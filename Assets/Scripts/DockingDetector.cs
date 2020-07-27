@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Rendering;
+
 
 public class DockingDetector : MonoBehaviour
 {
@@ -33,30 +35,96 @@ public class DockingDetector : MonoBehaviour
     private int gizmosAngle = 0;
     private LineRenderer gizmosDetector;
     private float gizmosTwistSpeed = 300;
+    private DetectContactPoints detector;
+
+    // draw contacts points
+    private CommandBuffer commandBuffer = null;
+    private Material contactPointMat = null;
+    private Mesh contactPointMesh = null;
 
     // Start is called before the first frame update
     void Start()
     {
         coneTrans = new GameObject("HostPlayer Docking Detector").transform;
         coneTrans.parent = hostPlayer;
-        Instantiate(coneMesh).transform.parent = coneTrans;
+        coneMesh = Instantiate(coneMesh);
+        coneMesh.transform.parent = coneTrans;
         
         gizmosDetector = gameObject.AddComponent<LineRenderer>();
         gizmosDetector.widthMultiplier = 0.05f;
 
         gizmosDetector.material = Resources.Load<Material>("Materials/DetectorGizmosMat");
+
+        //add mesh cllider
+        var meshCollider = coneMesh.AddComponent<MeshCollider>();
+        detector = coneMesh.AddComponent<DetectContactPoints>();
+        meshCollider.convex = true;
+
+        var rigidBody = coneMesh.AddComponent<Rigidbody>();
+        rigidBody.constraints = RigidbodyConstraints.FreezeAll;
+
+        // contact points
+        contactPointMat = Resources.Load<Material>("Materials/ContatctPointMat");
+        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        contactPointMesh = sphere.GetComponent<MeshFilter>().sharedMesh;
+        GameObject.Destroy(sphere);
+
+        commandBuffer = new CommandBuffer();
+
+        Camera.main.AddCommandBuffer(CameraEvent.AfterSkybox, commandBuffer);
+#if UNITY_EDITOR
+        foreach (UnityEditor.SceneView scenView in UnityEditor.SceneView.sceneViews)
+        {
+            scenView.camera.AddCommandBuffer(CameraEvent.AfterSkybox, commandBuffer);
+        }
+#endif
     }
 
     // Update is called once per frame
     void Update()
     {
         gizmosAngle = (gizmosAngle + (int)(Time.deltaTime * gizmosTwistSpeed)) % 360;
-        coneTrans.gameObject.SetActive(showMesh);
+        coneMesh.GetComponent<MeshRenderer>().enabled = showMesh;
 
         UpdateConeMeshTransformMS();
         UpdateGizmosPoints();
 
+        var ps = detector.GetPoints();
+        DrawContactPoints(ps);
     }
+
+    private void OnDisable()
+    {
+        if (Camera.main)
+        {
+            Camera.main.RemoveCommandBuffer(CameraEvent.AfterSkybox, commandBuffer);
+        }
+
+#if UNITY_EDITOR
+        foreach (UnityEditor.SceneView scenView in UnityEditor.SceneView.sceneViews)
+        {
+            scenView.camera.RemoveCommandBuffer(CameraEvent.AfterSkybox, commandBuffer);
+        }
+#endif
+    }
+
+    private void DrawContactPoints(List<Vector3> points)
+    {
+        commandBuffer.Clear();
+
+        List<Matrix4x4> matrixs = new List<Matrix4x4>();
+        foreach(var p in points)
+        {
+            Matrix4x4 mat4 = new Matrix4x4();
+            mat4.SetTRS(p, Quaternion.identity, Vector3.one * 0.1f);
+            matrixs.Add(mat4);
+        }
+
+        commandBuffer.DrawMeshInstanced(contactPointMesh, 0, contactPointMat, 0, matrixs.ToArray());
+
+        //Debug.Log(points.Count);
+    }
+
     private void UpdateConeMeshTransformMS()
     {
         // calculate cone's transform
