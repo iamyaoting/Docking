@@ -32,14 +32,14 @@ namespace Docking
             //GUILayout.EndArea();
             //Handles.EndGUI();
 
-            DockingVertex[] vertices = new DockingVertex[2] { script.m_start, script.m_end };
+            TR[] vertices = new TR[2] { script.m_start, script.m_end };
 
             
             for (int i = 0; i < vertices.Length; ++i)
             {
-                var positionWS = script.transform.TransformPoint(vertices[i].position);
+                var positionWS = script.transform.TransformPoint(vertices[i].translation);
                 var rotationWS = script.transform.rotation * vertices[i].rotation;
-                Handles.color = script.colors[script.m_type];
+                Handles.color = script.GetGizmosColor();
                 if (DotButton(positionWS, rotationWS, 0.04f, 0.08f))
                 {
                     selectedPoint = i;
@@ -54,7 +54,7 @@ namespace Docking
                             if (newpositionWS != positionWS)
                             {
                                 Undo.RecordObject(script, "move point");
-                                vertices[i].position = script.transform.InverseTransformPoint(newpositionWS);
+                                vertices[i].translation = script.transform.InverseTransformPoint(newpositionWS);
                             }
                             break;
                         case Tool.Rotate:
