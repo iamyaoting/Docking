@@ -20,25 +20,53 @@ namespace Docking
         [Range(0.2f, 2)]
         public float minDist = 1.0f;
         [Range(-40, 40)]
-        public float elevationAngleMS = 20;  // 俯仰角        
+        public float elevationAngleMS = 20;  // 俯仰角  
+        public DockingTarget DetectNearestTarget()
+        {
+            DockingTarget target = null;
+            float nearestDist = float.MaxValue;
+            var colliders = Physics.OverlapSphere(hostPlayer.TransformPoint(biasMS), maxDist);
+            foreach (var c in colliders)
+            {
+                var targets = c.GetComponentsInChildren<DockingTarget>();
+                foreach(var t in targets)
+                {                  
+                    float dist = float.MaxValue;
+                    if(t.IsInDetector(this, out dist))
+                    {
+                        if (dist < nearestDist)
+                        {
+                            nearestDist = dist;
+                            target = t;
+                        }
+                    }                    
+                }
+            }
+
+            if (target) target.m_isSelected = true;
+
+            return target;
+        }
 
         // 获得圆锥的中心朝向向量
         private Vector3 GetDirectionMS()
         {
             var directionMS = Quaternion.AngleAxis(90 - elevationAngleMS, Vector3.right) * Vector3.up;
             return directionMS.normalized;
-        }
+        }       
 
-        //private List<Vector3> DetectDockingPoints()
-        //{
-        //    List<Vector3> ret = new List<Vector3>();
-        //    var colliders = Physics.OverlapSphere(coneTrans.position, maxDist);
-        //    foreach (var c in colliders)
-        //    {
-        //        ret.Add(c.bounds.center);
-        //    }
-        //    return ret;
-        //}
+        public bool IsPointInDetectorWS(Vector3 pointWS)
+        {
+            var pointMS = hostPlayer.InverseTransformPoint(pointWS);
+            var point_center_dir = pointMS - biasMS;
+            float dist = point_center_dir.magnitude;
+            if (dist > minDist && dist < maxDist
+                && Vector3.Angle(point_center_dir, GetDirectionMS()) < fov)
+            {
+                return true;
+            }
+            return false;
+        }      
 
         #region gizmos
 

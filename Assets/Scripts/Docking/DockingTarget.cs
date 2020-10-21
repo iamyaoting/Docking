@@ -19,6 +19,15 @@ namespace Docking
         }
     }
 
+    [System.Serializable]
+    public class DockingVertex
+    {
+        public TR       tr;
+
+        // 对于take over代表墙高度，0：矮，1：高
+        public float    reserveFloatParam = 0;      
+    }
+
     public enum DockingTargetType
     {
         TAKE_COVER,
@@ -26,7 +35,6 @@ namespace Docking
         CLIMB
     }
 
-    //[RequireComponent(typeof(LineRenderer))]
     public abstract class DockingTarget : MonoBehaviour
     {
         public bool m_active = true;
@@ -69,12 +77,13 @@ namespace Docking
         }
 
         #endregion
-        public abstract TR GetDcokedVertex(Transform unDockedTrans);        
+        public abstract DockingVertex GetDcokedVertex(Transform unDockedTrans);
+        public abstract bool IsInDetector(DockingDetector detector, out float dist);
 
-        private void Start()
+        private void Update()
         {
             m_isSelected = false;
-        }        
+        }
     }
 
 }

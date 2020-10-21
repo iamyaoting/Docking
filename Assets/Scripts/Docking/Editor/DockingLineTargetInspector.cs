@@ -32,7 +32,7 @@ namespace Docking
             //GUILayout.EndArea();
             //Handles.EndGUI();
 
-            TR[] vertices = new TR[2] { script.m_start, script.m_end };
+            TR[] vertices = new TR[2] { script.m_start.tr, script.m_end.tr };
 
             
             for (int i = 0; i < vertices.Length; ++i)

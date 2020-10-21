@@ -113,8 +113,12 @@ MonoBehaviour:
   m_isSelected: 0
   m_constrainRotation: 1
   m_start:
-    translation: {x: -0.5, y: -0.5, z: 0.5}
-    rotation: {x: 0, y: 0, z: 0, w: 1}
+    tr:
+      translation: {x: -0.5, y: -0.5, z: 0.5}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0
   m_end:
-    translation: {x: 0.5, y: -0.5, z: 0.5}
-    rotation: {x: 0, y: 0, z: 0, w: 1}
+    tr:
+      translation: {x: 0.5, y: -0.5, z: 0.5}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0

@@ -16,9 +16,9 @@ namespace Docking
     {
         public DockingQuadData m_quadData;
 
-        public override TR GetDcokedVertex(Transform unDockedTrans)
+        public override DockingVertex GetDcokedVertex(Transform unDockedTrans)
         {
-            return new TR();
+            return new DockingVertex();
         }
 
         protected override void DrawGizmos()
@@ -70,6 +70,11 @@ namespace Docking
             dataWS.width = trs.TransformVector(dir).magnitude;
 
             return dataWS;
+        }
+
+        public override bool IsInDetector(DockingDetector detector, out float dist)
+        {
+            throw new System.NotImplementedException();
         }
     }
 

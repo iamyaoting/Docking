@@ -6,20 +6,31 @@ namespace Docking
 {
     public class DockingLineTarget : DockingTarget
     {
-        public bool     m_constrainRotation = true;
-        public TR       m_start;
-        public TR       m_end;
+        public bool                 m_constrainRotation = true;
+        public DockingVertex        m_start;
+        public DockingVertex        m_end;
 
-        public override TR GetDcokedVertex(Transform unDockedTrans)
+        public override DockingVertex GetDcokedVertex(Transform unDockedTrans)
         {
             var posMS = transform.InverseTransformPoint(unDockedTrans.position);
-            var point_start = posMS - m_start.translation;
-            var end_start = m_end.translation - m_start.translation;
+            var point_start = posMS - m_start.tr.translation;
+            var end_start = m_end.tr.translation - m_start.tr.translation;
 
             var k = Vector3.Dot(end_start, point_start) / end_start.magnitude;
             k = Mathf.Clamp01(k);
+            DockingVertex vertex = new DockingVertex();
+            vertex.tr = GetTRInWS(TR.Lerp(m_start.tr, m_end.tr, k));
+            return vertex;
+        }
+        public override bool IsInDetector(DockingDetector detector, out float dist)
+        {
+            var vertex = GetDcokedVertex(detector.hostPlayer);
+            var tr = vertex.tr;
+            dist = (tr.translation - detector.hostPlayer.position).magnitude;
 
-            return GetTRInWS(TR.Lerp(m_start, m_end, k));
+
+
+            return detector.IsPointInDetectorWS(tr.translation);
         }
 
         protected override void DrawGizmos()
@@ -29,8 +40,8 @@ namespace Docking
             var color = GetGizmosColor();           
             Gizmos.color = color;
 
-            var startTR = GetTRInWS(m_start);
-            var endTR = GetTRInWS(m_end);           
+            var startTR = GetTRInWS(m_start.tr);
+            var endTR = GetTRInWS(m_end.tr);           
 
             DockingGizmos.DrawCoordinateFrame(startTR, m_coordinateFrameAsixLength);
             DockingGizmos.DrawCoordinateFrame(endTR, m_coordinateFrameAsixLength);
