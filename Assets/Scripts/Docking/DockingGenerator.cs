@@ -23,44 +23,48 @@ namespace Docking
         public HumanBodyBones   m_dockingBone = HumanBodyBones.LastBone;
 
         public Vector3          m_translationOffset;
-        public Quaternion       m_rotationOffset;
+        public Quaternion       m_rotationOffset = Quaternion.identity;
 
         public BlendType        m_blendType;
 
         [HideInInspector]
         public DockingFlagBits  m_flags;
 
-        //noramlized time
-        public float            m_intervalStartLocalTime = 0;
-        public float            m_intervalEndLocalTime = 1;
+        public float    m_intervalStartLocalTime = 0;   // docking blend 混合开始归一化时间
+        public float    m_intervalEndLocalTime = 1;     // docking blend 混合结束归一化时间
+        
+        private float   m_localTime = 0;            
+        private float   m_previousLocalTime = 0;    
 
-        private float           m_localTime = 0;
-        private float           m_previousLocalTime = 0;
-      
 
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            
+            m_previousLocalTime = 0;
+            m_localTime = stateInfo.normalizedTime;
+            Utils.GetBlend(animator, stateInfo, layerIndex);
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-        //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    
-        //}
+        override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            m_previousLocalTime = m_localTime;
+            m_localTime = stateInfo.normalizedTime;
+        }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-        //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    
-        //}
+        override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            m_previousLocalTime = m_localTime;
+            m_localTime = stateInfo.normalizedTime;
+        }
 
         // OnStateMove is called right after Animator.OnAnimatorMove()
-        //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    // Implement code that processes and affects root motion
-        //}
+        override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            //Implement code that processes and affects root motion
+            
+        }
 
         // OnStateIK is called right after Animator.OnAnimatorIK()
         //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

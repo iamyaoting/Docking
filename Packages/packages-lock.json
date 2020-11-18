@@ -7,21 +7,11 @@
       "dependencies": {},
       "url": "https://packages.unity.cn"
     },
-    "com.unity.textmeshpro": {
-      "version": "3.0.1",
+    "com.unity.playablegraph-visualizer": {
+      "version": "file:E:/UnityPlugins/graph-visualizer",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0"
-      },
-      "url": "https://packages.unity.cn"
-    },
-    "com.unity.timeline": {
-      "version": "1.3.6",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.cn"
+      "source": "local",
+      "dependencies": {}
     },
     "com.unity.ugui": {
       "version": "1.0.0",

@@ -20,6 +20,7 @@ namespace Docking
             k = Mathf.Clamp01(k);
             DockingVertex vertex = new DockingVertex();
             vertex.tr = GetTRInWS(TR.Lerp(m_start.tr, m_end.tr, k));
+            vertex.reserveFloatParam = Mathf.Lerp(m_start.reserveFloatParam, m_end.reserveFloatParam, k);
             return vertex;
         }
         public override bool IsInDetector(DockingDetector detector, out float dist)

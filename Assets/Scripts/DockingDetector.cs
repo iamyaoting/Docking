@@ -61,7 +61,8 @@ namespace Docking
             var point_center_dir = pointMS - biasMS;
             float dist = point_center_dir.magnitude;
             if (dist > minDist && dist < maxDist
-                && Vector3.Angle(point_center_dir, GetDirectionMS()) < fov)
+                //&& Vector3.Angle(point_center_dir, GetDirectionMS()) < fov
+                )
             {
                 return true;
             }
