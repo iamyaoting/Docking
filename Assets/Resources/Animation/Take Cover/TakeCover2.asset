@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41074f76d66d4e84a864c0639a698c5a, type: 3}
+  m_Name: TakeCover2
+  m_EditorClassIdentifier: 
+  character: {fileID: 100166, guid: a5674d01884853d4e8f2386a171e14d9, type: 3}
+  anmis:
+  - clip: {fileID: 7400000, guid: 875ea21403951f942b479a2679e73637, type: 2}
+    isCenterofHands: 0
+    dockingBone: 55
+    dockingTimeType: 0
+    dockedFixedNormalizedTime: 0
+  - clip: {fileID: 7400000, guid: 774f2be822f379d4d8074ae559b9fe94, type: 2}
+    isCenterofHands: 0
+    dockingBone: 55
+    dockingTimeType: 0
+    dockedFixedNormalizedTime: 0
+  - clip: {fileID: 7400000, guid: 96dad493d1951294abebbcccea6571fc, type: 2}
+    isCenterofHands: 0
+    dockingBone: 55
+    dockingTimeType: 0
+    dockedFixedNormalizedTime: 0
+  - clip: {fileID: 7400000, guid: a5649c5ceef12cb4fa9563c30563035e, type: 2}
+    isCenterofHands: 0
+    dockingBone: 55
+    dockingTimeType: 0
+    dockedFixedNormalizedTime: 0
+  - clip: {fileID: 7400000, guid: 0811fb930c36a9c4387c129d130b296d, type: 2}
+    isCenterofHands: 0
+    dockingBone: 55
+    dockingTimeType: 0
+    dockedFixedNormalizedTime: 0
+  - clip: {fileID: 7400000, guid: bd8ada497050e044f9f50942ba071524, type: 2}
+    isCenterofHands: 0
+    dockingBone: 55
+    dockingTimeType: 0
+    dockedFixedNormalizedTime: 0
+  - clip: {fileID: 7400000, guid: eebc45e752cb3b14b97a30e47436a0f7, type: 2}
+    isCenterofHands: 0
+    dockingBone: 55
+    dockingTimeType: 0
+    dockedFixedNormalizedTime: 0
+  - clip: {fileID: 7400000, guid: 8240549c9b257ae4f8773e1243a53710, type: 2}
+    isCenterofHands: 0
+    dockingBone: 55
+    dockingTimeType: 0
+    dockedFixedNormalizedTime: 0

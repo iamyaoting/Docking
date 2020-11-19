@@ -106,10 +106,11 @@ namespace Docking
             GameObject.DestroyImmediate(player);
 
             // 保存docking bone轨迹到文件
-            SaveAnimationClip(da.clip, "DockingBone", dockingBoneTransCurve);           
+            SaveAnimationClip(da.clip, DockingGenerator.GetDockingBoneName(), dockingBoneTransCurve);           
         }
 
-        private static void GetDockingBoneWS(Transform root, DockingAnimation da, out Vector3 posWS, out Quaternion quatWS)
+        private static void GetDockingBoneWS(Transform root, DockingAnimation da, 
+            out Vector3 posWS, out Quaternion quatWS)
         {
             Animator animator = root.gameObject.GetComponent<Animator>();
             if (animator == null) Debug.LogError("No animator");
@@ -140,7 +141,8 @@ namespace Docking
             return;
         }
 
-        private static void SaveAnimationClip(AnimationClip clip, string dockingBonePath, BoneTransfromCurve boneTransfromCurve)
+        private static void SaveAnimationClip(AnimationClip clip, string dockingBonePath, 
+            BoneTransfromCurve boneTransfromCurve)
         {
             // 记录docking bone 轨迹到 animationclip
             clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition.x", boneTransfromCurve.posX);
@@ -160,7 +162,8 @@ namespace Docking
             AssetDatabase.Refresh();
         }
 
-        private static void SetTransformCurve(float time, BoneTransfromCurve transCurve, Vector3 posWS, Quaternion quatWS, Transform root)
+        private static void SetTransformCurve(float time, BoneTransfromCurve transCurve, 
+            Vector3 posWS, Quaternion quatWS, Transform root)
         {
             Vector3 lcoalPos = root.InverseTransformPoint(posWS);
             Quaternion localQuat = Quaternion.Inverse(root.rotation) * quatWS;

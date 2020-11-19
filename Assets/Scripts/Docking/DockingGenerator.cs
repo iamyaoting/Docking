@@ -19,6 +19,7 @@ namespace Docking
 
     public class DockingGenerator : StateMachineBehaviour
     {
+        // 固有信息
         // lastBone表示root
         public HumanBodyBones   m_dockingBone = HumanBodyBones.LastBone;
 
@@ -29,48 +30,74 @@ namespace Docking
 
         [HideInInspector]
         public DockingFlagBits  m_flags;
-
-        public float    m_intervalStartLocalTime = 0;   // docking blend 混合开始归一化时间
-        public float    m_intervalEndLocalTime = 1;     // docking blend 混合结束归一化时间
         
-        private float   m_localTime = 0;            
-        private float   m_previousLocalTime = 0;    
-
-
-        // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-        override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
-            m_previousLocalTime = 0;
-            m_localTime = stateInfo.normalizedTime;
-            Utils.GetBlend(animator, stateInfo, layerIndex);
-        }
+        public float    m_intervalStartNormalizedTime = 0;   // docking blend 混合开始归一化时间
+        public float    m_intervalEndNormalizedTime = 1;     // docking blend 混合结束归一化时间
+        
+        //// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+        //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        //{
+        //}
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            m_previousLocalTime = m_localTime;
-            m_localTime = stateInfo.normalizedTime;
+            float normalizedTime = stateInfo.normalizedTime;
+            float localTime = normalizedTime * stateInfo.length;
+            float preLocalTime = Mathf.Clamp(localTime - Time.deltaTime, 0, localTime);
+            float preNomalizedTime = preLocalTime / stateInfo.length;
+
+            DockingControlData dockingControlData = new DockingControlData();
+            dockingControlData.m_dockingBlend = GetDockingBlendWeight(normalizedTime);
+            dockingControlData.m_previousDockingBlend = GetDockingBlendWeight(preNomalizedTime);
+            dockingControlData.m_dockingBone = m_dockingBone;
+            dockingControlData.m_timeOffset = Time.deltaTime;
+
+            var driver = animator.GetComponent<DockingDriver>();
+            if (driver == null) Debug.LogError("avatar has no docking driver");
+            driver.Notify(dockingControlData);
         }
 
-        // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-        override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
-            m_previousLocalTime = m_localTime;
-            m_localTime = stateInfo.normalizedTime;
-        }
+        //// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
+        //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        //{
+        //}
 
-        // OnStateMove is called right after Animator.OnAnimatorMove()
-        override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
-            //Implement code that processes and affects root motion
+        //// OnStateMove is called right after Animator.OnAnimatorMove()
+        //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        //{
+        //    //Implement code that processes and affects root motion
             
-        }
+        //}
 
         // OnStateIK is called right after Animator.OnAnimatorIK()
         //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         //{
         //    // Implement code that sets up animation IK (inverse kinematics)
         //}
+
+
+        public static string GetDockingBoneName()
+        {
+            return "DockingBone";
+        }
+        private float GetDockingBlendWeight(float normalizedTime)
+        {
+            if (normalizedTime < m_intervalStartNormalizedTime || normalizedTime > m_intervalEndNormalizedTime) return 0;
+
+            float blendWeight = 0;
+            switch (m_blendType)
+            {
+                case BlendType.DOCKED_FULL_ON:
+                    blendWeight = 1.0f;
+                    break;
+                case BlendType.DOCKING_BLEND:
+                    blendWeight = (normalizedTime - m_intervalStartNormalizedTime)
+                        / (m_intervalEndNormalizedTime - m_intervalStartNormalizedTime);
+                    break;
+            }
+            return blendWeight;
+        }        
     }
 }
 
