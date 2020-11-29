@@ -10,30 +10,20 @@ namespace Docking
         public DockingVertex        m_start;
         public DockingVertex        m_end;
 
-        public override DockingVertex GetDcokedVertex(Transform unDockedTrans)
-        {
-            var posMS = transform.InverseTransformPoint(unDockedTrans.position);
+        public override void GetDockedLS(TR undockedTRLS, out DockingVertex dockedVertexLS)
+        {            
+            var posMS = undockedTRLS.translation;
             var point_start = posMS - m_start.tr.translation;
             var end_start = m_end.tr.translation - m_start.tr.translation;
 
             var k = Vector3.Dot(end_start, point_start) / end_start.magnitude;
             k = Mathf.Clamp01(k);
-            DockingVertex vertex = new DockingVertex();
-            vertex.tr = GetTRInWS(TR.Lerp(m_start.tr, m_end.tr, k));
-            vertex.reserveFloatParam = Mathf.Lerp(m_start.reserveFloatParam, m_end.reserveFloatParam, k);
-            return vertex;
+            
+            dockedVertexLS = new DockingVertex();
+            dockedVertexLS.tr = TR.Lerp(m_start.tr, m_end.tr, k);
+            dockedVertexLS.reserveFloatParam = Mathf.Lerp(m_start.reserveFloatParam, 
+                m_end.reserveFloatParam, k);           
         }
-        public override bool IsInDetector(DockingDetector detector, out float dist)
-        {
-            var vertex = GetDcokedVertex(detector.hostPlayer);
-            var tr = vertex.tr;
-            dist = (tr.translation - detector.hostPlayer.position).magnitude;
-
-
-
-            return detector.IsPointInDetectorWS(tr.translation);
-        }
-
         protected override void DrawGizmos()
         {
             DockingGizmos.PushGizmosData();
@@ -42,14 +32,14 @@ namespace Docking
             Gizmos.color = color;
 
             var startTR = GetTRInWS(m_start.tr);
-            var endTR = GetTRInWS(m_end.tr);           
-
-            DockingGizmos.DrawCoordinateFrame(startTR, m_coordinateFrameAsixLength);
-            DockingGizmos.DrawCoordinateFrame(endTR, m_coordinateFrameAsixLength);
-            Gizmos.DrawSphere(startTR.translation, m_vertexCubeSize);
-            Gizmos.DrawSphere(endTR.translation, m_vertexCubeSize);
+            var endTR = GetTRInWS(m_end.tr);
 
             DockingGizmos.DrawLine(startTR.translation, endTR.translation, m_lineWidth, color);
+
+            DockingGizmos.DrawCoordinateFrameWS(startTR);
+            DockingGizmos.DrawCoordinateFrameWS(endTR);
+            //Gizmos.DrawSphere(startTR.translation, m_vertexCubeSize);
+            //Gizmos.DrawSphere(endTR.translation, m_vertexCubeSize);            
 
             DockingGizmos.PopGizmosData();
         }

@@ -106,7 +106,7 @@ namespace Docking
             GameObject.DestroyImmediate(player);
 
             // 保存docking bone轨迹到文件
-            SaveAnimationClip(da.clip, DockingGenerator.GetDockingBoneName(), dockingBoneTransCurve);           
+            SaveAnimationClip(da.clip, Utils.GetDockingBoneName(), dockingBoneTransCurve);           
         }
 
         private static void GetDockingBoneWS(Transform root, DockingAnimation da, 

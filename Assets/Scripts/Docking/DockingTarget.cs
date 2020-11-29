@@ -39,7 +39,7 @@ namespace Docking
     {
         public bool m_active = true;
         public DockingTargetType m_type = DockingTargetType.TAKE_COVER;
-        public bool m_isSelected; // 是否被选中
+        public bool selected { get; set; } // 是否被选中
 
         #region gizmos
         private Dictionary<DockingTargetType, Color> m_gizmosColorDict =
@@ -50,11 +50,10 @@ namespace Docking
             };
 
         protected const float m_vertexCubeSize = 0.05f;
-        protected const float m_coordinateFrameAsixLength = 0.6f;
-        protected const float m_lineWidth = 0.03f;
+        protected const float m_lineWidth = 0.1f;
         public Color GetGizmosColor()
         {
-            if (m_isSelected)
+            if (selected)
                 return Color.red;
             
             var color = m_gizmosColorDict[m_type];
@@ -77,12 +76,83 @@ namespace Docking
         }
 
         #endregion
-        public abstract DockingVertex GetDcokedVertex(Transform unDockedTrans);
-        public abstract bool IsInDetector(DockingDetector detector, out float dist);
+
+        public abstract void GetDockedLS(TR undockedTRLS, out DockingVertex dockedVertexLS);
+
+        // referenceFromTarget 其不考虑scale，不考虑非等比缩放，默认始终为1
+        public void GetDcokedTransfrom(DockingTransform referenceFromUndocedTarget, 
+            out DockingTransform referenceFromDesiredTarget)
+        {
+            SafeCheck(referenceFromUndocedTarget);
+            var unDockedLS = GetLocalTRInReferenceSpace(referenceFromUndocedTarget);
+            
+            DockingVertex dockedLS;
+            GetDockedLS(unDockedLS, out dockedLS);
+
+            referenceFromDesiredTarget = GetReferenceFromTarget(dockedLS.tr);
+            return;
+        }
+        
+        // 安全性检查，确保reference From Target 的Scale 为 等比缩放
+        protected void SafeCheck(DockingTransform referenceFromUndocedTarget)
+        {
+            if(referenceFromUndocedTarget.scale != Vector3.one)
+            {
+                Debug.LogError("referenceFromTarget Transform's scale must be identity!");
+            }
+        }
+
+        // 考虑到dockingTarget的scale可能不是1
+        // referenceFromTarget中reference空间中scale为1
+        // 将referenceFromTarget转换为dockingTarget内的局部TR
+        protected TR GetLocalTRInReferenceSpace(DockingTransform referenceFromUndocedTarget)
+        {
+            var posWS = transform.position + transform.rotation * referenceFromUndocedTarget.translation;
+            TR tr = new TR();
+            tr.translation = transform.InverseTransformPoint(posWS);
+            tr.rotation = referenceFromUndocedTarget.rotation;
+            return tr;
+        }
+
+        // 考虑到dockingTarget的scale可能不是1
+        // referenceFromTarget中reference空间中scale为1
+        // 将dockingTarget内的局部TR转换为referenceFromTarget
+        protected DockingTransform GetReferenceFromTarget(TR localTR)
+        {
+            DockingTransform referenceFromTarget = new DockingTransform();
+            referenceFromTarget.rotation = localTR.rotation;
+
+            var posWS = transform.TransformPoint(localTR.translation);
+            referenceFromTarget.translation =
+                Quaternion.Inverse(transform.rotation) * (posWS - transform.position);            
+            return referenceFromTarget;
+        }
+
+        // 在Docking Target上面寻找离pointWS最近的点
+        public Vector3 GetClosedPointWS(Vector3 pointWS)
+        {
+            TR localTR = new TR();
+            localTR.translation = transform.InverseTransformPoint(pointWS);
+            DockingVertex localDockedVertex;
+            GetDockedLS(localTR, out localDockedVertex);
+
+            return transform.TransformPoint(localDockedVertex.tr.translation);
+        }
+
+        // 表征该DockingTarget是否在Detector sweep volume 内 
+        public bool IsInDetectorSweepVolume(DockingDetector detector, out float dist)
+        {
+            var playerPosition = detector.GetPlayerPositionWS();
+            var posWS = GetClosedPointWS(playerPosition);
+            dist = (posWS - playerPosition).magnitude;
+
+            // 判断最近的点是否在Detector内部
+            return detector.IsPointInDetectorWS(posWS);
+        }
 
         private void Update()
         {
-            m_isSelected = false;
+            selected = false;
         }
     }
 

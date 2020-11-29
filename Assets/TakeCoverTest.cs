@@ -6,11 +6,13 @@ public class TakeCoverTest : MonoBehaviour
 {
     public Docking.DockingDetector detector;
     private Animator animator;
+    private Docking.DockingDriver driver;
 
     // Start is called before the first frame update
     void Start()
     {
         animator = detector.hostPlayer.GetComponent<Animator>();
+        driver = animator.GetComponent<Docking.DockingDriver>();
     }
 
     // Update is called once per frame
@@ -19,15 +21,16 @@ public class TakeCoverTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             var target = detector.DetectNearestTarget();
-            var vertex = target.GetDcokedVertex(animator.transform);
             animator.SetTrigger("Commit");
-            animator.SetFloat("Height", vertex.reserveFloatParam);
+            animator.SetFloat("Height", 1.0f);
+            driver.SetDockingTarget(target);
 
-            // left or right            
-            var angle = Vector3.SignedAngle(animator.transform.InverseTransformVector(vertex.tr.rotation * Vector3.right), Vector3.left, Vector3.up);            
-            angle = (angle + 360) % 180;
-            if (angle < 90)
+            var closedTargetWS = target.GetClosedPointWS(animator.transform.position);
+            var angle = Docking.Utils.GetYawAngle(animator.transform, closedTargetWS);
+            
+            if (angle > 0)
             {
+                Debug.Log(angle);
                 animator.SetFloat("LeftRightSelctor", 1);
             }
             else

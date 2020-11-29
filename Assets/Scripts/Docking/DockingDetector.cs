@@ -10,7 +10,7 @@ namespace Docking
     {
         [Header("Init information")]
         public Transform hostPlayer;
-        
+
         public Vector3 biasMS = new Vector3(0.2f, 1.0f, 0);     // 搜索圆锥的顶点与hostplayer节点的偏移
 
         [Range(10, 80)]
@@ -21,6 +21,11 @@ namespace Docking
         public float minDist = 1.0f;
         [Range(-40, 40)]
         public float elevationAngleMS = 20;  // 俯仰角  
+
+        public Vector3 GetPlayerPositionWS()
+        {
+            return hostPlayer.position;
+        }
         public DockingTarget DetectNearestTarget()
         {
             DockingTarget target = null;
@@ -32,7 +37,7 @@ namespace Docking
                 foreach(var t in targets)
                 {                  
                     float dist = float.MaxValue;
-                    if(t.IsInDetector(this, out dist))
+                    if(t.IsInDetectorSweepVolume(this, out dist))
                     {
                         if (dist < nearestDist)
                         {
@@ -42,9 +47,6 @@ namespace Docking
                     }                    
                 }
             }
-
-            if (target) target.m_isSelected = true;
-
             return target;
         }
 

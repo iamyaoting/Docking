@@ -16,9 +16,9 @@ namespace Docking
     {
         public DockingQuadData m_quadData;
 
-        public override DockingVertex GetDcokedVertex(Transform unDockedTrans)
+        public override void GetDockedLS(TR undockedTRLS, out DockingVertex dockedVertexLS)
         {
-            return new DockingVertex();
+            dockedVertexLS = new DockingVertex();
         }
 
         protected override void DrawGizmos()
@@ -31,18 +31,20 @@ namespace Docking
                  
             DockingGizmos.DrawQuadPlane(quadDataWS, color);
             DrawGizmosQuadAxis(quadDataWS.p1, quadDataWS.p2,
-               quadDataWS.normal, m_coordinateFrameAsixLength);
+               quadDataWS.normal);
 
             Gizmos.color = oldColor;
         }
 
         // 添加坐标轴，包括偏移，防止重叠覆盖
-        private static void DrawGizmosQuadAxis(Vector3 p1, Vector3 p2, Vector3 up, float length)
+        private static void DrawGizmosQuadAxis(Vector3 p1, Vector3 p2, Vector3 up)
         {
             DockingGizmos.PushGizmosData();
 
             p1 += up * 0.05f;
             p2 += up * 0.05f;
+
+            var length = 0.6f;
 
             Vector3 center = (p1 + p2) / 2.0f;
             Vector3 dir = (p2 - p1).normalized;
@@ -70,11 +72,6 @@ namespace Docking
             dataWS.width = trs.TransformVector(dir).magnitude;
 
             return dataWS;
-        }
-
-        public override bool IsInDetector(DockingDetector detector, out float dist)
-        {
-            throw new System.NotImplementedException();
         }
     }
 

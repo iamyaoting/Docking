@@ -6,6 +6,12 @@ using UnityEngine.Playables;
 
 namespace Docking
 {
+    public enum BLEND_CURVE_TYPE
+    {
+        SMOOTH_TO_SMOOOTH,
+        LINEAR_TO_SMOOTH,
+        SMOOTH_TO_LINEAR
+    }
     public class DockingTransform
     {
         public Vector3 translation;
@@ -31,6 +37,18 @@ namespace Docking
             rotation = worldFromThis.rotation;
         }
 
+        public void ApplyDockingTransformWS(Transform trans)
+        {
+            var parent = trans.parent;
+            trans.parent = null;
+            
+            trans.position = translation;
+            trans.rotation = rotation;
+            trans.localScale = scale;
+
+            trans.parent = parent;
+        }
+
         public void SetIdentity()
         {
             translation = Vector3.zero;
@@ -39,10 +57,8 @@ namespace Docking
         }
 
         public void SetInverse()
-        {            
-            scale.x = 1.0f / scale.x;
-            scale.y = 1.0f / scale.y;
-            scale.z = 1.0f / scale.z;
+        {
+            scale = Reciprocal(scale);
 
             rotation = Quaternion.Inverse(rotation);
             translation = Vector3.Scale(translation, -scale);
@@ -68,7 +84,12 @@ namespace Docking
             DockingTransform result = new DockingTransform(t);
             result.SetInverse();
             return result;
-        }        
+        }      
+        
+        public static Vector3 Reciprocal(Vector3 v)
+        {
+            return new Vector3(1.0f / v.x, 1.0f / v.y, 1.0f / v.z);            
+        }
     }
 
     public class Utils
@@ -107,7 +128,58 @@ namespace Docking
             float angleFlipped = Quaternion.Angle(lastQ, midQFlipped);
 
             return angleFlipped < angle ? flipped : q;
-        }        
+        }
+
+        // 用于计算target点在空间trans下的Yaw的角度
+        public static float GetYawAngle(Transform trans, Vector3 targetWS)
+        {
+            var targetLS = trans.InverseTransformPoint(targetWS);
+            targetLS.y = 0;
+            return Vector3.SignedAngle(Vector3.forward, targetLS, Vector3.up);
+        }
+
+        // 用于实时按照预先定义好的曲线进行混合权重计算
+        public static float ComputeBlendFraction(BLEND_CURVE_TYPE type, float lastBlend, float curBlend)
+        {
+            float lastV = EvaluateBlendCurve(type, lastBlend);
+            float curV = EvaluateBlendCurve(type, curBlend);
+
+            float oneMinusBlend = 1.0f - lastV;
+            float fraction = 0.0f;
+            if (oneMinusBlend > 0)
+            {
+                fraction = (curV - lastV) / oneMinusBlend;
+            }
+            else
+            {
+                fraction = 1.0f;
+            }
+            return fraction;
+        }
+        public static float EvaluateBlendCurve(BLEND_CURVE_TYPE type, float t)
+        {
+            float value = 0;
+            t = Mathf.Clamp01(t);
+            switch(type)
+            {
+                case BLEND_CURVE_TYPE.LINEAR_TO_SMOOTH:
+                    value = -Mathf.Pow(t, 3) + Mathf.Pow(t, 2) + t;
+                    break;
+                case BLEND_CURVE_TYPE.SMOOTH_TO_LINEAR:
+                    value = -Mathf.Pow(t, 3) + 2 * Mathf.Pow(t, 2);
+                    break;
+                case BLEND_CURVE_TYPE.SMOOTH_TO_SMOOOTH:
+                    value = -2 * Mathf.Pow(t, 3) + 3 * Mathf.Pow(t, 2);
+                    break;
+            }
+            return Mathf.Clamp01(value);
+        }
+
+        public static string GetDockingBoneName()
+        {
+            return "DockingBone";
+        }
     }
+
 }
 

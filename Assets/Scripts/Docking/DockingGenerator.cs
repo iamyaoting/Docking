@@ -50,8 +50,11 @@ namespace Docking
             DockingControlData dockingControlData = new DockingControlData();
             dockingControlData.m_dockingBlend = GetDockingBlendWeight(normalizedTime);
             dockingControlData.m_previousDockingBlend = GetDockingBlendWeight(preNomalizedTime);
-            dockingControlData.m_dockingBone = m_dockingBone;
-            dockingControlData.m_timeOffset = Time.deltaTime;
+            //dockingControlData.m_dockingBone = m_dockingBone;
+            //dockingControlData.m_timeOffset = Time.deltaTime;
+            dockingControlData.m_targetOffsetMS = new DockingTransform();
+            dockingControlData.m_targetOffsetMS.translation = m_translationOffset;
+            dockingControlData.m_targetOffsetMS.rotation = m_rotationOffset;
 
             var driver = animator.GetComponent<DockingDriver>();
             if (driver == null) Debug.LogError("avatar has no docking driver");
@@ -74,13 +77,7 @@ namespace Docking
         //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         //{
         //    // Implement code that sets up animation IK (inverse kinematics)
-        //}
-
-
-        public static string GetDockingBoneName()
-        {
-            return "DockingBone";
-        }
+        //}       
         private float GetDockingBlendWeight(float normalizedTime)
         {
             if (normalizedTime < m_intervalStartNormalizedTime || normalizedTime > m_intervalEndNormalizedTime) return 0;

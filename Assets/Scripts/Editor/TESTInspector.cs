@@ -8,7 +8,7 @@ public class TESTInspector : Editor
 {
     public override void OnInspectorGUI()
     {
-        TEST t = target as TEST;
+     /*   TEST t = target as TEST;
         
 
         if(GUILayout.Button("test"))
@@ -68,7 +68,7 @@ public class TESTInspector : Editor
             EditorUtility.SetDirty(t.clip);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-        }
+        } */
 
         base.OnInspectorGUI();
     }

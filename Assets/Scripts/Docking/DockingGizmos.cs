@@ -11,11 +11,46 @@ namespace Docking
     }
     public class DockingGizmos
     {
-        private static Stack<GizmosData> gizmosStack = new Stack<GizmosData>();        
-        public static void DrawCoordinateFrame(TR tr, float length)
+        private static Stack<GizmosData> gizmosStack = new Stack<GizmosData>();
+
+        public static void DrawTR(TR tr, Color color,
+            float pointSize,
+            float coordinateFrameAxisLength)
         {
             PushGizmosData();
-            DrawCoordinateFrame_Impl(tr, length);
+            Gizmos.color = color;
+            Gizmos.DrawSphere(tr.translation, pointSize);
+            DrawCoordinateFrame_Impl(tr.translation, tr.rotation, coordinateFrameAxisLength);
+            PopGizmosData();
+        }
+
+        public static void DrawCoordinateFrameWS(Vector3 pos,
+            Quaternion rot, float coordinateFrameAxisLength = 0.6f)
+        {
+            DrawCoordinateFrameWS(pos, rot, Color.red, 0.0f, coordinateFrameAxisLength);
+        }
+
+        public static void DrawCoordinateFrameWS(TR tr, float coordinateFrameAxisLength = 0.6f)
+        {
+            DrawCoordinateFrameWS(tr.translation, tr.rotation, Color.red, 0.0f, coordinateFrameAxisLength);
+        }
+        public static void DrawCoordinateFrameWS(DockingTransform tr, float coordinateFrameAxisLength = 0.6f)
+        {
+            DrawCoordinateFrameWS(tr.translation, tr.rotation, Color.red, 0.0f, coordinateFrameAxisLength);
+        }
+
+        public static void DrawCoordinateFrameWS(Vector3 pos, 
+            Quaternion rot, Color originColor,
+            float originSize = 0.0f,
+            float coordinateFrameAxisLength = 0.6f)
+        {
+            PushGizmosData();            
+            DrawCoordinateFrame_Impl(pos, rot, coordinateFrameAxisLength);
+            if (originSize > 0)
+            {
+                Gizmos.color = originColor;
+                Gizmos.DrawSphere(pos, originSize);
+            }
             PopGizmosData();
         }
 
@@ -53,20 +88,7 @@ namespace Docking
             Gizmos.DrawCube(Vector3.zero, Vector3.one);
 
             PopGizmosData();
-        }
-                
-        public static void DrawTR(TR tr, Color color, 
-            float pointSize, 
-            float coordinateFrameAxisLength)
-        {
-            PushGizmosData();
-
-            Gizmos.color = color;
-            Gizmos.DrawSphere(tr.translation, pointSize);
-            DrawCoordinateFrame_Impl(tr, coordinateFrameAxisLength);
-
-            PopGizmosData();
-        }
+        }       
 
         public static void PushGizmosData()
         {
@@ -84,16 +106,16 @@ namespace Docking
             Gizmos.matrix = data.mat44;
         }
 
-        private static void DrawCoordinateFrame_Impl(TR tr, float length)
+        private static void DrawCoordinateFrame_Impl(Vector3 pos, Quaternion rot, float length)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(tr.translation, tr.rotation * -Vector3.left * length + tr.translation);
+            Gizmos.DrawLine(pos, rot * -Vector3.left * length + pos);
 
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(tr.translation, tr.rotation * Vector3.up * length + tr.translation);
+            Gizmos.DrawLine(pos, rot * Vector3.up * length + pos);
 
             Gizmos.color = Color.blue;
-            Gizmos.DrawLine(tr.translation, tr.rotation * Vector3.forward * length + tr.translation);
+            Gizmos.DrawLine(pos, rot * Vector3.forward * length + pos);
         }
     }
 }
