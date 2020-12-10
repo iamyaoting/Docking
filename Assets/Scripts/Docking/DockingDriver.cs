@@ -16,14 +16,10 @@ namespace Docking
         // public HumanBodyBones m_dockingBone = HumanBodyBones.LastBone;
         public DockingTransform m_targetOffsetMS;
     }
-
-    [RequireComponent(typeof(Animator))]
-    public class DockingDriver : MonoBehaviour
+    public class DockingDriver
     {
-        private Animator m_animator;
-        private DockingControlData m_dockingControlData;
-        private DockingTarget m_dockingTarget;
-
+        private Animator m_animator;        
+        
         private DockingTransform m_worldFromNewReference = new DockingTransform();
         private DockingTransform m_worldFromOldReference = new DockingTransform();
         private DockingTransform m_worldFromLastTarget = new DockingTransform();
@@ -34,28 +30,35 @@ namespace Docking
         // first init information
         private DockingTransform m_worldFromFirstTarget = new DockingTransform();
 
-        
-        private void Start()
+        // 是否进行 root motion 修正
+        public bool isActive { get; private set; }
+
+        // DockingDriver 修正所需要的参数数据，由Docking Generator 上传提供
+        private DockingControlData m_dockingControlData;
+
+        // DockingDriver 所需要的target标记线，由Docking Controller 设置提供
+        private DockingTarget m_dockingTarget;
+
+        // Docking 的顶点信息
+        private DockedVertexStatus m_dockedVertexStatus;
+
+        public void Init(Animator animator)
         {
-            m_animator = GetComponent<Animator>();
-            if (m_animator.avatar == null) Debug.LogError("No avatar in docking driver");
-            
-            if(null == transform.Find(Utils.GetDockingBoneName()))
+            m_animator = animator;
+            if (m_animator.avatar == null)
             {
-                GameObject dockingBone = new GameObject(Utils.GetDockingBoneName());
-                dockingBone.transform.parent = transform;
-                dockingBone.transform.localPosition = Vector3.zero;
-                dockingBone.transform.localRotation = Quaternion.identity;
-                dockingBone.transform.localScale = Vector3.one;
+                Debug.LogError("No avatar in docking driver");
             }
-        }
+            
+            if(null == animator.transform.Find(Utils.GetDockingBoneName()))
+            {
+                Debug.LogError("No Docking Bone, Please add in advance!");
+            }
 
-        private void OnAnimatorMove()
-        {
-            DockingDrive();
+            isActive = false;
         }
-
-        private void DockingDrive()
+        public DockedVertexStatus GetDockedVertexStatus() { return m_dockedVertexStatus; }
+        public void Dock()
         {            
             // 总体思想，先将更新后的model再old reference 空间中进行docking解算
             // old reference 更新到 new reference
@@ -96,12 +99,14 @@ namespace Docking
 
                 // get desired target from dockingTarget
                 if (null != m_dockingTarget) 
-                { 
+                {
+
                     // calculate the target
-                    //m_dockingTarget.
+                    m_dockingTarget.GetDcokedTransfrom(oldReferenceFromTarget, out referenceFromDesiredTarget, 
+                        out m_dockedVertexStatus);
 
                     // blend
-                    if(1.0 == m_dockingControlData.m_dockingBlend)
+                    if (1.0 == m_dockingControlData.m_dockingBlend)
                     {
                         oldReferenceFromModel = DockingTransform.Multiply(
                             referenceFromDesiredTarget, DockingTransform.Inverse(modelFromTarget));
@@ -110,7 +115,7 @@ namespace Docking
                     {
                         // blend and get error
                         DockingTransform error;
-                        GetError(referenceFromDesiredTarget, oldReferenceFromTarget, 
+                        GetError(oldReferenceFromTarget, referenceFromDesiredTarget,
                             m_dockingControlData.m_previousDockingBlend, 
                             m_dockingControlData.m_dockingBlend, out error);
                         oldReferenceFromModel.translation += error.translation;
@@ -130,8 +135,7 @@ namespace Docking
                 {
                     m_worldFromFirstTarget = m_worldFromLastTarget;                    
                 }
-                m_lastBlend = m_dockingControlData.m_dockingBlend;
-                
+                m_lastBlend = m_dockingControlData.m_dockingBlend;                
                 m_dockingTarget.selected = true;
             }
             else
@@ -142,15 +146,33 @@ namespace Docking
             worldFromModel = DockingTransform.Multiply(m_worldFromNewReference, oldReferenceFromModel);
             worldFromModel.ApplyDockingTransformWS(m_animator.transform);
             m_worldFromOldReference = m_worldFromNewReference;
+
+            m_dockingControlData = null;
+            isActive = false;
         }
 
         public void Notify(DockingControlData data)
         {
-            m_dockingControlData = data;
+            // 临时方案，为了解决 transisition 时候，会有两个dockinggenerator向dockingdriver发送dockingcontroldata，
+            // 优先docking的动画，舍弃docked状态
+            if(null != m_dockingControlData)
+            {
+                if(data.m_dockingBlend <= m_dockingControlData.m_dockingBlend)
+                {
+                    m_dockingControlData = data;
+                }
+            }
+            else
+            {
+                m_dockingControlData = data;
+            }
+
+            isActive = true;
         }
 
         public void SetDockingTarget(DockingTarget target)
         {
+            Debug.Log("DockingDriver: Set the docking target " + target.gameObject.name);
             m_dockingTarget = target;
             SetWorldFromReference(target);
         }
@@ -158,24 +180,16 @@ namespace Docking
         // 消除 Docking Target 非等比缩放，重构WorldFromReferenceTransform
         private void SetWorldFromReference(DockingTarget target)
         {
-            m_worldFromOldReference.SetIdentity();
-            m_worldFromOldReference.translation = target.transform.position;
-            m_worldFromOldReference.rotation = target.transform.rotation;
-
-            m_worldFromNewReference.SetIdentity();
-            m_worldFromNewReference.translation = target.transform.position;
-            m_worldFromNewReference.rotation = target.transform.rotation;
+            m_worldFromOldReference = new DockingTransform(target.transform);
+            m_worldFromNewReference = new DockingTransform(target.transform);
         }
 
         // 消除 Docking Target 非等比缩放，重构WorldFromReferenceTransform
-        // 在Docking Target不是static时候，调用该函数
+        // 在Docking Target 不是static时候，调用该函数
         private void UpdateWorldFromReference(DockingTarget target)
         {
             m_worldFromOldReference = m_worldFromNewReference;
-
-            m_worldFromNewReference.SetIdentity();
-            m_worldFromNewReference.translation = target.transform.position;
-            m_worldFromNewReference.rotation = target.transform.rotation;
+            m_worldFromNewReference = new DockingTransform(target.transform);
         }
 
         private void GetError(DockingTransform t1, DockingTransform t2,
@@ -184,11 +198,12 @@ namespace Docking
             error = new DockingTransform();
 
             var fraction = Utils.ComputeBlendFraction(BLEND_CURVE_TYPE.SMOOTH_TO_SMOOOTH, lastBlend, blend);
-            if(fraction > 0.0f)
+            if (fraction > 0.0f)
             {
+                
                 error.translation = t2.translation - t1.translation;
                 error.rotation = t2.rotation * Quaternion.Inverse(t1.rotation);
-                if(fraction < 1.0f)
+                if (fraction < 1.0f)
                 {
                     error.translation = Vector3.Lerp(Vector3.zero, error.translation, fraction);
                     error.rotation = Quaternion.Slerp(Quaternion.identity, error.rotation, fraction);
@@ -218,7 +233,7 @@ namespace Docking
             return m_animator.transform.Find(Utils.GetDockingBoneName());
         }
 
-        private void OnDrawGizmos()       
+        public void OnDrawGizmos()       
         {
             DockingGizmos.PushGizmosData();            
 

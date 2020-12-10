@@ -30,23 +30,26 @@ namespace Docking
             rotation = other.rotation;
         }
 
-        public DockingTransform(Transform worldFromThis)
+        public DockingTransform(Transform worldFromThisNoS)
         {
-            translation = worldFromThis.position;
-            scale = worldFromThis.lossyScale;
-            rotation = worldFromThis.rotation;
+            translation = worldFromThisNoS.position;
+            //scale = worldFromThisNoS.lossyScale;
+            scale = Vector3.one;
+            rotation = worldFromThisNoS.rotation;
         }
 
         public void ApplyDockingTransformWS(Transform trans)
         {
             var parent = trans.parent;
-            trans.parent = null;
-            
+            trans.parent = null;            
             trans.position = translation;
             trans.rotation = rotation;
-            trans.localScale = scale;
-
+            trans.localScale = Vector3.one;
             trans.parent = parent;
+            if(!IdentityScale(this))
+            {
+                Debug.LogError("ApplyDockingTransformWS Scale not identity!");
+            }
         }
 
         public void SetIdentity()
@@ -89,6 +92,15 @@ namespace Docking
         public static Vector3 Reciprocal(Vector3 v)
         {
             return new Vector3(1.0f / v.x, 1.0f / v.y, 1.0f / v.z);            
+        }
+
+        public static bool IdentityScale(DockingTransform t)
+        {
+            if((t.scale - Vector3.one).sqrMagnitude > 0.0001)
+            {
+                return false;
+            }
+            return true;
         }
     }
 

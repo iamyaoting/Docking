@@ -26,9 +26,16 @@ namespace Docking
         {
             return hostPlayer.position;
         }
-        public DockingTarget DetectNearestTarget()
+        public bool DetectNearestTarget(out DockingTarget target, 
+            out TR desiredVertex,
+            out DockedVertexStatus desiredVertexStatus)
         {
-            DockingTarget target = null;
+            desiredVertex = null;
+            desiredVertexStatus = null;
+            target = null;
+            DockedVertexStatus statusTmp = null;
+            TR trTmp = null;
+
             float nearestDist = float.MaxValue;
             var colliders = Physics.OverlapSphere(hostPlayer.TransformPoint(biasMS), maxDist);
             foreach (var c in colliders)
@@ -36,18 +43,20 @@ namespace Docking
                 var targets = c.GetComponentsInChildren<DockingTarget>();
                 foreach(var t in targets)
                 {                  
-                    float dist = float.MaxValue;
-                    if(t.IsInDetectorSweepVolume(this, out dist))
+                    float dist = float.MaxValue;                                        
+                    if(t.IsInDetectorSweepVolume(this, out dist, out trTmp, out statusTmp))
                     {
                         if (dist < nearestDist)
                         {
                             nearestDist = dist;
                             target = t;
+                            desiredVertexStatus = statusTmp;
+                            desiredVertex = trTmp;
                         }
                     }                    
                 }
             }
-            return target;
+            return true;
         }
 
         // 获得圆锥的中心朝向向量
