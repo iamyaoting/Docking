@@ -23,18 +23,22 @@ namespace Docking
         }
 
         protected override void DrawGizmos()
-        {            
+        {
+            DockingGizmos.PushGizmosData();
             var color = GetGizmosColor();
-            var oldColor = Gizmos.color;
+            //var oldColor = Gizmos.color;
             Gizmos.color = color;
 
             DockingQuadData quadDataWS = GetQuadDataWS(m_quadData, transform);
                  
             DockingGizmos.DrawQuadPlane(quadDataWS, color);
-            DrawGizmosQuadAxis(quadDataWS.p1, quadDataWS.p2,
-               quadDataWS.normal);
+            //DrawGizmosQuadAxis(quadDataWS.p1, quadDataWS.p2, quadDataWS.normal);
 
-            Gizmos.color = oldColor;
+            DockingGizmos.DrawCoordinateFrameWS(quadDataWS.p1, transform.rotation);
+            DockingGizmos.DrawCoordinateFrameWS(quadDataWS.p2, transform.rotation);
+
+            //Gizmos.color = oldColor;
+            DockingGizmos.PopGizmosData();
         }
 
         // 添加坐标轴，包括偏移，防止重叠覆盖
@@ -69,7 +73,7 @@ namespace Docking
             dataWS.p2 = trs.TransformPoint(dataMS.p2);
             dataWS.normal = trs.TransformVector(dataMS.normal).normalized;
 
-            Vector3 dir = dataMS.width * Vector3.Cross(dataMS.p2 - dataMS.p1, dataMS.normal);
+            Vector3 dir = dataMS.width * Vector3.Cross(dataMS.p2 - dataMS.p1, dataMS.normal).normalized;
             dataWS.width = trs.TransformVector(dir).magnitude;
 
             return dataWS;

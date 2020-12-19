@@ -58,11 +58,15 @@ namespace Docking
                     m_dockingController.SetEnableInput(false);
                     break;
             }
+
+            // 存储debug信息
+            m_dockingController.fsmState = AnimatorState.BLEND_IN;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+
             float normalizedTime = stateInfo.normalizedTime;
             float localTime = normalizedTime * stateInfo.length;
             float preLocalTime = Mathf.Clamp(localTime - Time.deltaTime, 0, localTime);
@@ -77,13 +81,28 @@ namespace Docking
             dockingControlData.m_targetOffsetMS.translation = m_translationOffset;
             dockingControlData.m_targetOffsetMS.rotation = m_rotationOffset;
                        
-            m_dockingdriver.Notify(dockingControlData);           
+            m_dockingdriver.Notify(dockingControlData);
+
+            
+            // 存储debug信息
+            if (m_dockingController.fsmState == AnimatorState.BLEND_IN && !animator.IsInTransition(layerIndex))
+            {
+                m_dockingController.fsmState = AnimatorState.NOT_TRANSITION;
+            }
+
+            if (m_dockingController.fsmState == AnimatorState.NOT_TRANSITION && animator.IsInTransition(layerIndex))
+            {
+                m_dockingController.fsmState = AnimatorState.BLEND_OUT;
+            }
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             m_dockingController.SetEnableInput(true);
+            
+            // 存储debug信息
+            m_dockingController.fsmState = AnimatorState.BLEND_OUT;
         }
 
         //// OnStateMove is called right after Animator.OnAnimatorMove()

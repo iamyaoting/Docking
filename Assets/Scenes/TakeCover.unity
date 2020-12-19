@@ -143,8 +143,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13835ba6d01be014eb9142246a56bd43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_dockingDetector: {fileID: 662069140}
+  m_dockingDetector: {fileID: 285626322}
   m_dockingDriverGizmos: 1
+  m_dockingDetectorGizmos: 1
+--- !u!114 &285626322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 285626320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f0bdfdd1fa904a46b8beb2abd24f55a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_biasMS: {x: 0, y: 1, z: 0.2}
+  m_fov: 40
+  m_maxDist: 5
+  m_minDist: 1
+  m_elevationAngleMS: 20
 --- !u!1 &662069139
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +172,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 662069141}
-  - component: {fileID: 662069140}
   m_Layer: 0
   m_Name: DockingDetector
   m_TagString: Untagged
@@ -162,24 +179,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
---- !u!114 &662069140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 662069139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f0bdfdd1fa904a46b8beb2abd24f55a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hostPlayer: {fileID: 1637144945}
-  biasMS: {x: 0, y: 1, z: 0.2}
-  fov: 41.1
-  maxDist: 5
-  minDist: 1
-  elevationAngleMS: 20
 --- !u!4 &662069141
 Transform:
   m_ObjectHideFlags: 0
@@ -1001,7 +1000,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400166, guid: a5674d01884853d4e8f2386a171e14d9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.56
+      value: -9.03
       objectReference: {fileID: 0}
     - target: {fileID: 400166, guid: a5674d01884853d4e8f2386a171e14d9, type: 3}
       propertyPath: m_LocalPosition.y

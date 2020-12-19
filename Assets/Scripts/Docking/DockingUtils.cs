@@ -106,6 +106,19 @@ namespace Docking
 
     public class Utils
     {
+
+        public static System.Type GetDefaultControllerTypeByTargetType(DockingTargetType type)
+        {
+            switch (type)
+            {
+                case DockingTargetType.TAKE_COVER:
+                    return typeof(TakeCoverController);
+                // 进入 DockingTargetType.VAULT的target，默认进入InValutController控制器中，在其中自动转入OutValutController控制器
+                case DockingTargetType.VAULT: 
+                    return typeof(InValutController);
+            }
+            return null;
+        }
         //public static void GetBlend(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         //{
         //    var graph = animator.playableGraph;
@@ -150,6 +163,16 @@ namespace Docking
             return Vector3.SignedAngle(Vector3.forward, targetLS, Vector3.up);
         }
 
+        public static DockingVertex DockingTransformToDockingVertex(DockingTransform trans)
+        {
+            DockingVertex vertex = new DockingVertex();
+            vertex.tr = new TR();
+            vertex.tr.translation = trans.translation;
+            vertex.tr.rotation = trans.rotation;
+            vertex.reserveFloatParam = 0.0f;
+            return vertex;
+        }
+
         // 用于实时按照预先定义好的曲线进行混合权重计算
         public static float ComputeBlendFraction(BLEND_CURVE_TYPE type, float lastBlend, float curBlend)
         {
@@ -185,6 +208,11 @@ namespace Docking
                     break;
             }
             return Mathf.Clamp01(value);
+        }
+
+        public static Transform GetDockingBoneTransform(Animator animator)
+        {
+            return animator.transform.Find(Utils.GetDockingBoneName());
         }
 
         public static string GetDockingBoneName()

@@ -22,6 +22,23 @@ namespace Docking
     [System.Serializable]
     public class DockingVertex
     {
+        public DockingVertex() { }
+        public DockingVertex(Vector3 pos, Quaternion rot, float resverdFloat = 0)
+        {
+            tr = new TR();
+            tr.translation = pos;
+            tr.rotation = rot;
+            reserveFloatParam = resverdFloat;
+        }
+
+        public DockingVertex(DockingVertex other)
+        {
+            tr = new TR();
+            tr.translation = other.tr.translation;
+            tr.rotation = other.tr.rotation;
+            reserveFloatParam = other.reserveFloatParam;
+        }
+
         public TR       tr;
 
         // 对于take over代表墙高度，0：矮，1：高
@@ -49,44 +66,16 @@ namespace Docking
         public DockingTargetType m_type = DockingTargetType.TAKE_COVER;
         public bool selected { get; set; } // 是否被选中
 
+        public bool temporary { get; set; } // 是否是临时的, 程序生成的target，而非静态的
+
         protected const float SMALL_DISTANCE = .7f;
 
-        #region gizmos
-        private Dictionary<DockingTargetType, Color> m_gizmosColorDict =
-            new Dictionary<DockingTargetType, Color>{
-                {DockingTargetType.TAKE_COVER,  Color.green },
-                {DockingTargetType.VAULT,       Color.yellow },
-                {DockingTargetType.CLIMB,       Color.blue }
-            };
-
-        protected const float m_lineWidth = 0.1f;
-        public Color GetGizmosColor()
-        {
-            if (selected)
-                return Color.red;
-            
-            var color = m_gizmosColorDict[m_type];
-            return color;
-        }
-
-        protected abstract void DrawGizmos();
-        protected void OnDrawGizmos()
-        {          
-            DrawGizmos();            
-        }
-
-        //获得WS下的TR点
-        protected TR GetTRInWS(TR vertex)
-        {
-            TR tr = new TR();            
-            tr.translation = transform.TransformPoint(vertex.translation);            
-            tr.rotation = transform.rotation * vertex.rotation;            
-            return tr;
-        }
-
-        #endregion
-
         public abstract DockedVertexStatus GetDockedLS(TR undockedTRLS, out DockingVertex dockedVertexLS);
+
+        public void Awake()
+        {
+            temporary = false;
+        }
 
         // referenceFromTarget 其不考虑scale，不考虑非等比缩放，默认始终为1
         public void GetDcokedTransfrom(DockingTransform referenceFromUndocedTarget, 
@@ -97,6 +86,9 @@ namespace Docking
             
             DockingVertex dockedLS;
             status = GetDockedLS(unDockedLS, out dockedLS);
+
+            // 如果为翻墙，则禁止输入
+            if (m_type == DockingTargetType.VAULT) status.limit = DOCKING_INPUT_LIMIT.ALL;
 
             referenceFromDesiredTarget = GetReferenceFromTarget(dockedLS.tr);
                        
@@ -138,39 +130,67 @@ namespace Docking
             return referenceFromTarget;
         }
 
-        // 在Docking Target上面寻找离pointWS最近的点
-        public Vector3 GetClosedPointWS(Vector3 pointWS)
-        {
-            TR localTR = new TR();
-            localTR.translation = transform.InverseTransformPoint(pointWS);
-            DockingVertex localDockedVertex;
-            GetDockedLS(localTR, out localDockedVertex);
-
-            return transform.TransformPoint(localDockedVertex.tr.translation);
-        }
-
         // 表征该DockingTarget是否在Detector sweep volume 内 
         public bool IsInDetectorSweepVolume(DockingDetector detector, 
-            out float dist, out TR nearestDockedTR, out DockedVertexStatus nearestDockedVertexStatus)
+            out float dist, out DockingVertex nearestDockedVertex, out DockedVertexStatus nearestDockedVertexStatus)
         {
-            var playerPosition = detector.GetPlayerPositionWS();
+            var playerTR = detector.GetPlayerTRWS();
+            DockingTransform playerWS = new DockingTransform();
+            playerWS.translation = playerTR.translation;
+            playerWS.rotation = playerTR.rotation;
 
-            TR localTR = new TR();
-            localTR.translation = transform.InverseTransformPoint(playerPosition);
-            DockingVertex localDockedVertex;
-            nearestDockedVertexStatus = GetDockedLS(localTR, out localDockedVertex);
+            DockingTransform neareast = null;
+            GetDcokedTransfrom(playerWS, out neareast, out nearestDockedVertexStatus);
 
-            nearestDockedTR = GetTRInWS(localDockedVertex.tr);
-            dist = (nearestDockedTR.translation - playerPosition).magnitude;            
+            nearestDockedVertex = Utils.DockingTransformToDockingVertex(neareast);
+            
+            dist = (nearestDockedVertex.tr.translation - playerTR.translation).magnitude;            
             
             // 判断最近的点是否在Detector内部
-            return detector.IsPointInDetectorWS(nearestDockedTR.translation);
+            return detector.IsPointInDetectorWS(nearestDockedVertex.tr.translation);
         }
 
         private void Update()
         {
             selected = false;
         }
+
+
+        #region gizmos
+        private Dictionary<DockingTargetType, Color> m_gizmosColorDict =
+            new Dictionary<DockingTargetType, Color>{
+                {DockingTargetType.TAKE_COVER,  Color.green },
+                {DockingTargetType.VAULT,       Color.yellow },
+                {DockingTargetType.CLIMB,       Color.blue }
+            };
+
+        protected const float m_lineWidth = 0.1f;
+        public Color GetGizmosColor()
+        {
+            if (selected)
+                return Color.red;
+
+            var color = m_gizmosColorDict[m_type];
+            return color;
+        }
+
+        protected abstract void DrawGizmos();
+        protected void OnDrawGizmos()
+        {
+            DrawGizmos();
+        }
+
+        //获得WS下的TR点
+        protected TR GetTRInWS(TR vertex)
+        {
+            TR tr = new TR();
+            tr.translation = transform.TransformPoint(vertex.translation);
+            tr.rotation = transform.rotation * vertex.rotation;
+            return tr;
+        }
+
+        #endregion
+
     }
 
 }

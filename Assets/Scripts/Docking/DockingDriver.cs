@@ -42,6 +42,9 @@ namespace Docking
         // Docking 的顶点信息
         private DockedVertexStatus m_dockedVertexStatus;
 
+        // docking Bone 的transform
+        private Transform m_dockingBone;
+
         public void Init(Animator animator)
         {
             m_animator = animator;
@@ -49,8 +52,10 @@ namespace Docking
             {
                 Debug.LogError("No avatar in docking driver");
             }
-            
-            if(null == animator.transform.Find(Utils.GetDockingBoneName()))
+
+            m_dockingBone = Utils.GetDockingBoneTransform(m_animator);
+
+            if (null == m_dockingBone)
             {
                 Debug.LogError("No Docking Bone, Please add in advance!");
             }
@@ -59,7 +64,9 @@ namespace Docking
         }
         public DockedVertexStatus GetDockedVertexStatus() { return m_dockedVertexStatus; }
         public void Dock()
-        {            
+        {
+            if (false == isActive) return;
+
             // 总体思想，先将更新后的model再old reference 空间中进行docking解算
             // old reference 更新到 new reference
             // 并带动model进行变换（考虑到载具，docking target 可能会移动）
@@ -177,6 +184,11 @@ namespace Docking
             SetWorldFromReference(target);
         }
 
+        public DockingTarget GetDockingTarget()
+        {
+            return m_dockingTarget;
+        }
+
         // 消除 Docking Target 非等比缩放，重构WorldFromReferenceTransform
         private void SetWorldFromReference(DockingTarget target)
         {
@@ -230,10 +242,10 @@ namespace Docking
         // 获得角色Docking Bone的Transform
         private Transform GetWorldFromTargetTransform()
         {
-            return m_animator.transform.Find(Utils.GetDockingBoneName());
+            return m_dockingBone;
         }
 
-        public void OnDrawGizmos()       
+        public void DrawGizmos()       
         {
             DockingGizmos.PushGizmosData();            
 
