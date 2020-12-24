@@ -24,10 +24,12 @@ namespace Docking
         
         public AnimationClip clip;
 
+        [Header("DockingBone")]
         // docking Bone是否是双手中心，若是，上面的dockingBone则失效
         public bool isCenterofHands = false;
         public HumanBodyBones dockingBone;       
 
+        [Header("DockingTime")]
         public DockingTimeType dockingTimeType = DockingTimeType.DOCKING_FIXED_TIME;
         // 若上面是DockingTimeType.DOCKING_FIXED_TIME，则dockedFixedTime有效
         public float dockedFixedNormalizedTime = 1.0f;

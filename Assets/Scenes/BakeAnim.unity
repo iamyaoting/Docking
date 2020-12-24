@@ -217,6 +217,120 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1001 &650915334
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 100016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_Name
+      value: ClazyRunner
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d917c7129a9e4c74e84188b278d96de7, type: 3}
+--- !u!1 &650915335 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100016, guid: d917c7129a9e4c74e84188b278d96de7,
+    type: 3}
+  m_PrefabInstance: {fileID: 650915334}
+  m_PrefabAsset: {fileID: 0}
+--- !u!320 &650915336
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650915335}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 1c3083947aef8f34487665a597eafcfc, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -192817876206500757, guid: 1c3083947aef8f34487665a597eafcfc, type: 2}
+    value: {fileID: 650915337}
+  m_ExposedReferences:
+    m_References: []
+--- !u!95 &650915337 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9500000, guid: d917c7129a9e4c74e84188b278d96de7,
+    type: 3}
+  m_PrefabInstance: {fileID: 650915334}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &650915338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650915335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efcc0ec5ed265a340a1412edb9110337, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 30
+  keyReductionError: 0.01
+  mode: 2
+  animationClips: []
+  animationStates: []
+  loop: 1
+  saveToFolder: Assets
+  appendName: _Baked
+  saveName: Baked Clip
+  animator: {fileID: 650915337}
+  director: {fileID: 650915336}
+  bakeHandIK: 1
+  IKKeyReductionError: 0
+  muscleFrameRateDiv: 1
 --- !u!1 &922108199
 GameObject:
   m_ObjectHideFlags: 0
@@ -1405,6 +1519,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: survivor_a_lusth
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a4d77b91552e0944bb6dbe0c3d18524d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 943223448204509391, guid: a4d77b91552e0944bb6dbe0c3d18524d,
         type: 3}
