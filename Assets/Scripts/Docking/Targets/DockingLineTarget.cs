@@ -58,8 +58,9 @@ namespace Docking
             var dir = undockedTRLS.translation - dockedVertexLS.tr.translation;
             if(dir.magnitude > 0.1 && Vector3.Angle(dockedVertexLS.tr.rotation * Vector3.forward, dir) > 100)
             {
+                Debug.Log(Vector3.Angle(dockedVertexLS.tr.rotation * Vector3.forward, dir) + "..." + k);
                 // 在背面，返回null
-                //Debug.LogWarning("At the back of the line!");
+                Debug.LogWarning("At the back of the line!");
                 dockedVertexLS = null;
             }
 

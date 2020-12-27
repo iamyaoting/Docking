@@ -82,7 +82,7 @@ namespace Docking
             out DockingTransform referenceFromDesiredTarget, out DockedVertexStatus status)
         {
             SafeCheck(referenceFromUndocedTarget);
-            var unDockedLS = GetLocalTRInReferenceSpace(referenceFromUndocedTarget);
+            var unDockedLS = GetLocalTRFromReferenceSpace(referenceFromUndocedTarget);
             
             DockingVertex dockedLS;
             status = GetDockedLS(unDockedLS, out dockedLS);
@@ -90,7 +90,7 @@ namespace Docking
             // 如果为翻墙，则禁止输入
             if (m_type == DockingTargetType.VAULT) status.limit = DOCKING_INPUT_LIMIT.ALL;
 
-            referenceFromDesiredTarget = GetReferenceFromTarget(dockedLS.tr);
+            referenceFromDesiredTarget = GetReferenceSpaceFromLocalSpace(dockedLS.tr.translation, dockedLS.tr.rotation);
                        
             return;
         }
@@ -107,7 +107,7 @@ namespace Docking
         // 考虑到dockingTarget的scale可能不是1
         // referenceFromTarget中reference空间中scale为1
         // 将referenceFromTarget转换为dockingTarget内的局部TR
-        protected TR GetLocalTRInReferenceSpace(DockingTransform referenceFromUndocedTarget)
+        protected TR GetLocalTRFromReferenceSpace(DockingTransform referenceFromUndocedTarget)
         {
             var posWS = transform.position + transform.rotation * referenceFromUndocedTarget.translation;
             TR tr = new TR();
@@ -119,31 +119,42 @@ namespace Docking
         // 考虑到dockingTarget的scale可能不是1
         // referenceFromTarget中reference空间中scale为1
         // 将dockingTarget内的局部TR转换为referenceFromTarget
-        protected DockingTransform GetReferenceFromTarget(TR localTR)
+        protected DockingTransform GetReferenceSpaceFromLocalSpace(Vector3 posLS, Quaternion rotLS)
         {
             DockingTransform referenceFromTarget = new DockingTransform();
-            referenceFromTarget.rotation = localTR.rotation;
+            referenceFromTarget.rotation = rotLS;
 
-            var posWS = transform.TransformPoint(localTR.translation);
+            var posWS = transform.TransformPoint(posLS);
             referenceFromTarget.translation =
                 Quaternion.Inverse(transform.rotation) * (posWS - transform.position);            
             return referenceFromTarget;
+        }
+
+        public DockingTransform GetWorldFromReference()
+        {
+            DockingTransform trans = new DockingTransform(transform);
+            return trans;
         }
 
         // 表征该DockingTarget是否在Detector sweep volume 内 
         public bool IsInDetectorSweepVolume(DockingDetector detector, 
             out float dist, out DockingVertex nearestDockedVertex, out DockedVertexStatus nearestDockedVertexStatus)
         {
-            var playerTR = detector.GetPlayerTRWS();
-            DockingTransform playerWS = new DockingTransform();
-            playerWS.translation = playerTR.translation;
-            playerWS.rotation = playerTR.rotation;
+            var playerTR = detector.GetWorldFromCharacter();
+            DockingTransform worldFromUndockedPoint = new DockingTransform(detector.transform);
+            DockingTransform worldFromReference = GetWorldFromReference();
+            DockingTransform referenceFromUndockedPoint = DockingTransform.Multiply(
+                DockingTransform.Inverse(worldFromReference), worldFromUndockedPoint);
+            DockingTransform referenceFromDockedVertex = null;
+            GetDcokedTransfrom(referenceFromUndockedPoint, out referenceFromDockedVertex, out nearestDockedVertexStatus);
 
-            DockingTransform neareast = null;
-            GetDcokedTransfrom(playerWS, out neareast, out nearestDockedVertexStatus);
-
-            nearestDockedVertex = Utils.DockingTransformToDockingVertex(neareast);
-            
+            DockingTransform worldFromDockedPoint = DockingTransform.Multiply(worldFromReference, referenceFromDockedVertex);
+            nearestDockedVertex = new DockingVertex(
+                worldFromDockedPoint.translation,
+                worldFromDockedPoint.rotation,
+                nearestDockedVertexStatus.reserveFloatParam
+                );
+            //Debug.Log(nearestDockedVertex.tr.translation);
             dist = (nearestDockedVertex.tr.translation - playerTR.translation).magnitude;            
             
             // 判断最近的点是否在Detector内部
@@ -180,7 +191,7 @@ namespace Docking
             DrawGizmos();
         }
 
-        //获得WS下的TR点
+        //LS-->WS,获得WS下的TR点
         protected TR GetTRInWS(TR vertex)
         {
             TR tr = new TR();

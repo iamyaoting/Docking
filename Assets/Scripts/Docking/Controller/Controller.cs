@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ControllerEnterContext
 {
-    // 想要docked的目标点状态
+    // 想要docked的目标点状态, 在ws中
     public Docking.DockedVertexStatus desiredDockedVertexStatus;
 
     // 想要docked的目标点

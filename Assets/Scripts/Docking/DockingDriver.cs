@@ -150,6 +150,8 @@ namespace Docking
                 SetDefaultValue();
             }
 
+            UpdateWorldFromReference(m_dockingTarget);
+
             worldFromModel = DockingTransform.Multiply(m_worldFromNewReference, oldReferenceFromModel);
             worldFromModel.ApplyDockingTransformWS(m_animator.transform);
             m_worldFromOldReference = m_worldFromNewReference;
@@ -192,8 +194,8 @@ namespace Docking
         // 消除 Docking Target 非等比缩放，重构WorldFromReferenceTransform
         private void SetWorldFromReference(DockingTarget target)
         {
-            m_worldFromOldReference = new DockingTransform(target.transform);
-            m_worldFromNewReference = new DockingTransform(target.transform);
+            m_worldFromOldReference = target.GetWorldFromReference();
+            m_worldFromNewReference = target.GetWorldFromReference();
         }
 
         // 消除 Docking Target 非等比缩放，重构WorldFromReferenceTransform
@@ -201,7 +203,7 @@ namespace Docking
         private void UpdateWorldFromReference(DockingTarget target)
         {
             m_worldFromOldReference = m_worldFromNewReference;
-            m_worldFromNewReference = new DockingTransform(target.transform);
+            m_worldFromNewReference = target.GetWorldFromReference();
         }
 
         private void GetError(DockingTransform t1, DockingTransform t2,

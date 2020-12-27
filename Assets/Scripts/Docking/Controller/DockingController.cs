@@ -73,7 +73,8 @@ namespace Docking
         public override void OnAnimatorMove()
         {
             m_dockingDriver.Dock();
-            m_dockedVertexStatus = m_dockingDriver.GetDockedVertexStatus();
+            m_dockedVertexStatus = m_dockingDriver.GetDockedVertexStatus() == null ? 
+                m_dockedVertexStatus: m_dockingDriver.GetDockedVertexStatus();
         }
     }
 }

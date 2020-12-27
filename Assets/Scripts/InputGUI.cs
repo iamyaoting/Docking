@@ -38,7 +38,7 @@ public class InputGUI : MonoBehaviour
             var btn = m_btns[i];
             for (int j = 0; j < m_keys[i].Length; ++j)
             {
-                if (Input.GetKeyDown(m_keys[i][j]))
+                if (Input.GetKey(m_keys[i][j]))
                 {
                     btn.onClick.Invoke();
                     btn.OnSubmit(null);

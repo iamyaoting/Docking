@@ -19,12 +19,10 @@ namespace Docking
         [Range(-40, 40)]
         public float m_elevationAngleMS = 20;  // 俯仰角  
 
-        public TR GetPlayerTRWS()
+        public DockingTransform GetWorldFromCharacter()
         {
-            TR tr = new TR();
-            tr.translation = transform.position;
-            tr.rotation = transform.rotation;
-            return tr;
+            DockingTransform ret = new DockingTransform(transform);
+            return ret;           
         }
         public bool DetectNearestTarget(out DockingTarget target, 
             out DockingVertex desiredVertex,
@@ -127,8 +125,9 @@ namespace Docking
             if(null != m_desiredDockedVertex)
             {
                 var oldColr = Gizmos.color;
-                Gizmos.color = Color.red;
-                Gizmos.DrawSphere(m_desiredDockedVertex.tr.translation, 0.5f);
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireSphere(m_desiredDockedVertex.tr.translation, 0.2f);
+                //Debug.Log(m_desiredDockedVertex.tr.translation);
                 Gizmos.color = oldColr;
             }            
         }
