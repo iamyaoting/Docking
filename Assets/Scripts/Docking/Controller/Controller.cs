@@ -109,7 +109,7 @@ public abstract class Controller
     }
 
     // 当前帧是否有 env interactive Event 的用户输入请求，包括键盘，手柄等
-    protected bool HasEnvInteractiveActionUserInput()
+    public static bool HasEnvInteractiveActionUserInput()
     {
         if (Input.GetKeyDown(KeyCode.E)) return true;
         return false;
@@ -122,7 +122,7 @@ public abstract class Controller
         if (false == m_dockingDetector.DetectNearestTarget(
             out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
         {
-            Debug.Log("Can not find docking target, climbing forbidden!");
+            Debug.Log("Can not find docking target, dock forbidden!");
             return null;
         }
         else

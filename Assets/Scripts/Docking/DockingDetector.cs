@@ -8,7 +8,6 @@ namespace Docking
 {
     public class DockingDetector : MonoBehaviour
     {
-        [Header("Init information")]
         public Vector3 m_biasMS = new Vector3(0.0f, 1.0f, 0.2f);     // 搜索圆锥的顶点与hostplayer节点的偏移
 
         [Range(10, 80)]

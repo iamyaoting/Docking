@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41074f76d66d4e84a864c0639a698c5a, type: 3}
   m_Name: TakeCover2
   m_EditorClassIdentifier: 
-  character: {fileID: 100166, guid: a5674d01884853d4e8f2386a171e14d9, type: 3}
+  character: {fileID: 8860408986781427052, guid: 68e0bcdc43d3cac47991a728cbbcd347,
+    type: 3}
   anmis:
   - clip: {fileID: 7400000, guid: 875ea21403951f942b479a2679e73637, type: 2}
     isCenterofHands: 0
