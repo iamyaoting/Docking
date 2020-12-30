@@ -7,7 +7,10 @@ namespace Docking
     public class TakeCoverController : DockingController
     {
         public override void OnEnter(ControllerEnterContext context)
-        {            
+        {
+            // 向动画图执行命令
+            m_animator.SetTrigger("Commit");
+
             var desiredDockedVertex = context.desiredDockedVertex; 
 
             var angle = Utils.GetYawAngle(m_animator.transform, desiredDockedVertex.tr.translation);

@@ -52,9 +52,7 @@ namespace Docking
             return input;
         }
         public override void OnEnter(ControllerEnterContext context)
-        {
-            // 向动画图执行命令
-            m_animator.SetTrigger("Commit");
+        {            
             m_dockingDriver.SetDockingTarget(context.dockingtarget);
             m_dockedVertexStatus = context.desiredDockedVertexStatus;
             base.OnEnter(context);
@@ -66,11 +64,13 @@ namespace Docking
             var target = m_dockingDriver.GetDockingTarget();
             if (target.temporary)
             {
-                Object.Destroy(target, 2.0f);
+                target.m_active = false;
+                Object.Destroy(target);
             }
+            base.OnExit();
         }
 
-        public override void OnAnimatorMove()
+        public override void OnDockingModify()
         {
             m_dockingDriver.Dock();
             m_dockedVertexStatus = m_dockingDriver.GetDockedVertexStatus() == null ? 

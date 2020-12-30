@@ -6,6 +6,8 @@ using UnityEngine;
 public class ControllerManager : MonoBehaviour
 {
     public Docking.DockingDetector                  m_dockingDetector;
+    public bool                                     m_enableDocking = true;
+
     protected Controller                            m_lastController;
     protected Controller                            m_currentController;
     private   Docking.DockingDriver                 m_dockingDriver;    
@@ -53,24 +55,23 @@ public class ControllerManager : MonoBehaviour
                     m_currentController = ControllerFactory.CreateControolerByType(conTrollertype);
                     m_currentController.OnInit(GetControllerInitContext());
                 }
-                m_currentController.OnEnter(context);
                 m_lastController.OnExit();
+                m_currentController.OnEnter(context);
+                
             }
             m_currentController.Tick(Time.deltaTime);           
         }
     }
 
-
-    private void OnAnimatorMove()
+    private void LateUpdate()
     {
-        transform.position += m_animator.deltaPosition;
-        transform.rotation = m_animator.deltaRotation * transform.rotation;
-        if (null != m_currentController)
+        //transform.position += m_animator.deltaPosition;
+        //transform.rotation = m_animator.deltaRotation * transform.rotation;
+        if (null != m_currentController && m_enableDocking)
         {
-            m_currentController.OnAnimatorMove();            
+            m_currentController.OnDockingModify();
         }
     }
-
     private ControllerInitContext GetControllerInitContext()
     {
         ControllerInitContext context = new ControllerInitContext();

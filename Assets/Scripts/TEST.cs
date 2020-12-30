@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class TEST : MonoBehaviour
 {
-    public Animator animator;
+    public GameObject go;
 
     private void Update()
     {
-        if(Input.GetKey(KeyCode.E))
+        if(go.GetComponent<Docking.DockingTarget>())
         {
-            animator.SetTrigger("Commit");
+            Debug.Log("YEs");
+        }
+        else
+        {
+            Debug.Log("NO");
         }
     }
 }

@@ -41,8 +41,6 @@ public abstract class Controller
     protected ControllerEnterContext            m_nextControllerEnterContext;
     protected System.Type                       m_nextControllerType;
 
-    public AnimatorState                        fsmState { get; set; }
-
     // 设置是否容许进行控制
     public void SetEnableInput(bool active)
     {
@@ -81,13 +79,18 @@ public abstract class Controller
         m_nextControllerEnterContext = null;
         m_nextControllerType = null;
         m_enableInput = true;
+
+        Debug.Log("【Controller: " + GetType().Name + " 】entered!");
     }
 
     public abstract void Tick(float deltaTime);
-    public virtual void OnExit() { }
+    public virtual void OnExit() 
+    {
+        Debug.Log("【Controller: " + GetType().Name + " 】exit!");
+    }
 
     // 若rootmotion需要特殊处理，则进行override该函数，进行处理，特指docking
-    public virtual void OnAnimatorMove() { }
+    public virtual void OnDockingModify() { }
 
     
 
@@ -101,6 +104,7 @@ public abstract class Controller
     {
         controllerType = m_nextControllerType;
         context = m_nextControllerEnterContext;
+        if (m_nextControllerType == typeof(IdleController)) return true;
         if (null != m_nextControllerEnterContext && null != m_nextControllerType)
         {            
             return true;
@@ -111,6 +115,7 @@ public abstract class Controller
     // 当前帧是否有 env interactive Event 的用户输入请求，包括键盘，手柄等
     public static bool HasEnvInteractiveActionUserInput()
     {
+        return true;
         if (Input.GetKeyDown(KeyCode.E)) return true;
         return false;
     }
@@ -133,12 +138,12 @@ public abstract class Controller
     }
 
     //  找地面的最近target，由于地面没有target，则使用物理碰撞
-    protected ControllerEnterContext GetNearestFloorVertexTarget(Transform hint)
+    protected ControllerEnterContext CreateFloorVertexTarget(Vector3 pointWS, Quaternion rotWS)
     {
         ControllerEnterContext context = new ControllerEnterContext();
 
         const float maxDist = 100;
-        var origin = hint.position + Vector3.up * 2;
+        var origin = pointWS + Vector3.up * 2;
         RaycastHit hit;
         if(false == Physics.Raycast(origin, -Vector3.up, out hit, maxDist))
         {
@@ -146,9 +151,9 @@ public abstract class Controller
             return null;
         }
 
-        var rot = Quaternion.FromToRotation(hint.up, hit.normal) * hint.rotation;
+        var rot = Quaternion.FromToRotation(rotWS * Vector3.up, hit.normal) * rotWS;
         context.desiredDockedVertex = new Docking.DockingVertex(hit.point, rot, 0);
-        context.desiredDockedVertexStatus = null;
+        context.desiredDockedVertexStatus = new Docking.DockedVertexStatus();
 
         // 添加DockingVertexTarget临时脚本到碰撞gameobject上
         var target = hit.collider.gameObject.AddComponent<Docking.DockingVertexTarget>();

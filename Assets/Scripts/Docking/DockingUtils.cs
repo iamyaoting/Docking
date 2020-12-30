@@ -219,6 +219,20 @@ namespace Docking
         {
             return "DockingBone";
         }
+
+        public static void GetLineSegmentDockedPoint(Vector3 start, Vector3 end, Vector3 unDockedPoint,
+            out Vector3 dockedPoint, out float alpha)
+        {
+            var posMS = unDockedPoint;
+            var point_start = posMS - start;
+            var end_start = end - start;
+
+            var k = Vector3.Dot(end_start, point_start) / end_start.sqrMagnitude;
+            k = Mathf.Clamp01(k);
+
+            dockedPoint = Vector3.Lerp(start, end, k);
+            alpha = k;            
+        }
     }
 
 }

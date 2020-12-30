@@ -61,55 +61,89 @@ namespace Docking
             GUILayout.EndHorizontal();
         }
 
-        private void DoSimulateAnimation(GameObject hostplayer, DockingAnimation da)
+        private void DoSimulateAnimationSegment(GameObject hostplayer, DockingAnimSegment da, 
+            BoneTransfromCurve dockingBoneTransCurve, DockingPlayAnimation comp, AnimationClip clip)
         {
+            float startTime = da.startNormalizedTime * clip.length;
+            float endTime = da.endNormalizedTime * clip.length;
+            //float timeSegLen = endTime - startTime;
             float intervalFrameTime = 1.0f / 30.0f;
-            
-            // 创建playable graph进行后处理
+            Vector3 posWS = new Vector3();
+            Quaternion quatWS = new Quaternion();
+            Transform root = comp.transform;
+
+            // 若只需要记录固定事件下的docking bone 的信息，则提前播放到指定时刻，先进行记录
+            if (da.dockingTimeType == DockingTimeType.DOCKING_FIXED_TIME)
+            {
+                comp.PlayAtTime(da.dockedFixedNormalizedTime * clip.length);
+                GetDockingBoneWS(root, da, out posWS, out quatWS);               
+            }
+
+            float time = startTime;
+            while (time < endTime + intervalFrameTime)
+            {
+                time = Mathf.Clamp(time, 0, endTime);
+                comp.PlayAtTime(time);
+                if (da.dockingTimeType == DockingTimeType.DOCKED)
+                {
+                    GetDockingBoneWS(root, da, out posWS, out quatWS);                    
+                }
+                SetTransformCurve(time, dockingBoneTransCurve, posWS, quatWS, comp.transform);
+                if (time == endTime) break;
+                time += intervalFrameTime;
+            }
+        }
+
+        private void DoSimulateAnimation(GameObject hostplayer, DockingAnimation da)
+        {           
+            // 创建playable graph 进行后处理
             var clip = da.clip;
             var player = GameObject.Instantiate(hostplayer);
             var comp = player.AddComponent<DockingPlayAnimation>();
             comp.Create(clip);
 
             BoneTransfromCurve dockingBoneTransCurve = new BoneTransfromCurve();
-            Vector3 posWS = new Vector3();
-            Quaternion quatWS = new Quaternion();
-            Transform root = comp.transform;
-
-
-            // 若只需要记录固定事件下的docking bone的信息，则提前播放到指定时刻，先进行记录
-            if (da.dockingTimeType == DockingTimeType.DOCKING_FIXED_TIME)
+            
+            for(int i = 0; i < da.segments.Length; ++i)
             {
-                comp.PlayAtTime(da.dockedFixedNormalizedTime * da.clip.length);
-                GetDockingBoneWS(root, da, out posWS, out quatWS);
-            }
-
-            float time = 0;
-            while (time < clip.length + intervalFrameTime)
-            {
-                time = Mathf.Clamp(time, 0, clip.length);
-                comp.PlayAtTime(time);
-
-                if (da.dockingTimeType == DockingTimeType.DOCKING_ALL_TIME)
-                {
-                    GetDockingBoneWS(root, da, out posWS, out quatWS);
-                }
-                SetTransformCurve(time, dockingBoneTransCurve, posWS, quatWS, comp.transform);
-
-                if (time == clip.length) break;
-
-                time += intervalFrameTime;
+                DoSimulateAnimationSegment(hostplayer, da.segments[i], dockingBoneTransCurve, comp, da.clip);
             }
 
             // 清理playablegraph
             comp.Destory();
             GameObject.DestroyImmediate(player);
 
-            // 保存docking bone轨迹到文件
+            //处理曲线斜率轨迹
+            SetCurveTangentMode(dockingBoneTransCurve);
+
+            // 保存docking bone 轨迹到文件
             SaveAnimationClip(da.clip, Utils.GetDockingBoneName(), dockingBoneTransCurve);           
         }
 
-        private static void GetDockingBoneWS(Transform root, DockingAnimation da, 
+        private static void SetCurveTangentMode(BoneTransfromCurve boneTransfromCurve)
+        {
+            AnimationCurve[] curves = new AnimationCurve[7] { 
+            boneTransfromCurve.posX, 
+            boneTransfromCurve.posY,
+            boneTransfromCurve.posZ,
+            boneTransfromCurve.quatX,
+            boneTransfromCurve.quatY,
+            boneTransfromCurve.quatZ,
+            boneTransfromCurve.quatW
+            };
+
+            foreach(var curve in curves)
+            {
+                int count = curve.length;
+                for(int i = 0; i < count; ++i)
+                {
+                    AnimationUtility.SetKeyLeftTangentMode(curve, i, AnimationUtility.TangentMode.ClampedAuto);
+                    AnimationUtility.SetKeyRightTangentMode(curve, i, AnimationUtility.TangentMode.ClampedAuto);
+                }
+            }
+        }
+
+        private static void GetDockingBoneWS(Transform root, DockingAnimSegment da, 
             out Vector3 posWS, out Quaternion quatWS)
         {
             Animator animator = root.gameObject.GetComponent<Animator>();
@@ -121,8 +155,13 @@ namespace Docking
             // 如果是双手中间的化，需要特殊处理
             if(da.isCenterofHands)
             {
-                posWS = Vector3.zero;
-                quatWS = Quaternion.identity;
+                var leftHandPosWS = animator.GetBoneTransform(HumanBodyBones.LeftHand).position;
+                var rightHandPosWS = animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+                var point = (leftHandPosWS + rightHandPosWS) / 2.0f;
+                var dir = point - root.position;
+                var projdir = Vector3.ProjectOnPlane(dir, root.right);
+                posWS = root.position + projdir;                
+                quatWS = root.rotation;
                 return;
             }
 
@@ -137,14 +176,19 @@ namespace Docking
 
             // 其余直接记录
             posWS = animator.GetBoneTransform(da.dockingBone).position;
-            quatWS = animator.GetBoneTransform(da.dockingBone).rotation;
+            //quatWS = animator.GetBoneTransform(da.dockingBone).rotation;
+            quatWS = root.rotation;
             return;
         }
 
         private static void SaveAnimationClip(AnimationClip clip, string dockingBonePath, 
             BoneTransfromCurve boneTransfromCurve)
         {
-            // 记录docking bone 轨迹到 animationclip
+            // 先删除原来的curve，因为直接setcurve会实施combine curve行为
+            clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition", null);                                                                               
+            clip.SetCurve(dockingBonePath, typeof(Transform), "localRotation", null);
+
+            // 记录docking bone 轨迹到 animation clip
             clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition.x", boneTransfromCurve.posX);
             clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition.y", boneTransfromCurve.posY);
             clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition.z", boneTransfromCurve.posZ);
@@ -168,7 +212,7 @@ namespace Docking
             Vector3 lcoalPos = root.InverseTransformPoint(posWS);
             Quaternion localQuat = Quaternion.Inverse(root.rotation) * quatWS;
             localQuat = Utils.EnsureQuaternionContinuity(transCurve.LastQuaternion(), localQuat);
-
+            
             transCurve.posX.AddKey(time, lcoalPos.x);
             transCurve.posY.AddKey(time, lcoalPos.y);
             transCurve.posZ.AddKey(time, lcoalPos.z);          

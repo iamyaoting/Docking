@@ -12,7 +12,7 @@ namespace Docking
         public override DockedVertexStatus GetDockedLS(TR undockedTRLS, out DockingVertex dockedVertexLS)
         {
             dockedVertexLS = new DockingVertex(m_desiredVertex);
-            return null;
+            return new DockedVertexStatus();
         }
         
         protected override void DrawGizmos()

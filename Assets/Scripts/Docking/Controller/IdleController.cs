@@ -9,6 +9,7 @@ public class IdleController : Controller
         if(HasEnvInteractiveActionUserInput())
         {
             m_nextControllerEnterContext = GetNearestDockingTarget();
+            if (null == m_nextControllerEnterContext) return;
             m_nextControllerType = Docking.Utils.GetDefaultControllerTypeByTargetType(m_nextControllerEnterContext.dockingtarget.m_type);
         }
     }

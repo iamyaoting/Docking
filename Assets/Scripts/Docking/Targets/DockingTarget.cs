@@ -22,7 +22,7 @@ namespace Docking
     [System.Serializable]
     public class DockingVertex
     {
-        public DockingVertex() { }
+        public DockingVertex() { tr = new TR(); }
         public DockingVertex(Vector3 pos, Quaternion rot, float resverdFloat = 0)
         {
             tr = new TR();

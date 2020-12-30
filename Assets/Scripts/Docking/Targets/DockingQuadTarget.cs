@@ -11,6 +11,32 @@ namespace Docking
         public Vector3 p2 = Vector3.zero;
         public Vector3 normal = Vector3.up;
         public float width = 0;
+
+        public DockedVertexStatus GetDockedLS(TR undockedTRLS, out DockingVertex dockedVertexLS)
+        {
+            // 先算纵向的
+            Vector3 dockedPoint;
+            float k1 = 0;
+            Docking.Utils.GetLineSegmentDockedPoint(p1, p2, undockedTRLS.translation, out dockedPoint, out k1);
+
+            // 再算横向的
+            float k2 = 0;
+            Vector3 dir = Vector3.Cross(p2 - p1, normal).normalized;
+            Vector3 p3 = dockedPoint - dir * width / 2;
+            Vector3 p4 = dockedPoint + dir * width / 2;
+            Docking.Utils.GetLineSegmentDockedPoint(p3, p4, undockedTRLS.translation, out dockedPoint, out k2);
+
+            dockedVertexLS = new DockingVertex();
+            dockedVertexLS.tr.translation = dockedPoint;
+            dockedVertexLS.tr.rotation = Quaternion.FromToRotation(undockedTRLS.rotation * Vector3.up, normal) * undockedTRLS.rotation;
+            dockedVertexLS.reserveFloatParam = 0;
+
+            var dockedVertexSatus = new DockedVertexStatus();
+            dockedVertexSatus.alpha = k1;
+            dockedVertexSatus.reserveFloatParam = k2;
+
+            return dockedVertexSatus;
+        }
     }
     public class DockingQuadTarget : DockingTarget
     {
@@ -18,8 +44,7 @@ namespace Docking
 
         public override DockedVertexStatus GetDockedLS(TR undockedTRLS, out DockingVertex dockedVertexLS)
         {
-            dockedVertexLS = new DockingVertex();
-            return new DockedVertexStatus();
+            return m_quadData.GetDockedLS(undockedTRLS, out dockedVertexLS);
         }
 
         protected override void DrawGizmos()
@@ -66,7 +91,7 @@ namespace Docking
             DockingGizmos.PopGizmosData();
         }
 
-        private static DockingQuadData GetQuadDataWS(DockingQuadData dataMS, Transform trs)
+        protected static DockingQuadData GetQuadDataWS(DockingQuadData dataMS, Transform trs)
         {            
             DockingQuadData dataWS = new DockingQuadData();
             dataWS.p1 = trs.TransformPoint(dataMS.p1);

@@ -6,20 +6,13 @@ namespace Docking
 {
     public class InValutController : DockingController
     {
+        private DockingQuadVaultTarget target;
         public override void OnEnter(ControllerEnterContext context)
-        {            
-            //var desiredDockedVertex = context.desiredDockedVertex; 
+        {
+            // 向动画图执行命令
+            m_animator.SetTrigger("Commit");
 
-            //var angle = Utils.GetYawAngle(m_animator.transform, desiredDockedVertex.tr.translation);
-
-            //if (angle < 0)
-            //{               
-            //    m_animator.SetFloat("LeftRightSelctor", 1);
-            //}
-            //else
-            //{
-            //    m_animator.SetFloat("LeftRightSelctor", 0);
-            //}
+            target = (DockingQuadVaultTarget)context.dockingtarget;
             base.OnEnter(context);
         }
 
@@ -29,9 +22,12 @@ namespace Docking
 
         public override void OnFSMStateExit() 
         {
-            var dockingBoneTrans = Utils.GetDockingBoneTransform(m_animator);
-            m_nextControllerEnterContext = GetNearestFloorVertexTarget(dockingBoneTrans);
+            var dockingBoneTrans = Docking.Utils.GetDockingBoneTransform(m_animator);
+            var landPoint = target.GetDesiredLandHintTRWS(dockingBoneTrans.position, dockingBoneTrans.rotation);
+
+            m_nextControllerEnterContext = CreateFloorVertexTarget(landPoint.translation, landPoint.rotation);
             m_nextControllerType = typeof(OutValutController);
+            //Time.timeScale = 0;
         }
     }
 

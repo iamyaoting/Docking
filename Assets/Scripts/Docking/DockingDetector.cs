@@ -41,7 +41,8 @@ namespace Docking
             {
                 var targets = c.GetComponentsInChildren<DockingTarget>();
                 foreach(var t in targets)
-                {                  
+                {
+                    if (!t.m_active) continue;
                     float dist = float.MaxValue;                                        
                     if(t.IsInDetectorSweepVolume(this, out dist, out tmpVertex, out statusTmp))
                     {
@@ -73,7 +74,7 @@ namespace Docking
             var point_center_dir = pointMS - m_biasMS;
             float dist = point_center_dir.magnitude;
             if (dist > m_minDist && dist < m_maxDist
-                //&& Vector3.Angle(point_center_dir, GetDirectionMS()) < m_fov
+                && Vector3.Angle(point_center_dir, GetDirectionMS()) < m_fov
                 )
             {
                 return true;

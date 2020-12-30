@@ -38,12 +38,11 @@ namespace Docking
         public static DockedVertexStatus GetDockedLS(TR undockedTRLS, DockingVertex start, DockingVertex end,
             out DockingVertex dockedVertexLS)
         {
-            var posMS = undockedTRLS.translation;
-            var point_start = posMS - start.tr.translation;
-            var end_start = end.tr.translation - start.tr.translation;
-
-            var k = Vector3.Dot(end_start, point_start) / end_start.sqrMagnitude;
-            k = Mathf.Clamp01(k);
+            
+            float k = 0;
+            Vector3 dockedPoint;
+            Utils.GetLineSegmentDockedPoint(start.tr.translation, end.tr.translation, undockedTRLS.translation,
+                out dockedPoint, out k);           
             
             dockedVertexLS = new DockingVertex();
             dockedVertexLS.tr = TR.Lerp(start.tr, end.tr, k);
@@ -54,15 +53,15 @@ namespace Docking
             dockedVertexSatus.alpha = k;
             dockedVertexSatus.reserveFloatParam = dockedVertexLS.reserveFloatParam;
             
-            // 判断原始的undocked点是否在直线的背面
-            var dir = undockedTRLS.translation - dockedVertexLS.tr.translation;
-            if(dir.magnitude > 0.1 && Vector3.Angle(dockedVertexLS.tr.rotation * Vector3.forward, dir) > 100)
-            {
-                Debug.Log(Vector3.Angle(dockedVertexLS.tr.rotation * Vector3.forward, dir) + "..." + k);
-                // 在背面，返回null
-                Debug.LogWarning("At the back of the line!");
-                dockedVertexLS = null;
-            }
+            //// 判断原始的undocked点是否在直线的背面
+            //var dir = undockedTRLS.translation - dockedVertexLS.tr.translation;
+            //if(dir.magnitude > 0.1 && Vector3.Angle(dockedVertexLS.tr.rotation * Vector3.forward, dir) > 100)
+            //{
+            //    //Debug.Log(Vector3.Angle(dockedVertexLS.tr.rotation * Vector3.forward, dir) + "..." + k);
+            //    // 在背面，返回null
+            //    //Debug.LogWarning("At the back of the line!");
+            //    dockedVertexLS = null;
+            //}
 
             return dockedVertexSatus;
         }
