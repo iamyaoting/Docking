@@ -9,6 +9,9 @@ TagManager:
   - Fly
   - Animal
   - Water
+  - Zipline
+  - Weapon
+  - PlayerUI
   layers:
   - Default
   - TransparentFX
@@ -16,7 +19,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - role
   - 
   - 
   - 
