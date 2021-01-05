@@ -49,7 +49,8 @@ namespace Docking
     {
         TAKE_COVER,
         VAULT,
-        CLIMB
+        BRACED_HANG,
+        HANGING
     }
 
     // 角色Dock的点的信息
@@ -172,7 +173,8 @@ namespace Docking
             new Dictionary<DockingTargetType, Color>{
                 {DockingTargetType.TAKE_COVER,  Color.green },
                 {DockingTargetType.VAULT,       Color.yellow },
-                {DockingTargetType.CLIMB,       Color.blue }
+                {DockingTargetType.BRACED_HANG, Color.blue },
+                {DockingTargetType.HANGING,     Color.cyan}      
             };
 
         protected const float m_lineWidth = 0.1f;

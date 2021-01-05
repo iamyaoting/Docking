@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4856441, g: 0.5923463, b: 0.6554918, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -239,6 +239,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8201617964172308383, guid: 7602534f3aea91e4990bb0db4163a1e8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8201617964823720061, guid: 7602534f3aea91e4990bb0db4163a1e8,
         type: 3}
       propertyPath: m_RootOrder
@@ -416,6 +421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_dockingDetector: {fileID: 158681348}
+  m_enableDocking: 1
   m_dockingDriverGizmos: 1
   m_dockingDetectorGizmos: 1
 --- !u!4 &158681351 stripped
@@ -466,6 +472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_dockingDetector: {fileID: 249284193}
+  m_enableDocking: 1
   m_dockingDriverGizmos: 1
   m_dockingDetectorGizmos: 1
 --- !u!1 &529579560
@@ -664,7 +671,7 @@ PrefabInstance:
     - target: {fileID: 8860408986781792588, guid: 68e0bcdc43d3cac47991a728cbbcd347,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -27.07
+      value: -26.07
       objectReference: {fileID: 0}
     - target: {fileID: 8860408986781792588, guid: 68e0bcdc43d3cac47991a728cbbcd347,
         type: 3}
@@ -674,7 +681,7 @@ PrefabInstance:
     - target: {fileID: 8860408986781792588, guid: 68e0bcdc43d3cac47991a728cbbcd347,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 19.1
+      value: 20.38
       objectReference: {fileID: 0}
     - target: {fileID: 8860408986781792588, guid: 68e0bcdc43d3cac47991a728cbbcd347,
         type: 3}
@@ -719,6 +726,75 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1139539155}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1015988136
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4291460572683305409, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291460572683305409, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291460572683305409, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291460572683305409, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291460572683305409, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291460572683305409, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291460572683305409, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291460572683305409, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291460572683305409, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291460572683305409, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291460572683305409, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4291460572683305410, guid: fe0cc2ff2c99fd94699f591c4853e642,
+        type: 3}
+      propertyPath: m_Name
+      value: CubeRoom
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fe0cc2ff2c99fd94699f591c4853e642, type: 3}
 --- !u!1001 &1139539155
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -813,6 +889,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_dockingDetector: {fileID: 1278942773}
+  m_enableDocking: 1
   m_dockingDriverGizmos: 1
   m_dockingDetectorGizmos: 1
 --- !u!114 &1278942773
@@ -1747,6 +1824,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateEntry: UnDocked
+  timeScale: 1
 --- !u!4 &2055519046
 Transform:
   m_ObjectHideFlags: 0
