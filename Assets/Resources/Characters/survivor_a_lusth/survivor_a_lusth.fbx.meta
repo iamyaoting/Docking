@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: a4d77b91552e0944bb6dbe0c3d18524d
 ModelImporter:
-  serializedVersion: 20101
+  serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: -203655887218126122
@@ -11,7 +11,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: survivor_MAT
-    second: {fileID: 2100000, guid: 0c7847f7a8badb64c8222f7ffc358f1e, type: 2}
+    second: {fileID: 2100000, guid: 24632f199db2e124fa8de70094b989d5, type: 2}
   - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
@@ -869,6 +869,7 @@ ModelImporter:
   animationType: 3
   humanoidOversampling: 1
   avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
