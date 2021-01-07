@@ -26,11 +26,19 @@ namespace Docking
             base.OnEnter(context);
         }
 
+        protected override void OnDockingTargetUpdate(DockingTarget target, TR tr, DockedVertexStatus status)
+        {
+            if (null != status)
+            {
+                m_animator.SetFloat("Height", status.reserveFloatParam);
+            }
+            base.OnDockingTargetUpdate(target, tr, status);
+        }
+
         public override void Tick(float deltaTime)
-        {            
+        {
             var moveDir = GetInput();
-            m_animator.SetFloat("MoveDirection", moveDir.x);
-            m_animator.SetFloat("Height", m_dockedVertexStatus.reserveFloatParam);
+            m_animator.SetFloat("MoveDirection", moveDir.x);            
         }
     }
 

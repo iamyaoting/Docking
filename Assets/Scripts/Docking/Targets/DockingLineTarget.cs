@@ -66,14 +66,14 @@ namespace Docking
             return dockedVertexSatus;
         }
 
-        private DOCKING_INPUT_LIMIT GetLimitByAlpha(float alpha, TR tr)
+        private DOCKED_POINT_MOVE_LIMIT GetLimitByAlpha(float alpha, TR tr)
         {
             if (alpha < 0.5f)
             {
                 var dist = transform.TransformVector(tr.translation - m_start.tr.translation).magnitude;
                 if (dist < SMALL_DISTANCE)
                 {
-                    return DOCKING_INPUT_LIMIT.HORIZEN_LEFT_FORBIDEN;
+                    return DOCKED_POINT_MOVE_LIMIT.HORIZEN_LEFT_FORBIDEN;
                 }
             }
             if (alpha >= 0.5f)
@@ -81,10 +81,10 @@ namespace Docking
                 var dist = transform.TransformVector(tr.translation - m_end.tr.translation).magnitude;
                 if (dist < SMALL_DISTANCE)
                 {
-                    return DOCKING_INPUT_LIMIT.HORIZEN_RIGHT_FORBIDEN;
+                    return DOCKED_POINT_MOVE_LIMIT.HORIZEN_RIGHT_FORBIDEN;
                 }               
             }
-            return DOCKING_INPUT_LIMIT.NONE;
+            return DOCKED_POINT_MOVE_LIMIT.NONE;
         }
     }
 

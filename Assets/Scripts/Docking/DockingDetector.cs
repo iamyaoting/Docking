@@ -68,17 +68,33 @@ namespace Docking
             return directionMS.normalized;
         }       
 
-        public bool IsPointInDetectorWS(Vector3 pointWS)
+        public bool IsPointInDetectorWS(DockingTarget target, Vector3 pointWS)
         {
             var pointMS = transform.InverseTransformPoint(pointWS);
             var point_center_dir = pointMS - m_biasMS;
+            var dir = GetDirectionMS();
             float dist = point_center_dir.magnitude;
-            if (dist > m_minDist && dist < m_maxDist
-                && Vector3.Angle(point_center_dir, GetDirectionMS()) < m_fov
-                )
+            float fovDiff = Vector3.Angle(point_center_dir, dir);
+            if (dist > m_minDist && dist < m_maxDist)
             {
-                return true;
+                switch (target.m_type)
+                {
+                    case DockingTargetType.HANGING:
+                    case DockingTargetType.BRACED_HANG:
+                        return true;
+
+                    case DockingTargetType.TAKE_COVER:
+                    case DockingTargetType.VAULT:
+                        if (fovDiff < m_fov)
+                        {
+                            return true;
+                        }
+                        break;
+                }
             }
+
+            Debug.Log("Detect Docking Target:" + target.m_type + ";  dist=" + dist +
+                ",  angle=" + fovDiff);
             return false;
         }      
 

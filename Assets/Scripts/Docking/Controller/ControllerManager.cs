@@ -12,6 +12,8 @@ public class ControllerManager : MonoBehaviour
     protected Controller                            m_currentController;
     private   Docking.DockingDriver                 m_dockingDriver;    
     private   Animator                              m_animator;
+    private int                                     m_currentStateHash;
+    
 
     // 用于存储涉及到的controller，防止多次 new
     private Dictionary<System.Type, Controller>     m_controllersCache;    
@@ -34,6 +36,7 @@ public class ControllerManager : MonoBehaviour
         m_controllersCache = new Dictionary<System.Type, Controller>();
         m_currentController = new IdleController();
         m_currentController.OnInit(GetControllerInitContext());
+        m_currentStateHash = m_animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
     }
 
     // Update is called once per frame
@@ -56,10 +59,31 @@ public class ControllerManager : MonoBehaviour
                     m_currentController.OnInit(GetControllerInitContext());
                 }
                 m_lastController.OnExit();
-                m_currentController.OnEnter(context);
-                
+                m_currentController.OnEnter(context);                
             }
-            m_currentController.Tick(Time.deltaTime);           
+            UpdateControllerActiveState();
+            if (m_currentController.active)
+            {
+                // 如果控制器属于激活状态，进行tick
+                m_currentController.Tick(Time.deltaTime);
+            }
+        }
+    }
+
+    // 更新控制器active状态
+    private void UpdateControllerActiveState()
+    {
+        if (m_currentController.active)
+        {
+            m_currentStateHash = m_animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
+            return;
+        }
+
+        if (m_animator.GetCurrentAnimatorStateInfo(0).fullPathHash != m_currentStateHash)
+        {
+            // 此时动画graph的state已经改变了，激活当前的controller
+            m_currentStateHash = m_animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
+            m_currentController.active = true;
         }
     }
 
@@ -67,9 +91,9 @@ public class ControllerManager : MonoBehaviour
     {
         //transform.position += m_animator.deltaPosition;
         //transform.rotation = m_animator.deltaRotation * transform.rotation;
-        if (null != m_currentController && m_enableDocking)
+        if (null != m_currentController && m_enableDocking && m_currentController.active)
         {
-            m_currentController.OnDockingModify();
+            m_currentController.OnDockingDriver();
         }
     }
     private ControllerInitContext GetControllerInitContext()

@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41074f76d66d4e84a864c0639a698c5a, type: 3}
+  m_Name: Hanging
+  m_EditorClassIdentifier: 
+  character: {fileID: 718614434110108122, guid: 019445333a3f9bd44ba695a1ba896bf4,
+    type: 3}
+  anmis:
+  - clip: {fileID: 7400000, guid: a33238eea563de14d9541887b31a6807, type: 2}
+    segments:
+    - isCenterofHands: 1
+      fixedPositionY: 0
+      dockingBone: 0
+      dockingTimeType: 1
+      dockedFixedNormalizedTime: 1
+      startNormalizedTime: 0
+      endNormalizedTime: 1
+  - clip: {fileID: 7400000, guid: 312860e0d0166e440b88a0849d83fd20, type: 2}
+    segments:
+    - isCenterofHands: 0
+      fixedPositionY: 0
+      dockingBone: 55
+      dockingTimeType: 1
+      dockedFixedNormalizedTime: 1
+      startNormalizedTime: 0
+      endNormalizedTime: 1
+  - clip: {fileID: 7400000, guid: 6b6534e52353bff4fae3c6a467ed3d39, type: 2}
+    segments:
+    - isCenterofHands: 1
+      fixedPositionY: 1
+      dockingBone: 0
+      dockingTimeType: 0
+      dockedFixedNormalizedTime: 0
+      startNormalizedTime: 0
+      endNormalizedTime: 1
+  - clip: {fileID: 7400000, guid: d38bd46774f78d04ead11cdf14ba8ab4, type: 2}
+    segments:
+    - isCenterofHands: 1
+      fixedPositionY: 1
+      dockingBone: 0
+      dockingTimeType: 0
+      dockedFixedNormalizedTime: 0
+      startNormalizedTime: 0
+      endNormalizedTime: 1
+  - clip: {fileID: 7400000, guid: ff015802af1cec7489b11f2bca5de1c1, type: 2}
+    segments:
+    - isCenterofHands: 1
+      fixedPositionY: 1
+      dockingBone: 0
+      dockingTimeType: 0
+      dockedFixedNormalizedTime: 0
+      startNormalizedTime: 0
+      endNormalizedTime: 1
+  - clip: {fileID: 7400000, guid: 28bd8f8d408996541920f10e57ad4c7f, type: 2}
+    segments:
+    - isCenterofHands: 1
+      fixedPositionY: 1
+      dockingBone: 0
+      dockingTimeType: 0
+      dockedFixedNormalizedTime: 0
+      startNormalizedTime: 0
+      endNormalizedTime: 1
+  - clip: {fileID: 7400000, guid: 787c0d34a67e00f45ab498bd3dd6b509, type: 2}
+    segments:
+    - isCenterofHands: 1
+      fixedPositionY: 1
+      dockingBone: 0
+      dockingTimeType: 0
+      dockedFixedNormalizedTime: 0
+      startNormalizedTime: 0
+      endNormalizedTime: 1

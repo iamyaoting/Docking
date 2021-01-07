@@ -58,7 +58,7 @@ namespace Docking
     {
         public float                alpha;              // 当前停靠点的alpha, 0代表left，1代表right，用于表示是否停靠再边界
         public float                reserveFloatParam;  // 当前点的额外信息
-        public DOCKING_INPUT_LIMIT  limit;              // 是否到target边界了
+        public DOCKED_POINT_MOVE_LIMIT  limit;              // 是否到target边界了
     }
 
     public abstract class DockingTarget : MonoBehaviour
@@ -88,8 +88,8 @@ namespace Docking
             DockingVertex dockedLS;
             status = GetDockedLS(unDockedLS, out dockedLS);
 
-            // 如果为翻墙，则禁止输入
-            if (m_type == DockingTargetType.VAULT) status.limit = DOCKING_INPUT_LIMIT.ALL;
+//             // 如果为翻墙，则禁止输入
+//             if (m_type == DockingTargetType.VAULT) status.limit = DOCKED_POINT_MOVE_LIMIT.ALL;
 
             referenceFromDesiredTarget = GetReferenceSpaceFromLocalSpace(dockedLS.tr.translation, dockedLS.tr.rotation);
                        
@@ -159,7 +159,7 @@ namespace Docking
             dist = (nearestDockedVertex.tr.translation - playerTR.translation).magnitude;            
             
             // 判断最近的点是否在Detector内部
-            return detector.IsPointInDetectorWS(nearestDockedVertex.tr.translation);
+            return detector.IsPointInDetectorWS(this, nearestDockedVertex.tr.translation);
         }
 
         private void Update()

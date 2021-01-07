@@ -41,6 +41,10 @@ public abstract class Controller
     protected ControllerEnterContext            m_nextControllerEnterContext;
     protected System.Type                       m_nextControllerType;
 
+    // 该控制器是否有效，在两个state之间的transistion状态下，不进行控制，该值为false
+    public bool active { get; set; }   
+  
+
     // 设置是否容许进行控制
     public void SetEnableInput(bool active)
     {
@@ -79,18 +83,19 @@ public abstract class Controller
         m_nextControllerEnterContext = null;
         m_nextControllerType = null;
         m_enableInput = true;
-
-        Debug.Log("【Controller: " + GetType().Name + " 】entered!");
+        active = false;
+        Debug.Log("【Controller: " + GetType().Name + " 】entered!");        
     }
 
     public abstract void Tick(float deltaTime);
     public virtual void OnExit() 
     {
+        active = false;
         Debug.Log("【Controller: " + GetType().Name + " 】exit!");
     }
 
     // 若rootmotion需要特殊处理，则进行override该函数，进行处理，特指docking
-    public virtual void OnDockingModify() { }
+    public virtual void OnDockingDriver() { }
 
     
 
@@ -115,7 +120,7 @@ public abstract class Controller
     // 当前帧是否有 env interactive Event 的用户输入请求，包括键盘，手柄等
     public static bool HasEnvInteractiveActionUserInput()
     {
-        return true;
+        // return true;
         if (Input.GetKeyDown(KeyCode.E)) return true;
         return false;
     }

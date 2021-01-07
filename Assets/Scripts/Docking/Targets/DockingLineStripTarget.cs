@@ -61,19 +61,19 @@ namespace Docking
             return dockedVertexSatus;
         }
 
-        private DOCKING_INPUT_LIMIT GetLimitByAlpha(float alpha, TR tr, int idx)
+        private DOCKED_POINT_MOVE_LIMIT GetLimitByAlpha(float alpha, TR tr, int idx)
         {
-            if (m_loop) return DOCKING_INPUT_LIMIT.NONE;
+            if (m_loop) return DOCKED_POINT_MOVE_LIMIT.NONE;
             
             var count = m_vertices.Length;
-            if (idx < count - 2 && idx > 0 && count > 1) return DOCKING_INPUT_LIMIT.NONE;
+            if (idx < count - 2 && idx > 0 && count > 1) return DOCKED_POINT_MOVE_LIMIT.NONE;
 
             if (alpha < 0.5f && 0 == idx)
             {
                 var dist = transform.TransformVector(tr.translation - m_vertices[0].tr.translation).magnitude;
                 if (dist < SMALL_DISTANCE)
                 {                    
-                    return DOCKING_INPUT_LIMIT.HORIZEN_LEFT_FORBIDEN;
+                    return DOCKED_POINT_MOVE_LIMIT.HORIZEN_LEFT_FORBIDEN;
                 }
             }
             if (alpha >= 0.5f && idx == count - 2)
@@ -81,10 +81,10 @@ namespace Docking
                 var dist = transform.TransformVector(tr.translation - m_vertices[count - 1].tr.translation).magnitude;
                 if (dist < SMALL_DISTANCE)
                 {                 
-                    return DOCKING_INPUT_LIMIT.HORIZEN_RIGHT_FORBIDEN;
+                    return DOCKED_POINT_MOVE_LIMIT.HORIZEN_RIGHT_FORBIDEN;
                 }
             }
-            return DOCKING_INPUT_LIMIT.NONE;
+            return DOCKED_POINT_MOVE_LIMIT.NONE;
         }
 
         private bool GetLineSegment(int idx, out DockingVertex start, out DockingVertex end)

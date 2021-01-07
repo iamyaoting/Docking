@@ -71,12 +71,23 @@ namespace Docking
             Vector3 posWS = new Vector3();
             Quaternion quatWS = new Quaternion();
             Transform root = comp.transform;
+            float ledgePosY = 0;
 
             // 若只需要记录固定事件下的docking bone 的信息，则提前播放到指定时刻，先进行记录
             if (da.dockingTimeType == DockingTimeType.DOCKING_FIXED_TIME)
             {
                 comp.PlayAtTime(da.dockedFixedNormalizedTime * clip.length);
                 GetDockingBoneWS(root, da, out posWS, out quatWS);               
+            }
+            else if(da.dockingTimeType == DockingTimeType.DOCKED)
+            {
+                // 若双手沿着Ledge边缘移动，默认初始帧的双手中心位置为Ledge高度
+                if(da.isCenterofHands && da.fixedPositionY) 
+                {
+                    comp.PlayAtTime(da.startNormalizedTime * clip.length);
+                    GetDockingBoneWS(root, da, out posWS, out quatWS);
+                    ledgePosY = posWS.y;
+                }
             }
 
             float time = startTime;
@@ -87,6 +98,10 @@ namespace Docking
                 if (da.dockingTimeType == DockingTimeType.DOCKED)
                 {
                     GetDockingBoneWS(root, da, out posWS, out quatWS);                    
+                    if(da.fixedPositionY)
+                    {
+                        posWS.y = ledgePosY;
+                    }
                 }
                 SetTransformCurve(time, dockingBoneTransCurve, posWS, quatWS, comp.transform);
                 if (time == endTime) break;

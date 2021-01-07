@@ -63,6 +63,14 @@ namespace Docking
             isActive = false;
         }
         public DockedVertexStatus GetDockedVertexStatus() { return m_dockedVertexStatus; }
+        public TR GetDockedVertexWS() 
+        {
+            var tr = new TR();
+            tr.translation = m_worldFromLastDesiredTarget.translation;
+            tr.rotation = m_worldFromLastDesiredTarget.rotation;
+            return tr;
+        }
+
         public void Dock()
         {
             if (false == isActive) return;
@@ -249,8 +257,11 @@ namespace Docking
 
         public void DrawGizmos()       
         {
-            DockingGizmos.PushGizmosData();            
-
+            DockingGizmos.PushGizmosData();
+            
+            Gizmos.color = Color.blue;
+            Gizmos.DrawSphere(m_worldFromLastDesiredTarget.translation, 0.2f);
+            
             DockingGizmos.DrawCoordinateFrameWS(m_worldFromLastTarget);
             DockingGizmos.DrawCoordinateFrameWS(m_worldFromLastDesiredTarget);
 
