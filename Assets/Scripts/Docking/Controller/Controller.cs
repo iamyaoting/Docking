@@ -36,8 +36,7 @@ public abstract class Controller
     protected Docking.DockingDetector           m_dockingDetector;
 
     protected bool                              m_enableInput;
-    private Vector2                             m_lastInput;
-
+    
     protected ControllerEnterContext            m_nextControllerEnterContext;
     protected System.Type                       m_nextControllerType;
 
@@ -50,9 +49,9 @@ public abstract class Controller
     {
         m_enableInput = active;
     }
-    public bool GetEnableInput() { return m_enableInput; }  
+    public bool GetEnableInput() { return m_enableInput; }
 
-    protected virtual Vector2 GetInput()
+    protected Vector2 GetRawInput()
     {
         if (false == m_enableInput) return Vector2.zero;
 
@@ -62,11 +61,8 @@ public abstract class Controller
 
         input = HandleInputLimit(input);
 
-        input = Vector2.Lerp(m_lastInput, input, .2f);
-        m_lastInput = input;
-
         return input;
-    }    
+    } 
 
     // 用于处理input约束的情况
     protected virtual Vector2 HandleInputLimit(Vector2 input) { return input; }
@@ -95,9 +91,7 @@ public abstract class Controller
     }
 
     // 若rootmotion需要特殊处理，则进行override该函数，进行处理，特指docking
-    public virtual void OnDockingDriver() { }
-
-    
+    public virtual void OnDockingDriver() { }    
 
 
     // 当绑定该控制器的状态结束时候，会调用该函数
@@ -123,6 +117,15 @@ public abstract class Controller
         // return true;
         if (Input.GetKeyDown(KeyCode.E)) return true;
         return false;
+    }
+
+    // 是否按了加速键
+    protected bool IsSpeedUpActionPressed()
+    {
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            return true;
+        else
+            return false;
     }
 
     // 利用docking detector 寻找最近的target

@@ -6,6 +6,7 @@ namespace Docking
 {
     public class TakeCoverController : DockingController
     {
+        private Vector2 m_lastInput;
         public override void OnEnter(ControllerEnterContext context)
         {
             // 向动画图执行命令
@@ -37,8 +38,10 @@ namespace Docking
 
         public override void Tick(float deltaTime)
         {
-            var moveDir = GetInput();
-            m_animator.SetFloat("MoveDirection", moveDir.x);            
+            var input = GetRawInput();
+            input = Vector2.Lerp(m_lastInput, input, .2f);
+            m_lastInput = input;
+            m_animator.SetFloat("MoveDirection", input.x);            
         }
     }
 

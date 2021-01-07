@@ -115,7 +115,9 @@ namespace Docking
                     return typeof(TakeCoverController);
                 // 进入 DockingTargetType.VAULT的target，默认进入InValutController控制器中，在其中自动转入OutValutController控制器
                 case DockingTargetType.VAULT: 
-                    return typeof(InValutController);
+                    return typeof(ValutController);
+                case DockingTargetType.HANGING:
+                    return typeof(HangingController);
             }
             return null;
         }
@@ -232,6 +234,26 @@ namespace Docking
 
             dockedPoint = Vector3.Lerp(start, end, k);
             alpha = k;            
+        }
+
+        public static int[] GetStateMachineStateHash(string[] names)
+        {
+            int[] hashes = new int[names.Length];
+            for(int i = 0; i < names.Length; ++i)
+            {
+                hashes[i] = Animator.StringToHash("Base Layer." + names[i]);
+            }
+            return hashes;
+        }
+
+        public static bool IsCurrentState(Animator animator, int[] hashes, int layer = 0)
+        {
+            var curHash = animator.GetCurrentAnimatorStateInfo(layer).fullPathHash;
+            foreach (var hash in hashes)
+            {
+                if (curHash == hash) return true;
+            }
+            return false;
         }
     }
 

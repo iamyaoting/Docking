@@ -69,7 +69,19 @@ namespace Docking
 
         public bool temporary { get; set; } // 是否是临时的, 程序生成的target，而非静态的
 
-        protected const float SMALL_DISTANCE = .7f;
+        protected float marginDist { 
+            get
+            {
+                switch(m_type)
+                {
+                    case DockingTargetType.TAKE_COVER:
+                        return .7f;
+                    case DockingTargetType.HANGING:
+                        return .4f;
+                }
+                return .0f;
+            }
+        }
 
         public abstract DockedVertexStatus GetDockedLS(TR undockedTRLS, out DockingVertex dockedVertexLS);
 

@@ -71,7 +71,7 @@ namespace Docking
             if (alpha < 0.5f && 0 == idx)
             {
                 var dist = transform.TransformVector(tr.translation - m_vertices[0].tr.translation).magnitude;
-                if (dist < SMALL_DISTANCE)
+                if (dist < marginDist)
                 {                    
                     return DOCKED_POINT_MOVE_LIMIT.HORIZEN_LEFT_FORBIDEN;
                 }
@@ -79,7 +79,7 @@ namespace Docking
             if (alpha >= 0.5f && idx == count - 2)
             {
                 var dist = transform.TransformVector(tr.translation - m_vertices[count - 1].tr.translation).magnitude;
-                if (dist < SMALL_DISTANCE)
+                if (dist < marginDist)
                 {                 
                     return DOCKED_POINT_MOVE_LIMIT.HORIZEN_RIGHT_FORBIDEN;
                 }
