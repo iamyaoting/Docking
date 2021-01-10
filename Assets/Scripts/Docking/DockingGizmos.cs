@@ -70,6 +70,19 @@ namespace Docking
             //PopGizmosData();
         }
 
+        // 绘制xz平面的圆盘
+        public static void DrawDisc(Vector3 center, float radius)
+        {
+            var oldMat = Gizmos.matrix;
+            var m = new Matrix4x4();
+            m.SetTRS(Vector3.zero, Quaternion.identity, new Vector3(1, 0, 1));
+            Gizmos.matrix = m;
+
+            Gizmos.DrawWireSphere(center, radius);
+
+            Gizmos.matrix = oldMat;
+        }
+
         public static void DrawLines(List<System.Tuple<Vector3, Vector3>> segments, float width, Color color)
         {
             foreach(var seg in segments)

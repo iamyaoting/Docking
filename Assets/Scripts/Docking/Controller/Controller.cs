@@ -112,11 +112,18 @@ public abstract class Controller
     }
 
     // 当前帧是否有 env interactive Event 的用户输入请求，包括键盘，手柄等
-    public static bool HasEnvInteractiveActionUserInput()
+    public static bool HasEnvCommitAction()
     {
         // return true;
         if (Input.GetKeyDown(KeyCode.E)) return true;
         return false;
+    }
+
+    // 当前是否进行跳下操作请求，进入正常locomotion控制器
+    public static bool HasEnvUnCommitAction()
+    {
+        if (Input.GetKeyDown(KeyCode.B)) return true;
+        else return false;
     }
 
     // 是否按了加速键
@@ -146,12 +153,12 @@ public abstract class Controller
     }
 
     //  找地面的最近target，由于地面没有target，则使用物理碰撞
-    protected ControllerEnterContext CreateFloorVertexTarget(Vector3 pointWS, Quaternion rotWS)
+    protected ControllerEnterContext CreateFloorVertexTarget(Vector3 pointWSHint, Quaternion rotWS)
     {
         ControllerEnterContext context = new ControllerEnterContext();
 
         const float maxDist = 100;
-        var origin = pointWS + Vector3.up * 2;
+        var origin = pointWSHint + Vector3.up * 2;
         RaycastHit hit;
         if(false == Physics.Raycast(origin, -Vector3.up, out hit, maxDist))
         {
@@ -159,7 +166,9 @@ public abstract class Controller
             return null;
         }
 
-        var rot = Quaternion.FromToRotation(rotWS * Vector3.up, hit.normal) * rotWS;
+        //var rot = Quaternion.FromToRotation(rotWS * Vector3.up, hit.normal) * rotWS;
+        // 人应该始终朝向up方向，狗和蜘蛛另外再说
+        var rot = Quaternion.FromToRotation(rotWS * Vector3.up, Vector3.up) * rotWS;
         context.desiredDockedVertex = new Docking.DockingVertex(hit.point, rot, 0);
         context.desiredDockedVertexStatus = new Docking.DockedVertexStatus();
 

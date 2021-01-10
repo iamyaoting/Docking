@@ -6,8 +6,9 @@ namespace Docking
 {
     public enum BlendType
     {
-        DOCKING_BLEND,      // docking correction is being blended
-        DOCKED_FULL_ON      // docking correction is fully on
+        DOCKING_BLEND,                      // docking correction is being blended, [000->1000]
+        DOCKING_BLEND_AND_DOCKED_FULL_ON,   // 在区间进行融合，后面则默认为fully docked[000->11111]
+        DOCKED_FULL_ON                      // docking correction is fully on
     }
 
     public enum DockingFlagBits
@@ -59,7 +60,7 @@ namespace Docking
             dockingControlData.m_targetOffsetMS.translation = m_translationOffset;
             dockingControlData.m_targetOffsetMS.rotation = m_rotationOffset;
                        
-            GetDockingDriver(animator).Notify(dockingControlData);
+            GetDockingDriver(animator).Notify(dockingControlData);            
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -84,17 +85,28 @@ namespace Docking
         {
             normalizedTime = normalizedTime - Mathf.Floor(normalizedTime);
 
-            if (normalizedTime < m_intervalStartNormalizedTime || normalizedTime > m_intervalEndNormalizedTime) return 0;
+            if (normalizedTime < m_intervalStartNormalizedTime) return 0;
 
             float blendWeight = 0;
             switch (m_blendType)
             {
                 case BlendType.DOCKED_FULL_ON:
-                    blendWeight = 1.0f;
+                    if (normalizedTime <= m_intervalEndNormalizedTime)
+                        blendWeight = 1.0f;
+                    else
+                        blendWeight = 0.0f;
                     break;
                 case BlendType.DOCKING_BLEND:
+                    if (normalizedTime <= m_intervalEndNormalizedTime)
+                        blendWeight = (normalizedTime - m_intervalStartNormalizedTime)
+                        / (m_intervalEndNormalizedTime - m_intervalStartNormalizedTime);
+                    else
+                        blendWeight = 0.0f;
+                    break;
+                case BlendType.DOCKING_BLEND_AND_DOCKED_FULL_ON:
                     blendWeight = (normalizedTime - m_intervalStartNormalizedTime)
                         / (m_intervalEndNormalizedTime - m_intervalStartNormalizedTime);
+                    blendWeight = Mathf.Clamp01(blendWeight);
                     break;
             }
             return blendWeight;

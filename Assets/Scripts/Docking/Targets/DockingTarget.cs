@@ -174,6 +174,32 @@ namespace Docking
             return detector.IsPointInDetectorWS(this, nearestDockedVertex.tr.translation);
         }
 
+        // 表征该DockingTarget是否在Detector sweep volume 内 
+        public bool IsInDetectorSweepVolume(DockingDetector detector, Vector2 moveDir,
+            out float dist, out DockingVertex nearestDockedVertex, out DockedVertexStatus nearestDockedVertexStatus)
+        {
+            var playerTR = detector.GetWorldFromCharacter();
+            DockingTransform worldFromUndockedPoint = new DockingTransform(detector.transform);
+            DockingTransform worldFromReference = GetWorldFromReference();
+            DockingTransform referenceFromUndockedPoint = DockingTransform.Multiply(
+                DockingTransform.Inverse(worldFromReference), worldFromUndockedPoint);
+            DockingTransform referenceFromDockedVertex = null;
+            GetDcokedTransfrom(referenceFromUndockedPoint, out referenceFromDockedVertex, out nearestDockedVertexStatus);
+
+            DockingTransform worldFromDockedPoint = DockingTransform.Multiply(worldFromReference, referenceFromDockedVertex);
+            nearestDockedVertex = new DockingVertex(
+                worldFromDockedPoint.translation,
+                worldFromDockedPoint.rotation,
+                nearestDockedVertexStatus.reserveFloatParam
+                );
+            //Debug.Log(nearestDockedVertex.tr.translation);
+            dist = (nearestDockedVertex.tr.translation - playerTR.translation).magnitude;
+
+            // 判断最近的点是否在Detector内部
+            return detector.IsPointInDetectorWS(this, nearestDockedVertex.tr);
+        }
+
+
         private void Update()
         {
             selected = false;

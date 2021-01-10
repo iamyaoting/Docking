@@ -45,7 +45,8 @@ namespace Docking
         {
             // 向动画图执行命令
             m_animator.SetTrigger("Commit");           
-            base.OnEnter(context);          
+            base.OnEnter(context);
+            // Debug.Break();
         }
 
         public override void Tick(float deltaTime)
@@ -63,15 +64,37 @@ namespace Docking
                 {
                     m_animator.ResetTrigger("T_HangingIdle");
                     m_animator.SetFloat("Velocity", vel);
-                    if(vel != 0)
+
+                    if(HasEnvUnCommitAction()) // 跳下至地面
+                    {
+                        m_animator.SetTrigger("UnCommit");                      
+                    }
+                    else if (vel != 0)// 切换至hanging move状态
+                    {
                         m_animator.SetTrigger("T_HangingMove");
+                    }
                 }
                 if(vel == 0  && STATE.HANGING_MOVE == state)
                 {
-                    m_animator.SetTrigger("T_HangingIdle");
+                    var ntime = Utils.GetCurrentStateNormalizedTime(m_animator, 0);
+                    if ((ntime < 0.3f && ntime > 0.25f) || ntime > 0.85f)
+                    {
+                        Debug.Log(ntime);
+                        m_animator.SetTrigger("T_HangingIdle");
+                    }                    
                     m_animator.ResetTrigger("T_HangingMove");
                 }
             }
+
+            // 在HandingToStang状态下且UnDocked状态下，进行指定target
+            if(STATE.OUT_HANGING == newState && STATE.HANGING_IDLE == state)
+            {
+                var dockingBoneTrans = Docking.Utils.GetDockingBoneTransform(m_animator);
+                var context = CreateFloorVertexTarget(dockingBoneTrans.position, dockingBoneTrans.rotation);
+                base.OnEnter(context);
+                active = true;
+            }
+
             state = newState;
         }
 

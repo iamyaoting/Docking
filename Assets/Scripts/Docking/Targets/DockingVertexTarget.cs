@@ -23,7 +23,11 @@ namespace Docking
             Gizmos.color = color;
 
             var tr = GetTRInWS(m_desiredVertex.tr);                        
-            DockingGizmos.DrawCoordinateFrameWS(tr);           
+            DockingGizmos.DrawCoordinateFrameWS(tr);
+
+//             Gizmos.color = Color.green;
+//             DockingGizmos.DrawDisc(tr.translation, 0.5f);
+
             DockingGizmos.PopGizmosData();
         }
     }

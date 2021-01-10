@@ -30,9 +30,6 @@ namespace Docking
         // first init information
         private DockingTransform m_worldFromFirstTarget = new DockingTransform();
 
-        // 是否进行 root motion 修正
-        public bool isActive { get; private set; }
-
         // DockingDriver 修正所需要的参数数据，由Docking Generator 上传提供
         private DockingControlData m_dockingControlData;
 
@@ -59,8 +56,6 @@ namespace Docking
             {
                 Debug.LogError("No Docking Bone, Please add in advance!");
             }
-
-            isActive = false;
         }
         public DockedVertexStatus GetDockedVertexStatus() { return m_dockedVertexStatus; }
         public TR GetDockedVertexWS() 
@@ -73,7 +68,8 @@ namespace Docking
 
         public void Dock()
         {
-            if (false == isActive) return;
+            //Debug.Log("Dock");
+            UpdateWorldFromReference(m_dockingTarget);
 
             // 总体思想，先将更新后的model再old reference 空间中进行docking解算
             // old reference 更新到 new reference
@@ -84,7 +80,7 @@ namespace Docking
 
             if (null == m_dockingControlData)
             {
-                Debug.LogWarning("Docking Control data can not be none!");
+                //Debug.LogWarning("Docking Control data can not be none!");
                 SetDefaultValue();
                 return;
             }
@@ -152,20 +148,17 @@ namespace Docking
                 }
                 m_lastBlend = m_dockingControlData.m_dockingBlend;                
                 m_dockingTarget.selected = true;
+
+                worldFromModel = DockingTransform.Multiply(m_worldFromNewReference, oldReferenceFromModel);
+                worldFromModel.ApplyDockingTransformWS(m_animator.transform);
+
+                //m_worldFromOldReference = m_worldFromNewReference;
             }
             else
             {
                 SetDefaultValue();
             }
-
-            UpdateWorldFromReference(m_dockingTarget);
-
-            worldFromModel = DockingTransform.Multiply(m_worldFromNewReference, oldReferenceFromModel);
-            worldFromModel.ApplyDockingTransformWS(m_animator.transform);
-            m_worldFromOldReference = m_worldFromNewReference;
-
             m_dockingControlData = null;
-            isActive = false;
         }
 
         public void Notify(DockingControlData data)
@@ -183,8 +176,6 @@ namespace Docking
             {
                 m_dockingControlData = data;
             }
-
-            isActive = true;
         }
 
         public void SetDockingTarget(DockingTarget target)

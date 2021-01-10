@@ -46,7 +46,7 @@ public class InputGUI : MonoBehaviour
             }
         }
 
-        if(Controller.HasEnvInteractiveActionUserInput())
+        if(Controller.HasEnvCommitAction())
         {
             m_dockBtn.onClick.Invoke();
             m_dockBtn.OnSubmit(null);

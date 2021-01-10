@@ -42,7 +42,7 @@ namespace Docking
                 var targets = c.GetComponentsInChildren<DockingTarget>();
                 foreach(var t in targets)
                 {
-                    if (!t.m_active) continue;
+                    if (!t.m_active || !t.enabled) continue;
                     float dist = float.MaxValue;                                        
                     if(t.IsInDetectorSweepVolume(this, out dist, out tmpVertex, out statusTmp))
                     {
@@ -56,6 +56,46 @@ namespace Docking
                             isFound = true;
                         }
                     }                    
+                }
+            }
+            return isFound;
+        }
+
+        public bool DetectNearestHangTarget(Vector2 moveDir,
+            DockingTarget curTarget,
+            out DockingTarget target,
+            out DockingVertex desiredVertex,
+            out DockedVertexStatus desiredVertexStatus)
+        {
+            bool isFound = false;
+            desiredVertex = new DockingVertex();
+            desiredVertexStatus = null;
+            target = null;
+            DockedVertexStatus statusTmp = null;
+            DockingVertex tmpVertex = null;
+
+            float nearestDist = float.MaxValue;
+            var colliders = Physics.OverlapSphere(transform.TransformPoint(m_biasMS), m_maxDist);
+            foreach (var c in colliders)
+            {
+                var targets = c.GetComponentsInChildren<DockingTarget>();
+                foreach (var t in targets)
+                {
+                    if (!t.m_active || !t.enabled) continue;
+                    if (t == curTarget) continue;
+                    float dist = float.MaxValue;
+                    if (t.IsInDetectorSweepVolume(this, moveDir, out dist, out tmpVertex, out statusTmp))
+                    {
+                        if (dist < nearestDist)
+                        {
+                            nearestDist = dist;
+                            target = t;
+                            desiredVertexStatus = statusTmp;
+                            m_desiredDockedVertex = tmpVertex; // 保存debug信息
+                            desiredVertex = tmpVertex;
+                            isFound = true;
+                        }
+                    }
                 }
             }
             return isFound;
@@ -75,6 +115,7 @@ namespace Docking
             var dir = GetDirectionMS();
             float dist = point_center_dir.magnitude;
             float fovDiff = Vector3.Angle(point_center_dir, dir);
+
             if (dist > m_minDist && dist < m_maxDist)
             {
                 switch (target.m_type)
@@ -96,7 +137,39 @@ namespace Docking
             Debug.Log("Detect Docking Target:" + target.m_type + ";  dist=" + dist +
                 ",  angle=" + fovDiff);
             return false;
-        }      
+        }
+
+        public bool IsPointInDetectorWS(DockingTarget target, TR pointWS)
+        {
+            var pointMS = transform.InverseTransformPoint(pointWS.translation);
+            float dist = pointMS.magnitude;
+            float fovDiff = Quaternion.Angle(pointWS.rotation, transform.rotation);
+
+            //if (dist > m_minDist && dist < m_maxDist)
+            {
+                switch (target.m_type)
+                {
+                    case DockingTargetType.HANGING:
+                    case DockingTargetType.BRACED_HANG:
+                        if (fovDiff < 120)
+                        {
+                            return true;
+                        }
+                        break;
+
+                    case DockingTargetType.TAKE_COVER:
+                    case DockingTargetType.VAULT:
+                        if (fovDiff < m_fov)
+                        {
+                            return true;
+                        }
+                        break;
+                }
+            }
+            Debug.Log("Detect Docking Target:" + target.m_type + ";  dist=" + dist +
+                ",  angle=" + fovDiff);
+            return false;
+        }
 
         #region gizmos
         private int gizmosAngle = 0;

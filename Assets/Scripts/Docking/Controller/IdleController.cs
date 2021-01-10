@@ -6,7 +6,7 @@ public class IdleController : Controller
 {
     public override void Tick(float deltaTime)
     {
-        if(HasEnvInteractiveActionUserInput())
+        if(HasEnvCommitAction())
         {
             m_nextControllerEnterContext = GetNearestDockingTarget();
             if (null == m_nextControllerEnterContext) return;

@@ -65,12 +65,12 @@ MonoBehaviour:
   m_constrainRotation: 1
   m_start:
     tr:
-      translation: {x: 0.33794144, y: 0.1127, z: -2.4639049}
+      translation: {x: 0.33800438, y: 0.1127, z: -2.2554698}
       rotation: {x: 0, y: -0.707, z: 0, w: 0.707}
     reserveFloatParam: 0
   m_end:
     tr:
-      translation: {x: 0.338078, y: 0.1127, z: 2.5282311}
+      translation: {x: 0.33802137, y: 0.1127, z: 2.3407826}
       rotation: {x: 0, y: -0.707, z: 0, w: 0.707}
     reserveFloatParam: 0
 --- !u!114 &1558890670

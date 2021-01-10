@@ -118,6 +118,8 @@ namespace Docking
                     return typeof(ValutController);
                 case DockingTargetType.HANGING:
                     return typeof(HangingController);
+                case DockingTargetType.BRACED_HANG:
+                    return typeof(BracedHangController);
             }
             return null;
         }
@@ -254,6 +256,13 @@ namespace Docking
                 if (curHash == hash) return true;
             }
             return false;
+        }
+
+        public static float GetCurrentStateNormalizedTime(Animator animator, int layer = 0)
+        {
+            var normalizedTime = animator.GetCurrentAnimatorStateInfo(layer).normalizedTime;
+            normalizedTime = normalizedTime - Mathf.Floor(normalizedTime);
+            return normalizedTime;
         }
     }
 

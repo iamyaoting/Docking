@@ -23,7 +23,8 @@ namespace Docking
         [Header("DockingBone")]
         // docking Bone是否是双手中心，若是，上面的dockingBone则失效
         public bool isCenterofHands = false;
-        public bool fixedPositionY = false;  // 用于双手沿着Ledge移动的情况
+        public bool fixedPositionY = false;  // 用于双手沿着Ledge移动的情况，固定高度
+        public bool linearVelocity = false;  // 
         public HumanBodyBones dockingBone;
         
 
