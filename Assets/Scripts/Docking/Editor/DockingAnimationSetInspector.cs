@@ -71,7 +71,7 @@ namespace Docking
             Vector3 posWS = new Vector3();
             Quaternion quatWS = new Quaternion();
             Transform root = comp.transform;
-            float ledgePosY = 0;
+            Vector3 ledgeStart = Vector3.zero, ledgeEnd = Vector3.zero;
 
             // 若只需要记录固定事件下的docking bone 的信息，则提前播放到指定时刻，先进行记录
             if (da.dockingTimeType == DockingTimeType.DOCKING_FIXED_TIME)
@@ -81,12 +81,18 @@ namespace Docking
             }
             else if(da.dockingTimeType == DockingTimeType.DOCKED)
             {
-                // 若双手沿着Ledge边缘移动，默认初始帧的双手中心位置为Ledge高度
-                if(da.isCenterofHands && da.fixedPositionY) 
+                // 若双手沿着Ledge边缘移动，且默认Ledge为一条直线
+                if(da.isCenterofHands) 
                 {
+                    // Ledge 开始位置
                     comp.PlayAtTime(da.startNormalizedTime * clip.length);
                     GetDockingBoneWS(root, da, out posWS, out quatWS);
-                    ledgePosY = posWS.y;
+                    ledgeStart = posWS;
+
+                    // Ledge 结束位置
+                    comp.PlayAtTime(da.endNormalizedTime * clip.length);
+                    GetDockingBoneWS(root, da, out posWS, out quatWS);
+                    ledgeEnd = posWS;                    
                 }
             }
 
@@ -98,15 +104,30 @@ namespace Docking
                 if (da.dockingTimeType == DockingTimeType.DOCKED)
                 {
                     GetDockingBoneWS(root, da, out posWS, out quatWS);                    
-                    if(da.fixedPositionY)
+                    if(da.isCenterofHands) // 将当前的点投影到ledgeStart---ledgeEnd直线上
                     {
-                        posWS.y = ledgePosY;
+                        posWS = ProjectLineSegment(posWS, ledgeStart, ledgeEnd);
                     }
                 }
                 SetTransformCurve(time, dockingBoneTransCurve, posWS, quatWS, comp.transform);
                 if (time == endTime) break;
                 time += intervalFrameTime;
             }
+        }
+
+        private static Vector3 ProjectLineSegment(Vector3 point, Vector3 start, Vector3 end)
+        {
+            var dir = end - start;
+            if(dir.magnitude == 0.0f)
+            {
+                return start;
+            }
+            dir.Normalize();
+
+            Vector3 dockedPoint;
+            float alpha = 0;
+            Utils.GetLineSegmentDockedPoint(start, end, point, out dockedPoint, out alpha);
+            return dockedPoint;
         }
 
         private void DoSimulateAnimation(GameObject hostplayer, DockingAnimation da)

@@ -149,54 +149,29 @@ namespace Docking
             return trans;
         }
 
-        // 表征该DockingTarget是否在Detector sweep volume 内 
-        public bool IsInDetectorSweepVolume(DockingDetector detector, 
-            out float dist, out DockingVertex nearestDockedVertex, out DockedVertexStatus nearestDockedVertexStatus)
+        public TR GetDockedPointWS(Vector3 pointWS, Quaternion quat)
         {
-            var playerTR = detector.GetWorldFromCharacter();
-            DockingTransform worldFromUndockedPoint = new DockingTransform(detector.transform);
-            DockingTransform worldFromReference = GetWorldFromReference();
-            DockingTransform referenceFromUndockedPoint = DockingTransform.Multiply(
-                DockingTransform.Inverse(worldFromReference), worldFromUndockedPoint);
-            DockingTransform referenceFromDockedVertex = null;
-            GetDcokedTransfrom(referenceFromUndockedPoint, out referenceFromDockedVertex, out nearestDockedVertexStatus);
-
-            DockingTransform worldFromDockedPoint = DockingTransform.Multiply(worldFromReference, referenceFromDockedVertex);
-            nearestDockedVertex = new DockingVertex(
-                worldFromDockedPoint.translation,
-                worldFromDockedPoint.rotation,
-                nearestDockedVertexStatus.reserveFloatParam
-                );
-            //Debug.Log(nearestDockedVertex.tr.translation);
-            dist = (nearestDockedVertex.tr.translation - playerTR.translation).magnitude;            
-            
-            // 判断最近的点是否在Detector内部
-            return detector.IsPointInDetectorWS(this, nearestDockedVertex.tr.translation);
+            DockedVertexStatus status = null;
+            TR dockedTRWS = null;
+            GetDockedPointWS(pointWS, quat, out dockedTRWS, out status);
+            return dockedTRWS;           
         }
 
-        // 表征该DockingTarget是否在Detector sweep volume 内 
-        public bool IsInDetectorSweepVolume(DockingDetector detector, Vector2 moveDir,
-            out float dist, out DockingVertex nearestDockedVertex, out DockedVertexStatus nearestDockedVertexStatus)
+        public void GetDockedPointWS(Vector3 pointWS, Quaternion quat, out TR dockedTRWS, out DockedVertexStatus status)
         {
-            var playerTR = detector.GetWorldFromCharacter();
-            DockingTransform worldFromUndockedPoint = new DockingTransform(detector.transform);
+            DockingTransform worldFromUndockedPoint = new DockingTransform();
+            worldFromUndockedPoint.translation = pointWS;
             DockingTransform worldFromReference = GetWorldFromReference();
             DockingTransform referenceFromUndockedPoint = DockingTransform.Multiply(
                 DockingTransform.Inverse(worldFromReference), worldFromUndockedPoint);
-            DockingTransform referenceFromDockedVertex = null;
-            GetDcokedTransfrom(referenceFromUndockedPoint, out referenceFromDockedVertex, out nearestDockedVertexStatus);
-
+            DockingTransform referenceFromDockedVertex = null;            
+            GetDcokedTransfrom(referenceFromUndockedPoint, out referenceFromDockedVertex, out status);
+            
             DockingTransform worldFromDockedPoint = DockingTransform.Multiply(worldFromReference, referenceFromDockedVertex);
-            nearestDockedVertex = new DockingVertex(
-                worldFromDockedPoint.translation,
-                worldFromDockedPoint.rotation,
-                nearestDockedVertexStatus.reserveFloatParam
-                );
-            //Debug.Log(nearestDockedVertex.tr.translation);
-            dist = (nearestDockedVertex.tr.translation - playerTR.translation).magnitude;
-
-            // 判断最近的点是否在Detector内部
-            return detector.IsPointInDetectorWS(this, nearestDockedVertex.tr);
+            
+            dockedTRWS = new TR();
+            dockedTRWS.translation = worldFromDockedPoint.translation;
+            dockedTRWS.rotation = worldFromDockedPoint.rotation;            
         }
 
 

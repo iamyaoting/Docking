@@ -8,7 +8,7 @@ public class IdleController : Controller
     {
         if(HasEnvCommitAction())
         {
-            m_nextControllerEnterContext = GetNearestDockingTarget();
+            m_nextControllerEnterContext = m_dockingDetector.GetNearestDockingTarget_Locomotion();
             if (null == m_nextControllerEnterContext) return;
             m_nextControllerType = Docking.Utils.GetDefaultControllerTypeByTargetType(m_nextControllerEnterContext.dockingtarget.m_type);
         }

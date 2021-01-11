@@ -18,7 +18,7 @@ MonoBehaviour:
   - clip: {fileID: 7400000, guid: 467413ee91efc594189404375e0629aa, type: 2}
     segments:
     - isCenterofHands: 1
-      fixedPositionY: 1
+      linearVelocity: 0
       dockingBone: 0
       dockingTimeType: 0
       dockedFixedNormalizedTime: 0
@@ -27,7 +27,7 @@ MonoBehaviour:
   - clip: {fileID: 7400000, guid: 48ed431d25b481d4f8cba17c35e3bdf3, type: 2}
     segments:
     - isCenterofHands: 1
-      fixedPositionY: 0
+      linearVelocity: 0
       dockingBone: 0
       dockingTimeType: 1
       dockedFixedNormalizedTime: 1
@@ -36,7 +36,7 @@ MonoBehaviour:
   - clip: {fileID: 7400000, guid: 6772e20067e4665438233fb30637c0fb, type: 2}
     segments:
     - isCenterofHands: 0
-      fixedPositionY: 0
+      linearVelocity: 0
       dockingBone: 55
       dockingTimeType: 1
       dockedFixedNormalizedTime: 1
@@ -45,7 +45,7 @@ MonoBehaviour:
   - clip: {fileID: 7400000, guid: 573abc5f869a39744bb944eb51ddb2a2, type: 2}
     segments:
     - isCenterofHands: 1
-      fixedPositionY: 1
+      linearVelocity: 0
       dockingBone: 0
       dockingTimeType: 0
       dockedFixedNormalizedTime: 0
@@ -54,7 +54,7 @@ MonoBehaviour:
   - clip: {fileID: 7400000, guid: fce6e0a6f114c3649ad0cc7132cda1e0, type: 2}
     segments:
     - isCenterofHands: 1
-      fixedPositionY: 1
+      linearVelocity: 0
       dockingBone: 0
       dockingTimeType: 0
       dockedFixedNormalizedTime: 0
@@ -63,7 +63,7 @@ MonoBehaviour:
   - clip: {fileID: 7400000, guid: ad6e4a8cf3270f443af6b0c6e20e07d5, type: 2}
     segments:
     - isCenterofHands: 1
-      fixedPositionY: 0
+      linearVelocity: 0
       dockingBone: 0
       dockingTimeType: 1
       dockedFixedNormalizedTime: 1
@@ -72,7 +72,7 @@ MonoBehaviour:
   - clip: {fileID: 7400000, guid: d537eb2e1f5e50c4c907c310efb7319b, type: 2}
     segments:
     - isCenterofHands: 1
-      fixedPositionY: 0
+      linearVelocity: 0
       dockingBone: 0
       dockingTimeType: 1
       dockedFixedNormalizedTime: 1
@@ -81,18 +81,32 @@ MonoBehaviour:
   - clip: {fileID: 7400000, guid: 2a8ad29c429d8cc4bb720765e0e98d4d, type: 2}
     segments:
     - isCenterofHands: 1
-      fixedPositionY: 0
+      linearVelocity: 0
       dockingBone: 0
       dockingTimeType: 1
       dockedFixedNormalizedTime: 1
       startNormalizedTime: 0
+      endNormalizedTime: 0.46
+    - isCenterofHands: 1
+      linearVelocity: 0
+      dockingBone: 0
+      dockingTimeType: 0
+      dockedFixedNormalizedTime: 1
+      startNormalizedTime: 0.46
       endNormalizedTime: 1
   - clip: {fileID: 7400000, guid: a73710744f224be4b8be2eb65d59d6fb, type: 2}
     segments:
     - isCenterofHands: 1
-      fixedPositionY: 0
+      linearVelocity: 0
       dockingBone: 0
       dockingTimeType: 1
-      dockedFixedNormalizedTime: 1
+      dockedFixedNormalizedTime: 0.7
       startNormalizedTime: 0
+      endNormalizedTime: 0.7
+    - isCenterofHands: 1
+      linearVelocity: 0
+      dockingBone: 0
+      dockingTimeType: 0
+      dockedFixedNormalizedTime: 1
+      startNormalizedTime: 0.7
       endNormalizedTime: 1

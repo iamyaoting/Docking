@@ -465,7 +465,7 @@ PlayableDirector:
   m_GameObject: {fileID: 1885447746}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 5c5207da6f02a634680f6b37be7a1851, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 208fc486c5ea0d84c8791362b612f640, type: 2}
   m_InitialState: 1
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -475,9 +475,7 @@ PlayableDirector:
     value: {fileID: 1885447748}
   - key: {fileID: -658929855268104221, guid: d9f89c76cec271c409c25687ef779fa9, type: 2}
     value: {fileID: 1885447748}
-  - key: {fileID: -2700379248179925379, guid: c7e88cd3cb742a24a8b9f6040e434475, type: 2}
-    value: {fileID: 1885447748}
-  - key: {fileID: -2700379248179925379, guid: 5c5207da6f02a634680f6b37be7a1851, type: 2}
+  - key: {fileID: 5115970532546286524, guid: 208fc486c5ea0d84c8791362b612f640, type: 2}
     value: {fileID: 1885447748}
   m_ExposedReferences:
     m_References:
@@ -1527,7 +1525,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: a4d77b91552e0944bb6dbe0c3d18524d,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 943223448204509391, guid: a4d77b91552e0944bb6dbe0c3d18524d,
         type: 3}

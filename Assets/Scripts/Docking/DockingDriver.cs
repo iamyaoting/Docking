@@ -163,19 +163,7 @@ namespace Docking
 
         public void Notify(DockingControlData data)
         {
-            // 临时方案，为了解决 transisition 时候，会有两个dockinggenerator向dockingdriver发送dockingcontroldata，
-            // 优先docking的动画，舍弃docked状态
-            if(null != m_dockingControlData)
-            {
-                if(data.m_dockingBlend <= m_dockingControlData.m_dockingBlend)
-                {
-                    m_dockingControlData = data;
-                }
-            }
-            else
-            {
-                m_dockingControlData = data;
-            }
+            m_dockingControlData = data;
         }
 
         public void SetDockingTarget(DockingTarget target)

@@ -114,7 +114,7 @@ public abstract class Controller
     // 当前帧是否有 env interactive Event 的用户输入请求，包括键盘，手柄等
     public static bool HasEnvCommitAction()
     {
-        // return true;
+        //return true;
         if (Input.GetKeyDown(KeyCode.E)) return true;
         return false;
     }
@@ -133,23 +133,6 @@ public abstract class Controller
             return true;
         else
             return false;
-    }
-
-    // 利用docking detector 寻找最近的target
-    protected ControllerEnterContext GetNearestDockingTarget()
-    {
-        ControllerEnterContext context = new ControllerEnterContext();       
-        if (false == m_dockingDetector.DetectNearestTarget(
-            out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
-        {
-            Debug.Log("Can not find docking target, dock forbidden!");
-            return null;
-        }
-        else
-        {
-            Debug.Log("Find docking target: " + context.dockingtarget.name);
-            return context;
-        }
     }
 
     //  找地面的最近target，由于地面没有target，则使用物理碰撞

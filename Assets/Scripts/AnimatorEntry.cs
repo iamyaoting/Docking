@@ -9,6 +9,7 @@ public class AnimatorEntry : MonoBehaviour
     [Range(0.2f, 1.0f)]
     public float timeScale = 1.0f;
 
+
     // Start is called before the first frame update
     void Start()
     {

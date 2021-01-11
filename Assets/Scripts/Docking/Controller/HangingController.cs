@@ -76,12 +76,8 @@ namespace Docking
                 }
                 if(vel == 0  && STATE.HANGING_MOVE == state)
                 {
-                    var ntime = Utils.GetCurrentStateNormalizedTime(m_animator, 0);
-                    if ((ntime < 0.3f && ntime > 0.25f) || ntime > 0.85f)
-                    {
-                        Debug.Log(ntime);
-                        m_animator.SetTrigger("T_HangingIdle");
-                    }                    
+                    var ntime = Utils.GetCurrentStateNormalizedTime(m_animator, 0);  
+                    m_animator.SetTrigger("T_HangingIdle");                                   
                     m_animator.ResetTrigger("T_HangingMove");
                 }
             }

@@ -44,8 +44,6 @@ namespace Docking
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            SetInputMode(animator);
-
             float normalizedTime = stateInfo.normalizedTime;
             float localTime = normalizedTime * stateInfo.length;
             float preLocalTime = Mathf.Clamp(localTime - Time.deltaTime, 0, localTime);
@@ -59,8 +57,14 @@ namespace Docking
             dockingControlData.m_targetOffsetMS = new DockingTransform();
             dockingControlData.m_targetOffsetMS.translation = m_translationOffset;
             dockingControlData.m_targetOffsetMS.rotation = m_rotationOffset;
-                       
-            GetDockingDriver(animator).Notify(dockingControlData);            
+            
+            if(!animator.IsInTransition(0)) //不允许在Transition期间进行docked操作
+            {
+                GetDockingDriver(animator).Notify(dockingControlData);
+            }
+
+            // 在docking blend 期间，禁止input输入
+            SetInputMode(animator, normalizedTime);
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -112,7 +116,7 @@ namespace Docking
             return blendWeight;
         }    
         
-        private void SetInputMode(Animator animator)
+        private void SetInputMode(Animator animator, float normalizedTime)
         {
             // 在docking blend 期间，禁止input输入
             switch (m_blendType)
@@ -123,7 +127,17 @@ namespace Docking
                 case BlendType.DOCKING_BLEND:
                     GetCurrentDockingController(animator).SetEnableInput(false);
                     break;
-            }
+                case BlendType.DOCKING_BLEND_AND_DOCKED_FULL_ON:
+                    if (normalizedTime > m_intervalStartNormalizedTime && normalizedTime < m_intervalEndNormalizedTime)
+                    {
+                        GetCurrentDockingController(animator).SetEnableInput(false);
+                    }
+                    if(normalizedTime > m_intervalEndNormalizedTime)
+                    {
+                        GetCurrentDockingController(animator).SetEnableInput(true);
+                    }
+                    break;
+            }            
         }
 
 

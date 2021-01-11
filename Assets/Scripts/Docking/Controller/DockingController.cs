@@ -33,6 +33,8 @@ namespace Docking
         
         protected override Vector2 HandleInputLimit(Vector2 input)
         {
+            if (null == m_dockedVertexStatus) return input;
+            
             var dockingInputLimit = m_dockedVertexStatus.limit;
 
             // 进行输入进行约束，若位于target边缘，则禁用某些input轴向输入        

@@ -38,7 +38,7 @@ namespace Docking
             string[] outstrs = { "BracedHang.Braced Hang To Stand" };
             outStateHashes = Utils.GetStateMachineStateHash(outstrs);
 
-            string[] hopStrs = { "BracedHang.Braced Hang Hop" };
+            string[] hopStrs = { "BracedHang.Braced Hang Hop Up", "BracedHang.Braced Hang Hop Down" };
             hopStateHashes = Utils.GetStateMachineStateHash(hopStrs);
 
             state = STATE.IN_BRACEDHANG;
@@ -76,19 +76,21 @@ namespace Docking
                 {
                     if (input.magnitude != 0)
                     {
-                        m_nextControllerEnterContext = GetNearestHangDockingTarget(Vector2.one, m_dockingDriver.GetDockingTarget());
+                        input.Normalize();
+                        m_nextControllerEnterContext = m_dockingDetector.GetNearestDockingTarget_Hanging(input, m_dockingDriver.GetDockingTarget());
                         if (null == m_nextControllerEnterContext) return;
                         m_nextControllerType = Docking.Utils.GetDefaultControllerTypeByTargetType(m_nextControllerEnterContext.dockingtarget.m_type);
 
                         m_animator.SetFloat("BracedHangHopX", input.x);
                         m_animator.SetFloat("BracedHangHopY", input.y);
+                        Debug.Log(input);
+                        //Debug.Break();
                     }
                 }
                 else if (vel != 0) // 切换至hanging move状态
                 {
                     m_animator.SetTrigger("T_BracedHangShimmy");
-                }
-                
+                }                
             }
             
             if(STATE.BRACEDHANG_SHIMMY == newState)
@@ -129,24 +131,6 @@ namespace Docking
             Debug.LogError("Braced Hang Error, Controller and State machine async！");
             return STATE.ERROR;
         }
-
-        // 搜索其他Hang 的 DockingTarget
-        protected ControllerEnterContext GetNearestHangDockingTarget(Vector2 moveDir, DockingTarget curTarget)
-        {
-            ControllerEnterContext context = new ControllerEnterContext();
-            if (false == m_dockingDetector.DetectNearestHangTarget(moveDir, curTarget,
-                out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
-            {
-                Debug.Log("Can not find docking hang target, dock forbidden!");
-                return null;
-            }
-            else
-            {
-                Debug.Log("Find docking hang target: " + context.dockingtarget.name);
-                return context;
-            }
-        }
-
 
         // 当前Out Vault动画State已经结束了，该控制器也结束了
         public override void OnFSMStateExit() 

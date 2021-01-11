@@ -16,15 +16,103 @@ namespace Docking
         public float m_maxDist = 5.0f;
         [Range(0.2f, 2)]
         public float m_minDist = 1.0f;
-        [Range(-40, 40)]
-        public float m_elevationAngleMS = 20;  // 俯仰角  
+        
+        public float m_phi = 20;  // 纬度
+        public float m_lamda = 0; // 经度
 
-        public DockingTransform GetWorldFromCharacter()
+
+        // 利用docking detector 寻找最近的target, Locomotion Detector
+        public ControllerEnterContext GetNearestDockingTarget_Locomotion()
         {
-            DockingTransform ret = new DockingTransform(transform);
-            return ret;           
+            SetLocomoitionDetector();
+            ControllerEnterContext context = new ControllerEnterContext();
+            if (false == DetectNearestTarget(null,
+                out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
+            {
+                Debug.Log("Can not find docking target, dock forbidden!");
+                return null;
+            }
+            else
+            {
+                Debug.Log("Find docking target: " + context.dockingtarget.name);
+                return context;
+            }
         }
-        public bool DetectNearestTarget(out DockingTarget target, 
+
+        // 利用docking detector 寻找最近的target, Hanging Detector
+        public ControllerEnterContext GetNearestDockingTarget_Hanging(Vector2 moveDirMS, DockingTarget currentTarget)
+        {
+            SetHangingDetector(moveDirMS);
+            ControllerEnterContext context = new ControllerEnterContext();
+            if (false == DetectNearestTarget(currentTarget,
+                out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
+            {
+                Debug.Log("Can not find docking target, dock forbidden!");
+                return null;
+            }
+            else
+            {
+                Debug.Log("Find docking target: " + context.dockingtarget.name);
+                return context;
+            }
+        }
+
+        // 设置Detector为Locomotion类型
+        private void SetLocomoitionDetector()
+        {
+            m_biasMS = new Vector3(0.0f, 1.0f, 0.2f);
+            m_fov = 40;
+            m_maxDist = 5.0f;
+            m_minDist = 1.0f;
+            m_phi = 20;
+            m_lamda = 0;
+        }
+
+        // 设置Detector为Hang的2D模式，在立面进行搜索
+        private void SetHangingDetector(Vector2 moveDir)
+        {
+            m_biasMS = transform.InverseTransformPoint(Utils.GetDockingBoneTransform(GetComponent<Animator>()).position);             
+            m_fov = 20;
+            m_maxDist = 7.0f;
+            m_minDist = 0.01f;
+                        
+            if(moveDir.magnitude == 0)
+            {
+                Debug.LogError("Detector Hang dir Error!");
+            }
+            moveDir.Normalize();
+
+            if(0 == moveDir.x)
+            {
+                m_lamda = 0;
+                if (moveDir.y > 0) m_phi = 90;
+                else m_phi = -90;               
+            }
+            else if(moveDir.x > 0)
+            {
+                m_phi = Vector2.SignedAngle(Vector2.right, moveDir);
+                m_lamda = 90;
+            }
+            else
+            {
+                m_phi = Vector2.SignedAngle(moveDir, -Vector2.right);
+                m_lamda = -90;
+            }
+        }
+
+        // 设置Detector为背面搜索模式，主要用于往背面跳跃
+        private void SetHangingBackDetector()
+        {
+            m_biasMS = new Vector3(0.0f, 1.0f, -0.2f);
+            m_fov = 40;
+            m_maxDist = 5.0f;
+            m_minDist = 1.0f;
+            m_phi = 0;
+            m_lamda = 180;
+        }        
+
+        private bool DetectNearestTarget(DockingTarget currentTarget,
+            out DockingTarget target, 
             out DockingVertex desiredVertex,
             out DockedVertexStatus desiredVertexStatus)
         {
@@ -32,8 +120,8 @@ namespace Docking
             desiredVertex = new DockingVertex();
             desiredVertexStatus = null;
             target = null;
-            DockedVertexStatus statusTmp = null;
-            DockingVertex tmpVertex = null;
+            DockedVertexStatus statusTmp = null;            
+            TR dockedTR = null;
 
             float nearestDist = float.MaxValue;
             var colliders = Physics.OverlapSphere(transform.TransformPoint(m_biasMS), m_maxDist);
@@ -43,77 +131,49 @@ namespace Docking
                 foreach(var t in targets)
                 {
                     if (!t.m_active || !t.enabled) continue;
-                    float dist = float.MaxValue;                                        
-                    if(t.IsInDetectorSweepVolume(this, out dist, out tmpVertex, out statusTmp))
-                    {
-                        if (dist < nearestDist)
-                        {
-                            nearestDist = dist;
-                            target = t;
-                            desiredVertexStatus = statusTmp;
-                            m_desiredDockedVertex = tmpVertex; // 保存debug信息
-                            desiredVertex = tmpVertex;
-                            isFound = true;
-                        }
-                    }                    
-                }
-            }
-            return isFound;
-        }
 
-        public bool DetectNearestHangTarget(Vector2 moveDir,
-            DockingTarget curTarget,
-            out DockingTarget target,
-            out DockingVertex desiredVertex,
-            out DockedVertexStatus desiredVertexStatus)
-        {
-            bool isFound = false;
-            desiredVertex = new DockingVertex();
-            desiredVertexStatus = null;
-            target = null;
-            DockedVertexStatus statusTmp = null;
-            DockingVertex tmpVertex = null;
+                    // 如果是当前的target，忽略它
+                    if (t == currentTarget) continue;  
 
-            float nearestDist = float.MaxValue;
-            var colliders = Physics.OverlapSphere(transform.TransformPoint(m_biasMS), m_maxDist);
-            foreach (var c in colliders)
-            {
-                var targets = c.GetComponentsInChildren<DockingTarget>();
-                foreach (var t in targets)
-                {
-                    if (!t.m_active || !t.enabled) continue;
-                    if (t == curTarget) continue;
+                    // 在世界空间获得detector的docked点
                     float dist = float.MaxValue;
-                    if (t.IsInDetectorSweepVolume(this, moveDir, out dist, out tmpVertex, out statusTmp))
+                    t.GetDockedPointWS(transform.position, transform.rotation, out dockedTR, out statusTmp);
+                    if (IsPointInDetectorWS(t, dockedTR, out dist))
                     {
                         if (dist < nearestDist)
                         {
                             nearestDist = dist;
                             target = t;
-                            desiredVertexStatus = statusTmp;
-                            m_desiredDockedVertex = tmpVertex; // 保存debug信息
-                            desiredVertex = tmpVertex;
+                            desiredVertexStatus = statusTmp;                            
+                            desiredVertex = new DockingVertex(dockedTR.translation, dockedTR.rotation, statusTmp.reserveFloatParam);
+                            m_desiredDockedVertex = new DockingVertex(dockedTR.translation, dockedTR.rotation, statusTmp.reserveFloatParam); // 保存debug信息
                             isFound = true;
                         }
-                    }
+                    }                   
                 }
             }
             return isFound;
-        }
+        }   
 
         // 获得圆锥的中心朝向向量
         private Vector3 GetDirectionMS()
         {
-            var directionMS = Quaternion.AngleAxis(90 - m_elevationAngleMS, Vector3.right) * Vector3.up;
-            return directionMS.normalized;
+            Vector3 pos = new Vector3(
+                Mathf.Cos(m_phi * Mathf.Deg2Rad) * Mathf.Sin(m_lamda * Mathf.Deg2Rad), 
+                Mathf.Sin(m_phi * Mathf.Deg2Rad),
+                Mathf.Cos(m_phi * Mathf.Deg2Rad) * Mathf.Cos(m_lamda * Mathf.Deg2Rad)
+                );
+            return pos;
         }       
 
-        public bool IsPointInDetectorWS(DockingTarget target, Vector3 pointWS)
+        public bool IsPointInDetectorWS(DockingTarget target, TR pointTRWS, out float dist)
         {
-            var pointMS = transform.InverseTransformPoint(pointWS);
+            var pointMS = transform.InverseTransformPoint(pointTRWS.translation);
             var point_center_dir = pointMS - m_biasMS;
             var dir = GetDirectionMS();
-            float dist = point_center_dir.magnitude;
+            dist = point_center_dir.magnitude;
+
+            // docked 点距离探测圆锥中心之间的角度
             float fovDiff = Vector3.Angle(point_center_dir, dir);
 
             if (dist > m_minDist && dist < m_maxDist)
@@ -139,37 +199,6 @@ namespace Docking
             return false;
         }
 
-        public bool IsPointInDetectorWS(DockingTarget target, TR pointWS)
-        {
-            var pointMS = transform.InverseTransformPoint(pointWS.translation);
-            float dist = pointMS.magnitude;
-            float fovDiff = Quaternion.Angle(pointWS.rotation, transform.rotation);
-
-            //if (dist > m_minDist && dist < m_maxDist)
-            {
-                switch (target.m_type)
-                {
-                    case DockingTargetType.HANGING:
-                    case DockingTargetType.BRACED_HANG:
-                        if (fovDiff < 120)
-                        {
-                            return true;
-                        }
-                        break;
-
-                    case DockingTargetType.TAKE_COVER:
-                    case DockingTargetType.VAULT:
-                        if (fovDiff < m_fov)
-                        {
-                            return true;
-                        }
-                        break;
-                }
-            }
-            Debug.Log("Detect Docking Target:" + target.m_type + ";  dist=" + dist +
-                ",  angle=" + fovDiff);
-            return false;
-        }
 
         #region gizmos
         private int gizmosAngle = 0;
@@ -186,32 +215,43 @@ namespace Docking
             Gizmos.matrix = mat44;
 
             var dirMS = GetDirectionMS();
-            Vector3 destP = dirMS * m_maxDist + m_biasMS;
-            Vector3 n = dirMS;
 
-            // 计算空间一个圆
-            float r = m_maxDist * Mathf.Tan(m_fov * Mathf.Deg2Rad);
-            Vector3 u = new Vector3(n.y, -n.x, 0);
-            Vector3 v = new Vector3(n.x * n.z, n.y * n.z, -n.x * n.x - n.y * n.y);
-
-            Func<float, Vector3> CalCirclePoint = (float angle) =>
-            {
-                return destP + r * (u.normalized * Mathf.Cos(Mathf.Deg2Rad * angle)
-                + v.normalized * Mathf.Sin(Mathf.Deg2Rad * angle));
-            };
-
-            var c1 = CalCirclePoint(gizmosAngle);
-            var c2 = CalCirclePoint(gizmosAngle + 180);
             float width = 0.03f;
             Color color = Color.green;
+
+            // 计算圆锥末端圆上两个相互垂直的向量
+            var tmp = dirMS + Vector3.one;
+            if (Vector3.Angle(tmp, dirMS) == 0) tmp += Vector3.up;
+            tmp.Normalize();
+            Vector3 u = Vector3.Cross(tmp, dirMS);
+            Vector3 v = Vector3.Cross(dirMS, u);
+
+            // 给定一个距离和角度，获得圆锥上圆的点
+            Func<float, float, Vector3> CalCirclePoint = (float dist, float angle) =>
+            {
+                Vector3 destP = dirMS * dist + m_biasMS;                              
+                float r = dist * Mathf.Tan(m_fov * Mathf.Deg2Rad);                
+                return destP + r * (u * Mathf.Cos(Mathf.Deg2Rad * angle)
+                + v * Mathf.Sin(Mathf.Deg2Rad * angle));
+            };
+
+            var c1 = CalCirclePoint(m_maxDist, gizmosAngle);
+            var c2 = CalCirclePoint(m_maxDist, gizmosAngle + 180);
+
+            var d1 = CalCirclePoint(m_minDist, gizmosAngle);
+            var d2 = CalCirclePoint(m_minDist, gizmosAngle + 180);
+            var dcenter = dirMS * m_minDist + m_biasMS;
+
             DockingGizmos.DrawLine(m_biasMS, c1, width, color);
             DockingGizmos.DrawLine(m_biasMS, c2, width, color);
-            DockingGizmos.DrawLine(m_biasMS, (c1 + c2) / 2, width, color);
-            DockingGizmos.DrawLine(c2, c1, width, color);             
+            DockingGizmos.DrawLine(dcenter, (c1 + c2) / 2, width, color);
+            DockingGizmos.DrawLine(dcenter, d1, width, color);
+            DockingGizmos.DrawLine(dcenter, d2, width, color);
+            DockingGizmos.DrawLine(c2, c1, width, color);            
 
-            DockingGizmos.PopGizmosData();
-
-            // 绘制detector寻找到的最近点
+            DockingGizmos.PopGizmosData();            
+            
+            // 绘制detector寻找到的最近点，候选点
             if(null != m_desiredDockedVertex)
             {
                 var oldColr = Gizmos.color;
