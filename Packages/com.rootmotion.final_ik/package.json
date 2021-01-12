@@ -1,0 +1,16 @@
+{
+  "name": "com.rootmotion.final_ik",
+  "displayName": "Final IK",
+  "version": "2.0.0",
+  "unity": "2020.1",
+  "description": "Inverse Kinematic Tool",
+  "licence": "MIT",
+  "author": {
+    "name": "RootMotion"
+  },
+  "keywords": [
+    "Final IK",
+    "Inverse Kinematic"
+  ],
+  "type": "library"
+}

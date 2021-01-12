@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.rootmotion.final_ik": {
+      "version": "file:com.rootmotion.final_ik",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.ide.visualstudio": {
       "version": "2.0.5",
       "depth": 0,

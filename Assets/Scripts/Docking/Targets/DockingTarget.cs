@@ -50,7 +50,8 @@ namespace Docking
         TAKE_COVER,
         VAULT,
         BRACED_HANG,
-        HANGING
+        HANGING,
+        BEAM
     }
 
     // 角色Dock的点的信息
@@ -187,7 +188,8 @@ namespace Docking
                 {DockingTargetType.TAKE_COVER,  Color.green },
                 {DockingTargetType.VAULT,       Color.yellow },
                 {DockingTargetType.BRACED_HANG, Color.blue },
-                {DockingTargetType.HANGING,     Color.cyan}      
+                {DockingTargetType.HANGING,     Color.cyan},
+                {DockingTargetType.BEAM,        Color.grey}
             };
 
         protected const float m_lineWidth = 0.1f;
@@ -203,7 +205,10 @@ namespace Docking
         protected abstract void DrawGizmos();
         protected void OnDrawGizmos()
         {
-            DrawGizmos();
+            if (m_active && enabled)
+            {
+                DrawGizmos();
+            }
         }
 
         //LS-->WS,获得WS下的TR点

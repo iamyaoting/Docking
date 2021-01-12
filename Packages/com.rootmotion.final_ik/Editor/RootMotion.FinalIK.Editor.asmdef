@@ -1,0 +1,16 @@
+{
+    "name": "RootMotion.FinalIK.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0d0abc1387c0f3f47baf34594b606443"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
