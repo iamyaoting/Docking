@@ -209,7 +209,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &47841802
 Transform:
   m_ObjectHideFlags: 0
@@ -407,7 +407,8 @@ MonoBehaviour:
   m_fov: 40
   m_maxDist: 5
   m_minDist: 1
-  m_elevationAngleMS: 20
+  m_phi: 20
+  m_lamda: 0
 --- !u!114 &158681349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,7 +459,8 @@ MonoBehaviour:
   m_fov: 60
   m_maxDist: 5
   m_minDist: 1
-  m_elevationAngleMS: 20
+  m_phi: 20
+  m_lamda: 0
 --- !u!114 &249284194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -908,7 +910,8 @@ MonoBehaviour:
   m_fov: 40
   m_maxDist: 5
   m_minDist: 1
-  m_elevationAngleMS: 20
+  m_phi: 20
+  m_lamda: 0
 --- !u!1 &1581514791
 GameObject:
   m_ObjectHideFlags: 0
@@ -1179,7 +1182,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1843432563
 Transform:
   m_ObjectHideFlags: 0

@@ -188,6 +188,7 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
   m_loop: 0
+  m_handIK: 1
 --- !u!114 &5882361928565385850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,6 +241,7 @@ MonoBehaviour:
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   m_loop: 0
+  m_handIK: 1
 --- !u!65 &4679962315479806238
 BoxCollider:
   m_ObjectHideFlags: 0

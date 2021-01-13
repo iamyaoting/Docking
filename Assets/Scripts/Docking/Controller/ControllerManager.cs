@@ -12,6 +12,7 @@ public class ControllerManager : MonoBehaviour
     protected Controller                            m_currentController;
     private   Docking.DockingDriver                 m_dockingDriver;    
     private   Animator                              m_animator;
+    private FullBodyIKModifier                      m_fullBodyIKModifer;
     private int                                     m_currentStateHash;
     
 
@@ -33,6 +34,7 @@ public class ControllerManager : MonoBehaviour
         m_animator = GetComponent<Animator>();
         m_dockingDriver = new Docking.DockingDriver();
         m_dockingDriver.Init(m_animator);
+        m_fullBodyIKModifer = new FullBodyIKModifier(m_animator.GetComponent<RootMotion.FinalIK.BipedIK>());
         m_controllersCache = new Dictionary<System.Type, Controller>();
         m_currentController = new IdleController();
         m_currentController.OnInit(GetControllerInitContext());
@@ -91,9 +93,13 @@ public class ControllerManager : MonoBehaviour
     {
         //transform.position += m_animator.deltaPosition;
         //transform.rotation = m_animator.deltaRotation * transform.rotation;
-        if (null != m_currentController && m_enableDocking && m_currentController.active)
+        if (null != m_currentController && m_currentController.active)
         {
-            m_currentController.OnDockingDriver();
+            if (m_enableDocking)
+            {
+                m_currentController.OnDockingDriver();
+            }
+            m_currentController.LateUpdate();
         }
     }
     private ControllerInitContext GetControllerInitContext()
@@ -101,7 +107,8 @@ public class ControllerManager : MonoBehaviour
         ControllerInitContext context = new ControllerInitContext();
         context.animator = m_animator;
         context.dockingDetector = m_dockingDetector;
-        context.dockingDriver = m_dockingDriver;        
+        context.dockingDriver = m_dockingDriver;
+        context.fullBodyIKModifier = m_fullBodyIKModifer;
         return context;
     }
 

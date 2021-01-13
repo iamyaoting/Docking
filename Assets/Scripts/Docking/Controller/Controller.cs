@@ -28,12 +28,14 @@ public class ControllerInitContext
     public Animator                     animator;
     public Docking.DockingDetector      dockingDetector;
     public Docking.DockingDriver        dockingDriver;
+    public FullBodyIKModifier           fullBodyIKModifier;
 }
 
 public abstract class Controller
 {
     protected Animator                          m_animator;
     protected Docking.DockingDetector           m_dockingDetector;
+    protected FullBodyIKModifier                m_fullBodyIKModifer;
 
     protected bool                              m_enableInput;
     
@@ -71,6 +73,7 @@ public abstract class Controller
     {
         m_animator = context.animator;
         m_dockingDetector = context.dockingDetector;
+        m_fullBodyIKModifer = context.fullBodyIKModifier;
     }
 
     public virtual void OnEnter(ControllerEnterContext context)
@@ -93,6 +96,10 @@ public abstract class Controller
     // 若rootmotion需要特殊处理，则进行override该函数，进行处理，特指docking
     public virtual void OnDockingDriver() { }    
 
+    public virtual void LateUpdate() 
+    {
+        m_fullBodyIKModifer.OnSolver(Time.deltaTime);
+    }
 
     // 当绑定该控制器的状态结束时候，会调用该函数
     public virtual void OnFSMStateExit() { }   

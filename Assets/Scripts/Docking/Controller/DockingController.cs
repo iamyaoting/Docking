@@ -77,10 +77,15 @@ namespace Docking
 
         public override void OnDockingDriver()
         {
-            m_dockingDriver.Dock();
+            var success = m_dockingDriver.DockDriver();
             //m_dockedVertexStatus = m_dockingDriver.GetDockedVertexStatus() == null ? m_dockedVertexStatus: m_dockingDriver.GetDockedVertexStatus();
-            m_dockedVertexStatus = m_dockingDriver.GetDockedVertexStatus();
-            OnDockingTargetUpdate(m_dockingDriver.GetDockingTarget(), m_dockingDriver.GetDockedVertexWS(), m_dockedVertexStatus);
+            if (success)
+            {
+                m_dockedVertexStatus = m_dockingDriver.GetDockedVertexStatus();
+
+                // 处理Docking Target相关的响应函数，比如当前处理target的何处
+                OnDockingTargetUpdate(m_dockingDriver.GetDockingTarget(), m_dockingDriver.GetDockedVertexWS(), m_dockedVertexStatus);
+            }
         }
     }
 }

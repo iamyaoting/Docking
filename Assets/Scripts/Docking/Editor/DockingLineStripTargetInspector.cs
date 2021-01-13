@@ -15,6 +15,7 @@ namespace Docking
         void OnSceneGUI()
         {
             if (Application.isPlaying) return;
+            if (!script.enabled || !script.m_active) return;
             //if (!Application.isPlaying) script.defaultLocalRotation = script.transform.localRotation;
 
             //// Quick Editing Tools

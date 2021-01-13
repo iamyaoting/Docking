@@ -100,11 +100,14 @@ namespace Docking
                     var ntime = Utils.GetCurrentStateNormalizedTime(m_animator, 0);
                     if ((ntime < 0.3f && ntime > 0.25f) || ntime > 0.85f)
                     {
-                        Debug.Log(ntime);
+                        //Debug.Log(ntime);
                         m_animator.SetTrigger("T_BracedHangIdle");
                     }
                     m_animator.ResetTrigger("T_BracedHangShimmy");
                 }
+
+                // 处理Hand IK行为
+
             }           
 
             // 在HandingToStang状态下且UnDocked状态下，进行指定target
@@ -140,6 +143,28 @@ namespace Docking
                 m_nextControllerEnterContext = null;
                 m_nextControllerType = typeof(IdleController);
             }            
+        }
+        protected override void OnDockingTargetUpdate(DockingTarget target, TR tr, DockedVertexStatus status)
+        {
+            bool handIK = false;
+            DockingLineStripTarget lineStripTarget = target as DockingLineStripTarget;
+            if (lineStripTarget)
+            {
+                handIK = lineStripTarget.m_handIK;
+            }            
+            m_fullBodyIKModifer.SetEnableIK(handIK);
+            if (handIK)
+            {
+                var leftHand = m_animator.GetBoneTransform(HumanBodyBones.LeftHand);
+                var rightHand = m_animator.GetBoneTransform(HumanBodyBones.RightHand);
+
+                var leftHandDocked = lineStripTarget.GetDockedPointWS(leftHand.position, leftHand.rotation);
+                var rightHandDocked = lineStripTarget.GetDockedPointWS(rightHand.position, rightHand.rotation);
+
+                m_fullBodyIKModifer.leftHandTargetOffset = Vector3.up * (leftHandDocked.translation.y - tr.translation.y);
+                m_fullBodyIKModifer.rightHandTargetOffset = Vector3.up * (rightHandDocked.translation.y - tr.translation.y);           
+            }
+            base.OnDockingTargetUpdate(target, tr, status);
         }
     }
 

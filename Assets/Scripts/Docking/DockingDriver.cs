@@ -66,7 +66,7 @@ namespace Docking
             return tr;
         }
 
-        public void Dock()
+        public bool DockDriver()
         {
             //Debug.Log("Dock");
             UpdateWorldFromReference(m_dockingTarget);
@@ -82,12 +82,12 @@ namespace Docking
             {
                 //Debug.LogWarning("Docking Control data can not be none!");
                 SetDefaultValue();
-                return;
+                return false;
             }
             if (m_dockingControlData.m_dockingBlend < 0.0f || m_dockingControlData.m_dockingBlend > 1.0f)
             {
                 Debug.LogError("Docking blend value error! --->" + m_dockingControlData.m_dockingBlend);
-                return;
+                return false;
             }
 
             if (m_dockingControlData.m_dockingBlend > 0.0f)
@@ -157,8 +157,11 @@ namespace Docking
             else
             {
                 SetDefaultValue();
+                m_dockingControlData = null;
+                return false;
             }
             m_dockingControlData = null;
+            return true;
         }
 
         public void Notify(DockingControlData data)

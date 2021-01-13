@@ -189,7 +189,7 @@ namespace Docking
                 {DockingTargetType.VAULT,       Color.yellow },
                 {DockingTargetType.BRACED_HANG, Color.blue },
                 {DockingTargetType.HANGING,     Color.cyan},
-                {DockingTargetType.BEAM,        Color.grey}
+                {DockingTargetType.BEAM,        Color.white}
             };
 
         protected const float m_lineWidth = 0.1f;

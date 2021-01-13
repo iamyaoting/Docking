@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &9149861563419873854
+--- !u!1 &8356498408198442931
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,47 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8059297608405524628}
-  - component: {fileID: 4092859682417038007}
-  - component: {fileID: 1264146835272899196}
-  - component: {fileID: 6067081636060866459}
-  - component: {fileID: 3446965898543695159}
+  - component: {fileID: 7081924951654729310}
+  - component: {fileID: 345183878690496186}
+  - component: {fileID: 7437780745463634020}
+  - component: {fileID: 1111300421260549188}
+  - component: {fileID: 6908040034024623152}
   m_Layer: 0
-  m_Name: Castle_Window_NoCC
+  m_Name: Castle_Gate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8059297608405524628
+--- !u!4 &7081924951654729310
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9149861563419873854}
-  m_LocalRotation: {x: -0.000000021855694, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 8356498408198442931}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4092859682417038007
+--- !u!33 &345183878690496186
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9149861563419873854}
-  m_Mesh: {fileID: 752351958133229314, guid: 0ca8e758e521b624e8b25236c864b8ef, type: 3}
---- !u!23 &1264146835272899196
+  m_GameObject: {fileID: 8356498408198442931}
+  m_Mesh: {fileID: -8679935647469344372, guid: fc9cebe5a1fb23341bc3c2e60a1e81e2, type: 3}
+--- !u!23 &7437780745463634020
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9149861563419873854}
+  m_GameObject: {fileID: 8356498408198442931}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -83,39 +83,39 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6067081636060866459
+--- !u!114 &1111300421260549188
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9149861563419873854}
+  m_GameObject: {fileID: 8356498408198442931}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc8b5a16595c0634e80da7922e31f6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_active: 1
-  m_type: 2
+  m_type: 3
   m_vertices:
   - tr:
-      translation: {x: 0.6895361, y: 1.7777461, z: 0.21659897}
+      translation: {x: 2.2592158, y: 5.6684694, z: 1.9308921}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 0.43515134, y: 2.1552224, z: 0.2205126}
+      translation: {x: 1.3607638, y: 6.589151, z: 1.9399574}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:
-      translation: {x: -0.007086796, y: 2.3356545, z: 0.22051252}
+      translation: {x: 0.0009804964, y: 6.9920955, z: 1.9399574}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:
-      translation: {x: -0.46600184, y: 2.1401198, z: 0.22051251}
+      translation: {x: -1.3583022, y: 6.6308355, z: 1.9399574}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:
-      translation: {x: -0.7005996, y: 1.7701998, z: 0.22051251}
+      translation: {x: -2.221935, y: 5.768346, z: 1.9399574}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   m_loop: 0
@@ -123,28 +123,43 @@ MonoBehaviour:
   radius: 5.2
   n: 20
   angleOffset: 30
---- !u!114 &3446965898543695159
+--- !u!114 &6908040034024623152
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9149861563419873854}
+  m_GameObject: {fileID: 8356498408198442931}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b4284a48e90a1843b03c4c6005a4223, type: 3}
+  m_Script: {fileID: 11500000, guid: dc8b5a16595c0634e80da7922e31f6b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_active: 1
-  m_type: 2
-  m_constrainRotation: 1
-  m_start:
-    tr:
-      translation: {x: 0.8418143, y: -1.8218179, z: 0.41741955}
-      rotation: {x: 0, y: 1, z: 0, w: 0}
+  m_type: 3
+  m_vertices:
+  - tr:
+      translation: {x: -2.2378342, y: 5.7018633, z: -1.9122103}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
-  m_end:
-    tr:
-      translation: {x: -0.840015, y: -1.8218179, z: 0.41741955}
-      rotation: {x: 0, y: 1, z: 0, w: 0}
+  - tr:
+      translation: {x: -1.381288, y: 6.6292934, z: -1.9122103}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
+  - tr:
+      translation: {x: -0.001762867, y: 7.0072246, z: -1.9122103}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 1.3349864, y: 6.613092, z: -1.9122103}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 2.195853, y: 5.740568, z: -1.9122103}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0
+  m_loop: 0
+  y: 2
+  radius: 5.2
+  n: 20
+  angleOffset: 30

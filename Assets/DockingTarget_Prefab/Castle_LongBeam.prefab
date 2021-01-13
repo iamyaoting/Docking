@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 5851143222709696835}
   - component: {fileID: 2194614766273922557}
   m_Layer: 0
-  m_Name: LongBeam
+  m_Name: Castle_LongBeam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2479212903606901205
 Transform:
@@ -84,6 +84,10 @@ PrefabInstance:
     - target: {fileID: 1666713336386586, guid: 350e0abf60d41374385f4ae5492b17ca, type: 3}
       propertyPath: m_Name
       value: Beam_metal_1-2 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666713336386586, guid: 350e0abf60d41374385f4ae5492b17ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4221405956097602, guid: 350e0abf60d41374385f4ae5492b17ca, type: 3}
       propertyPath: m_RootOrder
@@ -160,6 +164,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam_metal_1-2 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1666713336386586, guid: 350e0abf60d41374385f4ae5492b17ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4221405956097602, guid: 350e0abf60d41374385f4ae5492b17ca, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -235,6 +243,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Beam_metal_1-2 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1666713336386586, guid: 350e0abf60d41374385f4ae5492b17ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4221405956097602, guid: 350e0abf60d41374385f4ae5492b17ca, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -309,6 +321,10 @@ PrefabInstance:
     - target: {fileID: 1666713336386586, guid: 350e0abf60d41374385f4ae5492b17ca, type: 3}
       propertyPath: m_Name
       value: Beam_metal_1-2 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666713336386586, guid: 350e0abf60d41374385f4ae5492b17ca, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 4221405956097602, guid: 350e0abf60d41374385f4ae5492b17ca, type: 3}
       propertyPath: m_RootOrder
