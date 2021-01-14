@@ -1793,7 +1793,7 @@ MonoBehaviour:
         sqrMag: 0
         axis: {x: -1, y: -0, z: -0}
       goal: 2
-      bendModifier: 0
+      bendModifier: 3
       maintainRotationWeight: 0
       bendModifierWeight: 1
       bendGoal: {fileID: 0}
@@ -1805,7 +1805,7 @@ MonoBehaviour:
       target: {fileID: 0}
       IKRotationWeight: 0
       IKRotation: {x: -0.0000034200496, y: 0.9999845, z: 0.0055794385, w: 0.00000006558083}
-      bendNormal: {x: 1, y: 0, z: 0}
+      bendNormal: {x: 0, y: 1, z: 0}
       bone1:
         transform: {fileID: 389146082}
         weight: 1
@@ -1840,7 +1840,7 @@ MonoBehaviour:
         sqrMag: 0
         axis: {x: -1, y: -0, z: -0}
       goal: 3
-      bendModifier: 0
+      bendModifier: 3
       maintainRotationWeight: 0
       bendModifierWeight: 1
       bendGoal: {fileID: 0}
