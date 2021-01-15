@@ -15,6 +15,28 @@ Shader "Custom/SpecularTwoSidedCutout"
         LOD 200
         Cull off
 
+        ZTest Greater
+        //ZWrite Off//重要，关闭ZWrite后，后渲染的会覆盖此Pass
+        CGPROGRAM
+        #pragma surface surf StandardSpecular alphatest:_Cutoff fullforwardshadows
+        #pragma target 3.0
+        sampler2D _MainTex;
+        struct Input
+        {
+            float2 uv_MainTex;
+            float2 uv_Normal;
+            float2 uv_Specular;
+        };       
+        UNITY_INSTANCING_BUFFER_START(Props)       
+        UNITY_INSTANCING_BUFFER_END(Props)
+        void surf(Input IN, inout SurfaceOutputStandardSpecular o)
+        {              
+            fixed4 c = tex2D(_MainTex, IN.uv_MainTex);            
+            o.Alpha = c.a;
+        }
+        ENDCG
+
+        ZTest LEqual       
         CGPROGRAM
         // Physically based Standard lighting model, and enable shadows on all light types
         #pragma surface surf StandardSpecular alphatest:_Cutoff fullforwardshadows

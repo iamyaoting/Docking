@@ -11,6 +11,10 @@ GameObject:
   - component: {fileID: 12970491537594069}
   - component: {fileID: 12970491536824053}
   - component: {fileID: 12970491535692853}
+  - component: {fileID: 4997707378323867414}
+  - component: {fileID: 6409740388597594825}
+  - component: {fileID: 3031485363812201134}
+  - component: {fileID: 8157044728173135976}
   m_Layer: 0
   m_Name: Castle_TowerA
   m_TagString: Untagged
@@ -87,6 +91,106 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4997707378323867414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12970491537951477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b4284a48e90a1843b03c4c6005a4223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_active: 1
+  m_type: 2
+  m_constrainRotation: 1
+  m_start:
+    tr:
+      translation: {x: 2.4148633, y: 14.894461, z: 2.0786583}
+      rotation: {x: 0, y: 1, z: 0, w: 0}
+    reserveFloatParam: 0
+  m_end:
+    tr:
+      translation: {x: -1.9849575, y: 14.89446, z: 2.0786583}
+      rotation: {x: 0, y: 1, z: 0, w: 0}
+    reserveFloatParam: 0
+--- !u!114 &6409740388597594825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12970491537951477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b4284a48e90a1843b03c4c6005a4223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_active: 1
+  m_type: 2
+  m_constrainRotation: 1
+  m_start:
+    tr:
+      translation: {x: 2.4148633, y: 14.89446, z: -2.318817}
+      rotation: {x: -8.158939e-16, y: -0.70932907, z: 1.9109423e-16, w: 0.7048775}
+    reserveFloatParam: 0
+  m_end:
+    tr:
+      translation: {x: 2.4149678, y: 14.894459, z: 2.0703487}
+      rotation: {x: -8.158939e-16, y: -0.70932907, z: 1.9109423e-16, w: 0.7048775}
+    reserveFloatParam: 0
+--- !u!114 &3031485363812201134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12970491537951477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b4284a48e90a1843b03c4c6005a4223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_active: 1
+  m_type: 2
+  m_constrainRotation: 1
+  m_start:
+    tr:
+      translation: {x: -1.9641229, y: 14.894459, z: -2.3190947}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0
+  m_end:
+    tr:
+      translation: {x: 2.3896196, y: 14.894459, z: -2.3177748}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0
+--- !u!114 &8157044728173135976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12970491537951477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b4284a48e90a1843b03c4c6005a4223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_active: 1
+  m_type: 2
+  m_constrainRotation: 1
+  m_start:
+    tr:
+      translation: {x: -1.9790733, y: 14.894459, z: 2.0837975}
+      rotation: {x: -8.158939e-16, y: 0.7093291, z: 1.9109423e-16, w: 0.7048775}
+    reserveFloatParam: 0
+  m_end:
+    tr:
+      translation: {x: -1.9792384, y: 14.894459, z: -2.3166714}
+      rotation: {x: -8.158939e-16, y: 0.7093291, z: 1.9109423e-16, w: 0.7048775}
+    reserveFloatParam: 0
 --- !u!1 &12970491537951487
 GameObject:
   m_ObjectHideFlags: 0

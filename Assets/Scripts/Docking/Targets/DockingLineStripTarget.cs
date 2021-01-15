@@ -10,30 +10,40 @@ namespace Docking
         public bool m_loop;                         // 是否循环
         public bool m_handIK = false;               // 是否需要开启Hand IK
 
-        //public float y = 2;
-        //public float radius = 5.2f;
-        //public int n = 20;
-        //public float angleOffset = 30.0f;
+        public float y = 2;
+        public float radius = 5.2f;
+        public int n = 20;
+        public float angleOffset = 30.0f;
+
+        private void OnEnable()
+        {
+            System.Action<DockingVertex, float, float> calc = (DockingVertex vertex, float r, float angle) =>
+            {
+                vertex.tr = new TR();
+                vertex.tr.translation = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+                vertex.tr.rotation = Quaternion.LookRotation(-vertex.tr.translation.normalized, Vector3.up);
+                vertex.tr.translation.y = y;
+                vertex.reserveFloatParam = 1.0f;
+                return;
+            };
+
+            m_vertices = new DockingVertex[n];
+            for (int i = 0; i < n; ++i)
+            {
+                m_vertices[i] = new DockingVertex();
+                float angle = 2 * Mathf.PI / n * i + angleOffset * Mathf.Deg2Rad;
+                m_vertices[i] = new DockingVertex();
+                calc(m_vertices[i], radius, angle);
+            }
+        }
 
         //private void OnEnable()
         //{
-        //    System.Action<DockingVertex, float, float> calc = (DockingVertex vertex, float r, float angle) =>
-        //    {
-        //        vertex.tr = new TR();
-        //        vertex.tr.translation = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
-        //        vertex.tr.rotation = Quaternion.LookRotation(-vertex.tr.translation.normalized, Vector3.up);
-        //        vertex.tr.translation.y = y;
-        //        vertex.reserveFloatParam = 1.0f;
-        //        return;
-        //    };
-
-        //    m_vertices = new DockingVertex[n];
+        //    int n = m_vertices.Length;
         //    for (int i = 0; i < n; ++i)
         //    {
-        //        m_vertices[i] = new DockingVertex();
-        //        float angle = 2 * Mathf.PI / n * i + angleOffset * Mathf.Deg2Rad;
-        //        m_vertices[i] = new DockingVertex();
-        //        calc(m_vertices[i], radius, angle);
+        //        var p = m_vertices[i].tr.translation;
+        //        m_vertices[i].tr.rotation = Quaternion.LookRotation(new Vector3(-p.x, 0, -p.z));
         //    }
         //}
 
@@ -121,14 +131,17 @@ namespace Docking
 
             DockingVertex startV, endV;
 
-            for(int i = 0; i < m_vertices.Length; ++i)
+            if (null != m_vertices)
             {
-                var startTR = GetTRInWS(m_vertices[i].tr);
-                DockingGizmos.DrawCoordinateFrameWS(startTR.translation + Vector3.up * 0.01f, startTR.rotation);
-                if (!GetLineSegment(i, out startV, out endV)) break;
-                startTR = GetTRInWS(startV.tr);
-                var endTR = GetTRInWS(endV.tr);
-                DockingGizmos.DrawLine(startTR.translation, endTR.translation, m_lineWidth, color);              
+                for (int i = 0; i < m_vertices.Length; ++i)
+                {
+                    var startTR = GetTRInWS(m_vertices[i].tr);
+                    DockingGizmos.DrawCoordinateFrameWS(startTR.translation + Vector3.up * 0.01f, startTR.rotation);
+                    if (!GetLineSegment(i, out startV, out endV)) break;
+                    startTR = GetTRInWS(startV.tr);
+                    var endTR = GetTRInWS(endV.tr);
+                    DockingGizmos.DrawLine(startTR.translation, endTR.translation, m_lineWidth, color);
+                }
             }
 
             DockingGizmos.PopGizmosData();

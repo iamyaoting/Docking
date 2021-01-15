@@ -160,27 +160,47 @@ MonoBehaviour:
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 2.7699997, y: -0.32955167, z: -1.0074912}
+      translation: {x: 2.038696, y: -0.64029706, z: -1.0074911}
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 4.4000006, y: 0.118853614, z: -1.0074914}
+      translation: {x: 2.9436352, y: -0.26570898, z: -1.007491}
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 6.2599993, y: 0.27800372, z: -1.0074914}
+      translation: {x: 3.8472822, y: -0.001408186, z: -1.0074914}
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 8.270001, y: -0.0064639603, z: -1.0074914}
+      translation: {x: 4.784131, y: 0.18142383, z: -1.0074912}
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 9.750001, y: -0.5068788, z: -1.0074915}
+      translation: {x: 5.71185, y: 0.2686906, z: -1.0074911}
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 10.94, y: -1.1100445, z: -1.0074914}
+      translation: {x: 6.673592, y: 0.2482268, z: -1.0074912}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 7.6489034, y: 0.13836648, z: -1.0074916}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 8.592957, y: -0.08146689, z: -1.0074916}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 9.476135, y: -0.39648792, z: -1.0074915}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 10.362528, y: -0.79378885, z: -1.0074914}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 10.939999, y: -1.0982926, z: -1.0074914}
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
   - tr:
@@ -213,23 +233,43 @@ MonoBehaviour:
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 9.742831, y: -0.51935965, z: 1.0074918}
+      translation: {x: 10.052772, y: -0.6518493, z: 1.007492}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 8.260547, y: -0.004908606, z: 1.0074918}
+      translation: {x: 9.165547, y: -0.2764417, z: 1.0074918}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 6.244521, y: 0.26118657, z: 1.007492}
+      translation: {x: 8.2441225, y: -0.009428328, z: 1.0074918}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 4.4011316, y: 0.1103992, z: 1.0074918}
+      translation: {x: 7.31605, y: 0.1794348, z: 1.0074918}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:
-      translation: {x: 2.7645214, y: -0.3419619, z: 1.007492}
+      translation: {x: 6.364701, y: 0.25758487, z: 1.0074917}
+      rotation: {x: 0, y: 1, z: 0, w: 0}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 5.426897, y: 0.24455993, z: 1.0140042}
+      rotation: {x: 0, y: 1, z: 0, w: 0}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 4.448862, y: 0.11886748, z: 1.0270293}
+      rotation: {x: 0, y: 1, z: 0, w: 0}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 3.5013094, y: -0.08957139, z: 1.0270293}
+      rotation: {x: 0, y: 1, z: 0, w: 0}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 2.6038117, y: -0.38711563, z: 1.0074921}
+      rotation: {x: 0, y: 1, z: 0, w: 0}
+    reserveFloatParam: 0
+  - tr:
+      translation: {x: 1.7294396, y: -0.78796244, z: 1.0074918}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:

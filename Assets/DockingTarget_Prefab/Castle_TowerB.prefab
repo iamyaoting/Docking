@@ -99,90 +99,87 @@ MonoBehaviour:
   m_type: 2
   m_vertices:
   - tr:
-      translation: {x: 2.81, y: 11.4, z: 0}
+      translation: {x: 2.81, y: 11.71, z: 0}
       rotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
     reserveFloatParam: 1
   - tr:
-      translation: {x: 2.672469, y: 11.4, z: 0.86833775}
+      translation: {x: 2.672469, y: 11.71, z: 0.86833775}
       rotation: {x: 0, y: -0.80901706, z: 0, w: 0.58778524}
     reserveFloatParam: 1
   - tr:
-      translation: {x: 2.2733378, y: 11.4, z: 1.6516765}
+      translation: {x: 2.2733378, y: 11.71, z: 1.6516765}
       rotation: {x: 0, y: 0.8910065, z: -0, w: -0.45399055}
     reserveFloatParam: 1
   - tr:
-      translation: {x: 1.6516765, y: 11.4, z: 2.2733378}
+      translation: {x: 1.6516765, y: 11.71, z: 2.2733378}
       rotation: {x: 0, y: 0.95105654, z: -0, w: -0.30901697}
     reserveFloatParam: 1
   - tr:
-      translation: {x: 0.8683377, y: 11.4, z: 2.672469}
+      translation: {x: 0.8683377, y: 11.71, z: 2.672469}
       rotation: {x: 0, y: 0.98768836, z: -0, w: -0.15643446}
     reserveFloatParam: 1
   - tr:
-      translation: {x: -0.000000122829, y: 11.4, z: 2.81}
+      translation: {x: -0.000000122829, y: 11.71, z: 2.81}
       rotation: {x: 0, y: 1, z: 0, w: 0.000000021855692}
     reserveFloatParam: 1
   - tr:
-      translation: {x: -0.86833787, y: 11.4, z: 2.6724687}
+      translation: {x: -0.86833787, y: 11.71, z: 2.6724687}
       rotation: {x: 0, y: 0.98768836, z: 0, w: 0.15643449}
     reserveFloatParam: 1
   - tr:
-      translation: {x: -1.6516763, y: 11.4, z: 2.2733378}
+      translation: {x: -1.6516763, y: 11.71, z: 2.2733378}
       rotation: {x: 0, y: 0.95105654, z: 0, w: 0.30901694}
     reserveFloatParam: 1
   - tr:
-      translation: {x: -2.2733378, y: 11.4, z: 1.6516763}
+      translation: {x: -2.2733378, y: 11.71, z: 1.6516763}
       rotation: {x: 0, y: 0.8910065, z: 0, w: 0.45399055}
     reserveFloatParam: 1
   - tr:
-      translation: {x: -2.672469, y: 11.4, z: 0.86833715}
+      translation: {x: -2.672469, y: 11.71, z: 0.86833715}
       rotation: {x: 0, y: 0.809017, z: 0, w: 0.5877853}
     reserveFloatParam: 1
   - tr:
-      translation: {x: -2.81, y: 11.4, z: -0.000000245658}
+      translation: {x: -2.81, y: 11.71, z: -0.000000245658}
       rotation: {x: 0, y: 0.7071067, z: 0, w: 0.7071068}
     reserveFloatParam: 1
   - tr:
-      translation: {x: -2.672469, y: 11.4, z: -0.8683377}
+      translation: {x: -2.672469, y: 11.71, z: -0.8683377}
       rotation: {x: 0, y: 0.5877853, z: 0, w: 0.809017}
     reserveFloatParam: 1
   - tr:
-      translation: {x: -2.2733376, y: 11.4, z: -1.6516769}
+      translation: {x: -2.2733376, y: 11.71, z: -1.6516769}
       rotation: {x: 0, y: 0.4539905, z: 0, w: 0.8910065}
     reserveFloatParam: 1
   - tr:
-      translation: {x: -1.651676, y: 11.4, z: -2.273338}
+      translation: {x: -1.651676, y: 11.71, z: -2.273338}
       rotation: {x: 0, y: 0.3090169, z: 0, w: 0.9510566}
     reserveFloatParam: 1
   - tr:
-      translation: {x: -0.868338, y: 11.4, z: -2.6724687}
+      translation: {x: -0.868338, y: 11.71, z: -2.6724687}
       rotation: {x: 0, y: 0.15643452, z: 0, w: 0.98768836}
     reserveFloatParam: 1
   - tr:
-      translation: {x: 0.000000033508915, y: 11.4, z: -2.81}
+      translation: {x: 0.000000033508915, y: 11.71, z: -2.81}
       rotation: {x: 0, y: -0.0000000059624403, z: -0, w: 1}
     reserveFloatParam: 1
   - tr:
-      translation: {x: 0.8683381, y: 11.4, z: -2.6724687}
+      translation: {x: 0.8683381, y: 11.71, z: -2.6724687}
       rotation: {x: 0, y: -0.15643455, z: -0, w: 0.98768836}
     reserveFloatParam: 1
   - tr:
-      translation: {x: 1.6516771, y: 11.4, z: -2.2733371}
+      translation: {x: 1.6516771, y: 11.71, z: -2.2733371}
       rotation: {x: 0, y: -0.30901718, z: -0, w: 0.9510565}
     reserveFloatParam: 1
   - tr:
-      translation: {x: 2.2733383, y: 11.4, z: -1.6516757}
+      translation: {x: 2.2733383, y: 11.71, z: -1.6516757}
       rotation: {x: 0, y: -0.45399064, z: -0, w: 0.89100647}
     reserveFloatParam: 1
   - tr:
-      translation: {x: 2.672469, y: 11.4, z: -0.8683376}
+      translation: {x: 2.672469, y: 11.71, z: -0.8683376}
       rotation: {x: 0, y: -0.5877853, z: -0, w: 0.809017}
     reserveFloatParam: 1
   m_loop: 1
-  y: 11.4
-  radius: 2.81
-  n: 20
-  angleOffset: 30
+  m_handIK: 0
 --- !u!1001 &4631932557684786486
 PrefabInstance:
   m_ObjectHideFlags: 0
