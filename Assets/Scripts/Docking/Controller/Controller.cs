@@ -86,7 +86,13 @@ public abstract class Controller
         Debug.Log("【Controller: " + GetType().Name + " 】entered!");        
     }
 
-    public abstract void Tick(float deltaTime);
+    // 真实的Tick实现方法
+    protected abstract void Tick(float deltaTime);
+    public void OnUpdate(float deltaTime)
+    {
+        ResetAnimatorTriggers();
+        Tick(deltaTime);
+    }
     public virtual void OnExit() 
     {
         active = false;
@@ -122,7 +128,7 @@ public abstract class Controller
     public static bool HasEnvCommitAction()
     {
         //return true;
-        if (Input.GetKeyDown(KeyCode.E)) return true;
+        if (Input.GetKey(KeyCode.E)) return true;
         return false;
     }
 
@@ -175,6 +181,17 @@ public abstract class Controller
         context.dockingtarget = target;
 
         return context;
+    }
+
+    private void ResetAnimatorTriggers()
+    {
+        foreach(var par in m_animator.parameters)
+        {
+            if(par.type == AnimatorControllerParameterType.Trigger)
+            {
+                m_animator.ResetTrigger(par.nameHash);
+            }
+        }
     }
 
 }

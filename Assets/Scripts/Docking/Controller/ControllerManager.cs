@@ -67,7 +67,7 @@ public class ControllerManager : MonoBehaviour
             if (m_currentController.active)
             {
                 // 如果控制器属于激活状态，进行tick
-                m_currentController.Tick(Time.deltaTime);
+                m_currentController.OnUpdate(Time.deltaTime);
             }
         }
     }

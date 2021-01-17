@@ -36,7 +36,7 @@ namespace Docking
             base.OnDockingTargetUpdate(target, tr, status);
         }
 
-        public override void Tick(float deltaTime)
+        protected override void Tick(float deltaTime)
         {
             var input = GetRawInput();
             input = Vector2.Lerp(m_lastInput, input, .2f);

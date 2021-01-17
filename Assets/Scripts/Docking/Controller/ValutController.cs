@@ -42,7 +42,7 @@ namespace Docking
             base.OnEnter(context);          
         }
 
-        public override void Tick(float deltaTime)
+        protected override void Tick(float deltaTime)
         {
             if (!active) return;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Docking
-{   
+{
     public class BracedHangController : DockingController
     {
         enum STATE
@@ -21,7 +21,7 @@ namespace Docking
         private int[] outStateHashes;
         private int[] inStateHashes;
         private int[] hopStateHashes;
-       
+
         private STATE state;
 
         public override void OnInit(ControllerInitContext context)
@@ -38,7 +38,8 @@ namespace Docking
             string[] outstrs = { "BracedHang.Braced Hang To Stand" };
             outStateHashes = Utils.GetStateMachineStateHash(outstrs);
 
-            string[] hopStrs = { "BracedHang.Braced Hang Hop Up", "BracedHang.Braced Hang Hop Down" };
+            string[] hopStrs = { "BracedHang.Braced Hang Hop Up", "BracedHang.Braced Hang Hop Down",
+            "BracedHang.Braced Hang Hop Left","BracedHang.Braced Hang Hop Right"};
             hopStateHashes = Utils.GetStateMachineStateHash(hopStrs);
 
             state = STATE.IN_BRACEDHANG;
@@ -49,51 +50,45 @@ namespace Docking
         public override void OnEnter(ControllerEnterContext context)
         {
             // 向动画图执行命令
-            m_animator.SetTrigger("Commit");           
+            m_animator.SetTrigger("Commit");
             base.OnEnter(context);
             // Debug.Break();
         }
 
-        public override void Tick(float deltaTime)
+        protected override void Tick(float deltaTime)
         {
             if (!active) return;
 
-            var newState = GetState();           
+            var newState = GetState();
             var input = GetRawInput();
             if (IsSpeedUpActionPressed()) input = 2 * input;
             var vel = Mathf.RoundToInt(input.x);
 
             if (STATE.BRACEDHANG_IDLE == newState)
             {
-                m_animator.ResetTrigger("T_BracedHangIdle");
                 m_animator.SetFloat("Velocity", vel);
 
-                if(HasEnvUnCommitAction()) // 跳下至地面
+                if (HasEnvUnCommitAction()) // 跳下至地面
                 {
-                    m_animator.SetTrigger("UnCommit");                      
+                    m_animator.SetTrigger("UnCommit");
                 }
-                else if(HasEnvCommitAction()) // 跳到下一个target
+                else if (HasEnvCommitAction()) // 跳到下一个target
                 {
-                    if (input.magnitude != 0)
+                    if (SetAnimatorHopActionTrigger(input))
                     {
                         input.Normalize();
                         m_nextControllerEnterContext = m_dockingDetector.GetNearestDockingTarget_Hanging(input, m_dockingDriver.GetDockingTarget());
                         if (null == m_nextControllerEnterContext) return;
                         m_nextControllerType = Docking.Utils.GetDefaultControllerTypeByTargetType(m_nextControllerEnterContext.dockingtarget.m_type);
-
-                        m_animator.SetFloat("BracedHangHopX", input.x);
-                        m_animator.SetFloat("BracedHangHopY", input.y);
-                        Debug.Log(input);
-                        //Debug.Break();
-                    }
+                    }                
                 }
                 else if (vel != 0) // 切换至hanging move状态
                 {
                     m_animator.SetTrigger("T_BracedHangShimmy");
-                }                
+                }
             }
-            
-            if(STATE.BRACEDHANG_SHIMMY == newState)
+
+            if (STATE.BRACEDHANG_SHIMMY == newState)
             {
                 if (vel == 0)
                 {
@@ -103,15 +98,11 @@ namespace Docking
                         //Debug.Log(ntime);
                         m_animator.SetTrigger("T_BracedHangIdle");
                     }
-                    m_animator.ResetTrigger("T_BracedHangShimmy");
                 }
-
-                // 处理Hand IK行为
-
-            }           
+            }
 
             // 在HandingToStang状态下且UnDocked状态下，进行指定target
-            if(STATE.OUT_BRACEDHANG == newState && STATE.BRACEDHANG_IDLE == state)
+            if (STATE.OUT_BRACEDHANG == newState && STATE.BRACEDHANG_IDLE == state)
             {
                 var dockingBoneTrans = Docking.Utils.GetDockingBoneTransform(m_animator);
                 var context = CreateFloorVertexTarget(dockingBoneTrans.position, dockingBoneTrans.rotation);
@@ -136,14 +127,16 @@ namespace Docking
         }
 
         // 当前Out Vault动画State已经结束了，该控制器也结束了
-        public override void OnFSMStateExit() 
+        public override void OnFSMStateExit()
         {
-            if(state == STATE.OUT_BRACEDHANG)
+            if (state == STATE.OUT_BRACEDHANG)
             {
                 m_nextControllerEnterContext = null;
                 m_nextControllerType = typeof(IdleController);
-            }            
+            }
         }
+
+        // 处理手部IK
         protected override void OnDockingTargetUpdate(DockingTarget target, TR tr, DockedVertexStatus status)
         {
             bool handIK = false;
@@ -151,7 +144,7 @@ namespace Docking
             if (lineStripTarget)
             {
                 handIK = lineStripTarget.m_handIK;
-            }            
+            }
             m_fullBodyIKModifer.SetEnableIK(handIK);
             if (handIK)
             {
@@ -162,10 +155,33 @@ namespace Docking
                 var rightHandDocked = lineStripTarget.GetDockedPointWS(rightHand.position, rightHand.rotation);
 
                 m_fullBodyIKModifer.leftHandTargetOffset = Vector3.up * (leftHandDocked.translation.y - tr.translation.y);
-                m_fullBodyIKModifer.rightHandTargetOffset = Vector3.up * (rightHandDocked.translation.y - tr.translation.y);           
+                m_fullBodyIKModifer.rightHandTargetOffset = Vector3.up * (rightHandDocked.translation.y - tr.translation.y);
             }
             base.OnDockingTargetUpdate(target, tr, status);
         }
-    }
 
+        protected bool SetAnimatorHopActionTrigger(Vector2 direction)
+        {
+            if (direction.magnitude == 0.0) return false;
+            float angle = Vector2.SignedAngle(Vector2.up, direction);
+
+            if (angle < 45 && angle > -45)
+            {
+                m_animator.SetTrigger("T_HangHopUp");
+            }
+            else if (angle >= 45 && angle <= 135)
+            {
+                m_animator.SetTrigger("T_HangHopLeft");
+            }        
+            else if(angle > 135 || angle< -135)
+            {
+                m_animator.SetTrigger("T_HangHopDown");
+            }
+            else
+            {
+                m_animator.SetTrigger("T_HangHopRight");
+            }
+            return true;
+        }
+    }
 }

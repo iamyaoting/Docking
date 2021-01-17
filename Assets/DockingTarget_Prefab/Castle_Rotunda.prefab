@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7077452236032276097}
   - component: {fileID: 1189184299935939230}
   - component: {fileID: 1952774877}
+  - component: {fileID: 2002096294533829245}
   m_Layer: 0
   m_Name: Castle_Rotunda
   m_TagString: Untagged
@@ -141,10 +142,7 @@ MonoBehaviour:
       rotation: {x: 0, y: -0.7771459, z: 0, w: 0.62932044}
     reserveFloatParam: 1
   m_loop: 1
-  y: 17.9
-  radius: 2.4
-  n: 10
-  angleOffset: 48
+  m_handIK: 0
 --- !u!114 &1952774877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,10 +199,20 @@ MonoBehaviour:
       rotation: {x: 0, y: -0.45399064, z: -0, w: 0.89100647}
     reserveFloatParam: 1
   m_loop: 1
-  y: 20.42
-  radius: 3.17
-  n: 10
-  angleOffset: 30
+  m_handIK: 0
+--- !u!65 &2002096294533829245
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7077452236029857955}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6.3472667, y: 30.474375, z: 6.1255884}
+  m_Center: {x: 0.0000023841858, y: 15.234876, z: -0.0000015497208}
 --- !u!1001 &842719100346178088
 PrefabInstance:
   m_ObjectHideFlags: 0

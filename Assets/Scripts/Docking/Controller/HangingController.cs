@@ -49,7 +49,7 @@ namespace Docking
             // Debug.Break();
         }
 
-        public override void Tick(float deltaTime)
+        protected override void Tick(float deltaTime)
         {
             if (!active) return;
 

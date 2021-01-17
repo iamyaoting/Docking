@@ -90,7 +90,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9149861563419873854}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc8b5a16595c0634e80da7922e31f6b9, type: 3}
   m_Name: 
@@ -119,10 +119,7 @@ MonoBehaviour:
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   m_loop: 0
-  y: 2
-  radius: 5.2
-  n: 20
-  angleOffset: 30
+  m_handIK: 0
 --- !u!114 &3446965898543695159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,7 +127,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9149861563419873854}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b4284a48e90a1843b03c4c6005a4223, type: 3}
   m_Name: 

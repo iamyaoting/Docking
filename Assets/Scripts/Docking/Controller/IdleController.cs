@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class IdleController : Controller
 {
-    public override void Tick(float deltaTime)
+    protected override void Tick(float deltaTime)
     {
         if(HasEnvCommitAction())
         {

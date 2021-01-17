@@ -177,23 +177,12 @@ namespace Docking
             float fovDiff = Vector3.Angle(point_center_dir, dir);
 
             if (dist > m_minDist && dist < m_maxDist)
-            {
-                switch (target.m_type)
+            {                
+                if (fovDiff < m_fov)
                 {
-                    case DockingTargetType.HANGING:
-                    case DockingTargetType.BRACED_HANG:
-                        return true;
-
-                    case DockingTargetType.TAKE_COVER:
-                    case DockingTargetType.VAULT:
-                        if (fovDiff < m_fov)
-                        {
-                            return true;
-                        }
-                        break;
-                }
+                    return true;
+                }             
             }
-
             Debug.Log("Detect Docking Target:" + target.m_type + ";  dist=" + dist +
                 ",  angle=" + fovDiff);
             return false;
