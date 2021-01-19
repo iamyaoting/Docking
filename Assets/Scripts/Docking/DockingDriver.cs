@@ -242,7 +242,7 @@ namespace Docking
             DockingGizmos.PushGizmosData();
             
             Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(m_worldFromLastDesiredTarget.translation, 0.2f);
+            Gizmos.DrawSphere(m_worldFromLastDesiredTarget.translation, 0.1f);
             
             DockingGizmos.DrawCoordinateFrameWS(m_worldFromLastTarget);
             DockingGizmos.DrawCoordinateFrameWS(m_worldFromLastDesiredTarget);

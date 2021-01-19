@@ -22,9 +22,26 @@ namespace Docking
 
 
         // 利用docking detector 寻找最近的target, Locomotion Detector
-        public ControllerEnterContext GetNearestDockingTarget_Locomotion()
+        public ControllerEnterContext GetNearestDockingTarget_Locomotion_High()
         {
-            SetLocomoitionDetector();
+            SetLocomoitionHighDetector();
+            ControllerEnterContext context = new ControllerEnterContext();
+            if (false == DetectNearestTarget(null,
+                out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
+            {
+                Debug.Log("Can not find docking target, dock forbidden!");
+                return null;
+            }
+            else
+            {
+                Debug.Log("Find docking target: " + context.dockingtarget.name);
+                return context;
+            }
+        }
+
+        public ControllerEnterContext GetNearestDockingTarget_Locomotion_Low()
+        {
+            SetLocomoitionLowDetector();
             ControllerEnterContext context = new ControllerEnterContext();
             if (false == DetectNearestTarget(null,
                 out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
@@ -40,8 +57,9 @@ namespace Docking
         }
 
         // 利用docking detector 寻找最近的target, Hanging Detector
-        public ControllerEnterContext GetNearestDockingTarget_Hanging(Vector2 moveDirMS, DockingTarget currentTarget)
+        public ControllerEnterContext GetNearestDockingTarget_Hanging(Vector2 moveDir, DockingTarget currentTarget)
         {
+            var moveDirMS = Quaternion.FromToRotation(Vector3.up, transform.up) * moveDir;
             SetHangingDetector(moveDirMS);
             ControllerEnterContext context = new ControllerEnterContext();
             if (false == DetectNearestTarget(currentTarget,
@@ -58,7 +76,7 @@ namespace Docking
         }
 
         // 设置Detector为Locomotion类型
-        private void SetLocomoitionDetector()
+        private void SetLocomoitionHighDetector()
         {
             m_biasMS = new Vector3(0.0f, 1.0f, 0.2f);
             m_fov = 40;
@@ -67,6 +85,16 @@ namespace Docking
             m_phi = 20;
             m_lamda = 0;
         }
+        private void SetLocomoitionLowDetector()
+        {
+            m_biasMS = new Vector3(0.0f, 0.0f, 0.2f);
+            m_fov = 40;
+            m_maxDist = 5.0f;
+            m_minDist = 1.0f;
+            m_phi = 20;
+            m_lamda = 0;
+        }
+
 
         // 设置Detector为Hang的2D模式，在立面进行搜索
         private void SetHangingDetector(Vector2 moveDir)
@@ -166,25 +194,27 @@ namespace Docking
             return pos;
         }       
 
-        public bool IsPointInDetectorWS(DockingTarget target, TR pointTRWS, out float dist)
+        public bool IsPointInDetectorWS(DockingTarget target, TR dockedPointTRWS, out float dist)
         {
-            var pointMS = transform.InverseTransformPoint(pointTRWS.translation);
+            var pointMS = transform.InverseTransformPoint(dockedPointTRWS.translation);            
             var point_center_dir = pointMS - m_biasMS;
             var dir = GetDirectionMS();
             dist = point_center_dir.magnitude;
+            var quatDiff = Quaternion.Angle(dockedPointTRWS.rotation, transform.rotation);
+
 
             // docked 点距离探测圆锥中心之间的角度
             float fovDiff = Vector3.Angle(point_center_dir, dir);
 
             if (dist > m_minDist && dist < m_maxDist)
-            {                
-                if (fovDiff < m_fov)
+            {                  
+                if (fovDiff < m_fov && quatDiff < 90)
                 {
                     return true;
                 }             
             }
             Debug.Log("Detect Docking Target:" + target.m_type + ";  dist=" + dist +
-                ",  angle=" + fovDiff);
+                ",  angle=" + fovDiff + "  orientation Diff =" + quatDiff);
             return false;
         }
 

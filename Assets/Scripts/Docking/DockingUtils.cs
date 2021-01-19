@@ -120,6 +120,8 @@ namespace Docking
                     return typeof(HangingController);
                 case DockingTargetType.BRACED_HANG:
                     return typeof(BracedHangController);
+                case DockingTargetType.BEAM:
+                    return typeof(JumpController);
             }
             return null;
         }

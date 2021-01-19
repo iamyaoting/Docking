@@ -122,10 +122,18 @@ namespace Docking
             switch (m_blendType)
             {
                 case BlendType.DOCKED_FULL_ON:
+                    
                     GetCurrentDockingController(animator).SetEnableInput(true);
                     break;
                 case BlendType.DOCKING_BLEND:
-                    GetCurrentDockingController(animator).SetEnableInput(false);
+                    if (normalizedTime > m_intervalStartNormalizedTime && normalizedTime < m_intervalEndNormalizedTime)
+                    { 
+                        GetCurrentDockingController(animator).SetEnableInput(false); 
+                    }
+                    else
+                    {
+                        GetCurrentDockingController(animator).SetEnableInput(true);
+                    }
                     break;
                 case BlendType.DOCKING_BLEND_AND_DOCKED_FULL_ON:
                     if (normalizedTime > m_intervalStartNormalizedTime && normalizedTime < m_intervalEndNormalizedTime)

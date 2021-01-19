@@ -89,9 +89,12 @@ public abstract class Controller
     // 真实的Tick实现方法
     protected abstract void Tick(float deltaTime);
     public void OnUpdate(float deltaTime)
-    {
+    {        
         ResetAnimatorTriggers();
-        Tick(deltaTime);
+        if (!m_animator.IsInTransition(0))
+        {
+            Tick(deltaTime);
+        }            
     }
     public virtual void OnExit() 
     {

@@ -78,7 +78,8 @@ namespace Docking
                     case DockingTargetType.TAKE_COVER:
                         return .7f;
                     case DockingTargetType.HANGING:
-                        return .4f;
+                    case DockingTargetType.BRACED_HANG:
+                        return .6f;                        
                 }
                 return .0f;
             }

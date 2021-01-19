@@ -62,7 +62,6 @@ namespace Docking
                 var vel = Mathf.RoundToInt(input.x);
                 if (STATE.HANGING_IDLE == state)
                 {
-                    m_animator.ResetTrigger("T_HangingIdle");
                     m_animator.SetFloat("Velocity", vel);
 
                     if(HasEnvUnCommitAction()) // 跳下至地面
@@ -78,7 +77,6 @@ namespace Docking
                 {
                     var ntime = Utils.GetCurrentStateNormalizedTime(m_animator, 0);  
                     m_animator.SetTrigger("T_HangingIdle");                                   
-                    m_animator.ResetTrigger("T_HangingMove");
                 }
             }
 
