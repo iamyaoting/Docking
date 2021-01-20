@@ -58,19 +58,19 @@ namespace Docking
             dockingControlData.m_targetOffsetMS.translation = m_translationOffset;
             dockingControlData.m_targetOffsetMS.rotation = m_rotationOffset;
             
-            if(!animator.IsInTransition(0)) //不允许在Transition期间进行docked操作
+            if(!animator.IsInTransition(layerIndex)) //不允许在Transition期间进行docked操作
             {
                 GetDockingDriver(animator).Notify(dockingControlData);
             }
 
-            // 在docking blend 期间，禁止input输入
-            SetInputMode(animator, normalizedTime);
+            //// 在docking blend 期间，禁止input输入
+            //SetInputMode(animator, normalizedTime);
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
         override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            GetCurrentDockingController(animator).OnFSMStateExit();
+            //GetCurrentDockingController(animator).OnFSMStateExit();
         }
 
         //// OnStateMove is called right after Animator.OnAnimatorMove()
@@ -121,8 +121,7 @@ namespace Docking
             // 在docking blend 期间，禁止input输入
             switch (m_blendType)
             {
-                case BlendType.DOCKED_FULL_ON:
-                    
+                case BlendType.DOCKED_FULL_ON:                    
                     GetCurrentDockingController(animator).SetEnableInput(true);
                     break;
                 case BlendType.DOCKING_BLEND:
@@ -151,9 +150,9 @@ namespace Docking
 
         private Docking.DockingDriver GetDockingDriver(Animator animator)
         {
-            var controllerMan = animator.GetComponent<ControllerManager>();
-            if (!controllerMan) Debug.LogError("avatar has no controller mangers!");
-            return controllerMan.GetDockingDriver();
+            var driver = animator.GetComponent<DockingDriver>();
+            if (!driver) Debug.LogError("avatar has no docking drvier!");
+            return driver;
         }
 
         private Docking.DockingController GetCurrentDockingController(Animator animator)

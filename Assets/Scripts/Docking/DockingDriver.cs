@@ -16,7 +16,7 @@ namespace Docking
         // public HumanBodyBones m_dockingBone = HumanBodyBones.LastBone;
         public DockingTransform m_targetOffsetMS;
     }
-    public class DockingDriver
+    public class DockingDriver : MonoBehaviour
     {
         private Animator m_animator;        
         
@@ -42,6 +42,13 @@ namespace Docking
         // docking Bone 的transform
         private Transform m_dockingBone;
 
+        // 数据是否有效
+        public bool valid { get; private set; } = false;
+
+        private void Start()
+        {
+            Init(GetComponent<Animator>());
+        }
         public void Init(Animator animator)
         {
             m_animator = animator;
@@ -57,6 +64,12 @@ namespace Docking
                 Debug.LogError("No Docking Bone, Please add in advance!");
             }
         }
+
+        private void LateUpdate()
+        {
+            valid = DockDriver();
+        }
+
         public DockedVertexStatus GetDockedVertexStatus() { return m_dockedVertexStatus; }
         public TR GetDockedVertexWS() 
         {
@@ -67,7 +80,7 @@ namespace Docking
         }
 
         public bool DockDriver()
-        {
+        {            
             //Debug.Log("Dock");
             UpdateWorldFromReference(m_dockingTarget);
 
@@ -192,6 +205,7 @@ namespace Docking
         // 在Docking Target 不是static时候，调用该函数
         private void UpdateWorldFromReference(DockingTarget target)
         {
+            if (null == target) return;
             m_worldFromOldReference = m_worldFromNewReference;
             m_worldFromNewReference = target.GetWorldFromReference();
         }
@@ -237,6 +251,11 @@ namespace Docking
             return m_dockingBone;
         }
 
+        
+        private void OnDrawGizmos()
+        {
+            DrawGizmos();
+        }
         public void DrawGizmos()       
         {
             DockingGizmos.PushGizmosData();

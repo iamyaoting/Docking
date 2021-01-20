@@ -1004,21 +1004,22 @@ MonoBehaviour:
   m_vertices:
   - tr:
       translation: {x: 4.9, y: 0.59, z: 0.16}
-      rotation: {x: 0, y: 0, z: 0, w: 1}
+      rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:
       translation: {x: 1.5, y: 0.59, z: 0.16}
-      rotation: {x: 0, y: 0, z: 0, w: 1}
+      rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   - tr:
       translation: {x: -1.5, y: 0, z: 0.16}
-      rotation: {x: 0, y: 0, z: 0, w: 1}
+      rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 1
   - tr:
       translation: {x: -4.9, y: 0, z: 0.16}
-      rotation: {x: 0, y: 0, z: 0, w: 1}
+      rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 1
   m_loop: 0
+  m_handIK: 0
 --- !u!65 &6606391505701638609
 BoxCollider:
   m_ObjectHideFlags: 0

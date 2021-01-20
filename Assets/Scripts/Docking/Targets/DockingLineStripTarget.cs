@@ -47,6 +47,16 @@ namespace Docking
         //    }
         //}
 
+
+        //private void Start()
+        //{
+        //    int n = m_vertices.Length;
+        //    for (int i = 0; i < n; ++i)
+        //    {
+        //        var p = m_vertices[i].tr.translation;
+        //        m_vertices[i].tr.rotation = Quaternion.LookRotation(new Vector3(-p.x, 0, -p.z));
+        //    }
+        //}
         public override DockedVertexStatus GetDockedLS(TR undockedTRLS, out DockingVertex dockedVertexLS)
         {
             DockedVertexStatus dockedVertexSatus = null;

@@ -6,6 +6,16 @@ using UnityEngine.Rendering;
 
 namespace Docking
 {
+    [System.Flags]
+    public enum DetectorType
+    {
+        None = 0x00,
+        LowDetector = 0x1,
+        HighDetector = 0x2,
+        HangDetector = 0x4,
+        HangBackDetector = 0x8
+    }
+
     public class DockingDetector : MonoBehaviour
     {
         public Vector3 m_biasMS = new Vector3(0.0f, 1.0f, 0.2f);     // 搜索圆锥的顶点与hostplayer节点的偏移
@@ -19,6 +29,28 @@ namespace Docking
         
         public float m_phi = 20;  // 纬度
         public float m_lamda = 0; // 经度
+
+        public ControllerEnterContext GetNearestDockingTarget(DetectorType type, Vector2 dir, DockingTarget target)
+        {            
+            ControllerEnterContext context = null;
+            if ((type & DetectorType.LowDetector) != DetectorType.None)
+            {
+                context = GetNearestDockingTarget_Locomotion_Low();
+            }
+            if ((type & DetectorType.HighDetector) != DetectorType.None)
+            {
+                context = GetNearestDockingTarget_Locomotion_High();
+            }
+            if ((type & DetectorType.HangDetector) != DetectorType.None)
+            {
+                context = GetNearestDockingTarget_Hanging(dir, target);
+            }
+            if ((type & DetectorType.HangBackDetector) != DetectorType.None)
+            {
+                context = GetNearestDockingTarget_Hanging(new Vector2(0, 1), null);
+            }
+            return context;
+        }
 
 
         // 利用docking detector 寻找最近的target, Locomotion Detector
@@ -223,7 +255,11 @@ namespace Docking
         private int gizmosAngle = 0;
         private const float gizmosTwistSpeed = 150;
         private DockingVertex m_desiredDockedVertex = null;
-               
+
+        private void OnDrawGizmos()
+        {
+            DrawGizmos();
+        }
         public void DrawGizmos()
         {
             gizmosAngle = (gizmosAngle + (int)(Time.deltaTime * gizmosTwistSpeed)) % 360;

@@ -10,7 +10,7 @@ public class ControllerManager : MonoBehaviour
 
     protected Controller                            m_lastController;
     protected Controller                            m_currentController;
-    private   Docking.DockingDriver                 m_dockingDriver;    
+    public   Docking.DockingDriver                  m_dockingDriver;    
     private   Animator                              m_animator;
     private FullBodyIKModifier                      m_fullBodyIKModifer;
     private int                                     m_currentStateHash;
@@ -32,13 +32,12 @@ public class ControllerManager : MonoBehaviour
     void Start()
     {
         m_animator = GetComponent<Animator>();
-        m_dockingDriver = new Docking.DockingDriver();
         m_dockingDriver.Init(m_animator);
         m_fullBodyIKModifer = new FullBodyIKModifier(m_animator.GetComponent<RootMotion.FinalIK.BipedIK>());
         m_controllersCache = new Dictionary<System.Type, Controller>();
-        m_currentController = new IdleController();
-        m_currentController.OnInit(GetControllerInitContext());
-        m_currentStateHash = m_animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
+        //m_currentController = new IdleController();
+        //m_currentController.OnInit(GetControllerInitContext());
+        //m_currentStateHash = m_animator.GetCurrentAnimatorStateInfo(0).fullPathHash;
     }
 
     // Update is called once per frame
