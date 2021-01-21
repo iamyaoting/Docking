@@ -3,15 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using Docking;
 
+
+public class ControllerEnterContext
+{
+    // 想要docked的目标点状态, 在ws中
+    public Docking.DockedVertexStatus desiredDockedVertexStatus;
+
+    // 想要docked的目标点
+    public Docking.DockingVertex desiredDockedVertex;
+
+    // docking target
+    public Docking.DockingTarget dockingtarget;
+}
+
 public abstract class StateBehavioConBase : StateMachineBehaviour
 {
     protected Animator m_animator;
     protected Docking.DockingDetector m_dockingDetector;
     protected Docking.DockingDriver m_dockingDriver;
 
-    protected abstract void OnControllerUpdate(int layerIndex);
+   
+
+    protected virtual void OnControllerUpdate(int layerIndex) { }
+    protected virtual void OnControllerEnter(int layerIndex) { }
+    protected virtual void OnControllerExit(int layerIndex) { }
     protected virtual void OnDockingTargetUpdate(DockingTarget target, TR tr, DockedVertexStatus status)
     {}
+
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -19,12 +37,13 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
         m_animator = animator;
         m_dockingDetector = animator.GetComponent<Docking.DockingDetector>();
         m_dockingDriver = animator.GetComponent<Docking.DockingDriver>();
+        OnControllerEnter(layerIndex);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        ResetAnimatorTriggers();        
+        //ResetAnimatorTriggers();        
         {
             OnControllerUpdate(layerIndex);
             if(m_dockingDriver.valid)
@@ -32,13 +51,13 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
                 OnDockingTargetUpdate(m_dockingDriver.GetDockingTarget(), m_dockingDriver.GetDockedVertexWS(), m_dockingDriver.GetDockedVertexStatus());
             }
         }
-    }    
+    }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {        
+        OnControllerExit(layerIndex);
+    }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -60,6 +79,13 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
         return false;
     }
 
+    // 当前是否进行跳下操作请求，进入正常locomotion控制器
+    public static bool HasEnvUnCommitAction()
+    {
+        if (Input.GetKeyDown(KeyCode.B)) return true;
+        else return false;
+    }
+
     private void ResetAnimatorTriggers()
     {
         foreach (var par in m_animator.parameters)
@@ -73,6 +99,10 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
     protected void SetDockingCommit()
     {
         m_animator.SetTrigger("Commit");
+    }
+    protected void SetUnDocking()
+    {
+        m_animator.SetTrigger("UnCommit");
     }
 
     protected Vector2 GetRawInput()

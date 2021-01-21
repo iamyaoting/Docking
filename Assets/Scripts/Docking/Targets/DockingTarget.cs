@@ -4,6 +4,17 @@ using UnityEngine;
 
 namespace Docking
 {
+    [System.Flags]
+    public enum DOCKED_POINT_MOVE_LIMIT
+    {
+        NONE = 0,
+        HORIZEN_LEFT_FORBIDEN = 1,
+        HORIZEN_RIGHT_FORBIDEN = 2,
+        VERTICAL_DOWN_FORBIDEN = 4,
+        VERTICAL_UP_FORBIDEN = 8,
+        ALL = 15
+    }
+
     // 位姿，位置和朝向
     [System.Serializable]
     public class TR
@@ -163,6 +174,7 @@ namespace Docking
         {
             DockingTransform worldFromUndockedPoint = new DockingTransform();
             worldFromUndockedPoint.translation = pointWS;
+            worldFromUndockedPoint.rotation = quat;
             DockingTransform worldFromReference = GetWorldFromReference();
             DockingTransform referenceFromUndockedPoint = DockingTransform.Multiply(
                 DockingTransform.Inverse(worldFromReference), worldFromUndockedPoint);

@@ -50,7 +50,7 @@ namespace Docking
                 if(m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5f && m_enableInput)
                 {
                     m_animator.SetTrigger("Commit");
-                    var context = m_dockingDetector.GetNearestDockingTarget_Locomotion_Low();
+                    var context = m_dockingDetector.GetNearestDockingTarget_Locomotion_Low(null);
                     OnEnter(context);
                     active = true;
                 }                

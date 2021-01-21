@@ -35,11 +35,11 @@ namespace Docking
             ControllerEnterContext context = null;
             if ((type & DetectorType.LowDetector) != DetectorType.None)
             {
-                context = GetNearestDockingTarget_Locomotion_Low();
+                context = GetNearestDockingTarget_Locomotion_Low(target);
             }
             if ((type & DetectorType.HighDetector) != DetectorType.None)
             {
-                context = GetNearestDockingTarget_Locomotion_High();
+                context = GetNearestDockingTarget_Locomotion_High(target);
             }
             if ((type & DetectorType.HangDetector) != DetectorType.None)
             {
@@ -54,11 +54,11 @@ namespace Docking
 
 
         // 利用docking detector 寻找最近的target, Locomotion Detector
-        public ControllerEnterContext GetNearestDockingTarget_Locomotion_High()
+        public ControllerEnterContext GetNearestDockingTarget_Locomotion_High(DockingTarget target)
         {
             SetLocomoitionHighDetector();
             ControllerEnterContext context = new ControllerEnterContext();
-            if (false == DetectNearestTarget(null,
+            if (false == DetectNearestTarget(target,
                 out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
             {
                 Debug.Log("Can not find docking target, dock forbidden!");
@@ -71,11 +71,11 @@ namespace Docking
             }
         }
 
-        public ControllerEnterContext GetNearestDockingTarget_Locomotion_Low()
+        public ControllerEnterContext GetNearestDockingTarget_Locomotion_Low(DockingTarget target)
         {
             SetLocomoitionLowDetector();
             ControllerEnterContext context = new ControllerEnterContext();
-            if (false == DetectNearestTarget(null,
+            if (false == DetectNearestTarget(target,
                 out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
             {
                 Debug.Log("Can not find docking target, dock forbidden!");
@@ -245,7 +245,7 @@ namespace Docking
                     return true;
                 }             
             }
-            Debug.Log("Detect Docking Target:" + target.m_type + ";  dist=" + dist +
+            Debug.Log("Detect Docking Target:" + target.name + "type: " + target.m_type + ";  dist=" + dist +
                 ",  angle=" + fovDiff + "  orientation Diff =" + quatDiff);
             return false;
         }

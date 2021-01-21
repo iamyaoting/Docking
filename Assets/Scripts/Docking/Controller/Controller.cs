@@ -3,17 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class ControllerEnterContext
-{
-    // 想要docked的目标点状态, 在ws中
-    public Docking.DockedVertexStatus desiredDockedVertexStatus;
 
-    // 想要docked的目标点
-    public Docking.DockingVertex desiredDockedVertex;
-
-    // docking target
-    public Docking.DockingTarget dockingtarget;
-}
 
 public enum AnimatorState
 {
@@ -107,7 +97,7 @@ public abstract class Controller
 
     public virtual void LateUpdate() 
     {
-        m_fullBodyIKModifer.OnSolver(Time.deltaTime);
+        m_fullBodyIKModifer.OnIKUpdate(Time.deltaTime);
     }
 
     // 当绑定该控制器的状态结束时候，会调用该函数

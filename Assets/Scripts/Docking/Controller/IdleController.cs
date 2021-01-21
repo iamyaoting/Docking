@@ -10,11 +10,11 @@ public class IdleController : Controller
         {
             if (null == m_nextControllerEnterContext)
             {
-                m_nextControllerEnterContext = m_dockingDetector.GetNearestDockingTarget_Locomotion_High();
+                //m_nextControllerEnterContext = m_dockingDetector.GetNearestDockingTarget_Locomotion_High();
             }
             if (null == m_nextControllerEnterContext)
             {
-                m_nextControllerEnterContext = m_dockingDetector.GetNearestDockingTarget_Locomotion_Low();
+                //m_nextControllerEnterContext = m_dockingDetector.GetNearestDockingTarget_Locomotion_Low();
             }
             if (null == m_nextControllerEnterContext)// 往上寻找target
             {

@@ -4,16 +4,7 @@ using UnityEngine;
 
 namespace Docking
 {
-    [System.Flags]
-    public enum DOCKED_POINT_MOVE_LIMIT
-    {
-        NONE                    = 0,
-        HORIZEN_LEFT_FORBIDEN   = 1,
-        HORIZEN_RIGHT_FORBIDEN  = 2,
-        VERTICAL_DOWN_FORBIDEN  = 4,
-        VERTICAL_UP_FORBIDEN    = 8,
-        ALL                     = 15
-    }
+   
 
     public abstract class DockingController: Controller
     {        

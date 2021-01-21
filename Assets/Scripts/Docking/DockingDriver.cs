@@ -18,8 +18,9 @@ namespace Docking
     }
     public class DockingDriver : MonoBehaviour
     {
-        private Animator m_animator;        
-        
+        private Animator m_animator;
+        private FullBodyIKModifier m_fullBodyIK;
+
         private DockingTransform m_worldFromNewReference = new DockingTransform();
         private DockingTransform m_worldFromOldReference = new DockingTransform();
         private DockingTransform m_worldFromLastTarget = new DockingTransform();
@@ -36,6 +37,9 @@ namespace Docking
         // DockingDriver 所需要的target标记线，由Docking Controller 设置提供
         private DockingTarget m_dockingTarget;
 
+        // DockingDriver 所需要的target标记线
+        private DockingTarget m_dockingNextTarget;
+
         // Docking 的顶点信息
         private DockedVertexStatus m_dockedVertexStatus;
 
@@ -48,6 +52,7 @@ namespace Docking
         private void Start()
         {
             Init(GetComponent<Animator>());
+
         }
         public void Init(Animator animator)
         {
@@ -63,6 +68,7 @@ namespace Docking
             {
                 Debug.LogError("No Docking Bone, Please add in advance!");
             }
+            m_fullBodyIK = new FullBodyIKModifier(m_animator.GetComponent<RootMotion.FinalIK.BipedIK>());
         }
 
         private void LateUpdate()
@@ -83,6 +89,8 @@ namespace Docking
         {            
             //Debug.Log("Dock");
             UpdateWorldFromReference(m_dockingTarget);
+            // 更新ik控制器
+            m_fullBodyIK.OnIKUpdate(Time.deltaTime);
 
             // 总体思想，先将更新后的model再old reference 空间中进行docking解算
             // old reference 更新到 new reference
@@ -166,13 +174,21 @@ namespace Docking
                 worldFromModel.ApplyDockingTransformWS(m_animator.transform);
 
                 //m_worldFromOldReference = m_worldFromNewReference;
+
+                // 处理手部IK
+                SolveHandIK(m_dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
+
             }
             else
             {
+                // 处理手部IK
+                SolveHandIK(m_dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
+
                 SetDefaultValue();
                 m_dockingControlData = null;
                 return false;
-            }
+            }            
+            
             m_dockingControlData = null;
             return true;
         }
@@ -187,6 +203,17 @@ namespace Docking
             Debug.Log("DockingDriver: Set the docking target " + target.gameObject.name);
             m_dockingTarget = target;
             SetWorldFromReference(target);
+        }
+        public void SetDockingNextTarget(DockingTarget target)
+        {
+            Debug.Log("DockingDriver: Set the docking next target " + target.gameObject.name);
+            m_dockingNextTarget = target;            
+        }
+        public void SwitchToNextDockingTarget()
+        {
+            m_dockingTarget = m_dockingNextTarget;
+            m_dockingNextTarget = null;
+            SetWorldFromReference(m_dockingTarget);
         }
 
         public DockingTarget GetDockingTarget()
@@ -251,7 +278,31 @@ namespace Docking
             return m_dockingBone;
         }
 
-        
+        // 处理手部IK
+        protected void SolveHandIK(DockingTarget target, TR tr, DockedVertexStatus status)
+        {
+            bool handIK = false;
+            DockingLineStripTarget lineStripTarget = target as DockingLineStripTarget;
+            if (lineStripTarget)
+            {
+                handIK = lineStripTarget.m_handIK;
+                handIK = handIK & (m_lastBlend == 1.0f);
+
+            }
+            m_fullBodyIK.SetEnableIK(handIK);
+            //if (handIK)
+            {
+                var leftHand = m_animator.GetBoneTransform(HumanBodyBones.LeftHand);
+                var rightHand = m_animator.GetBoneTransform(HumanBodyBones.RightHand);
+
+                var leftHandDocked = lineStripTarget.GetDockedPointWS(leftHand.position, m_animator.rootRotation);
+                var rightHandDocked = lineStripTarget.GetDockedPointWS(rightHand.position, m_animator.rootRotation);
+
+                m_fullBodyIK.leftHandTargetOffset = Vector3.up * (leftHandDocked.translation.y - tr.translation.y);
+                m_fullBodyIK.rightHandTargetOffset = Vector3.up * (rightHandDocked.translation.y - tr.translation.y);
+            }
+        }
+
         private void OnDrawGizmos()
         {
             DrawGizmos();

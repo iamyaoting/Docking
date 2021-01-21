@@ -18,6 +18,7 @@ public class IdleCon : StateBehavioConBase
             if(null != context)
             {
                 m_dockingDriver.SetDockingTarget(context.dockingtarget);
+                m_dockingDriver.SetDockingNextTarget(context.dockingtarget);
                 SetDockingCommit();
             }
         }

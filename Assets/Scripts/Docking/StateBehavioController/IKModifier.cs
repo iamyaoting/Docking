@@ -40,7 +40,7 @@ public class FullBodyIKModifier
         m_remainingTime = blendTime;
     }
 
-    public void OnSolver(float deltaTime)
+    public void OnIKUpdate(float deltaTime)
     {
         UpdateBlendWeight(deltaTime);
         for(int i = 0; i < m_IKGoals.Length; ++i)
