@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class HangingMoveCon : StateBehavioConBase
 {
-    protected override void OnControllerUpdate(int layerIndex)
+    protected override void OnControllerUpdate(int layerIndex, AnimatorStateInfo stateInfo)
     {
         if (m_animator.IsInTransition(layerIndex)) return;
 

@@ -6,13 +6,13 @@ public class JumpBeamCon : StateBehavioConBase
 {
     bool m_firstUpdate = true;
 
-    protected override void OnControllerEnter(int layerIndex)
+    protected override void OnControllerEnter(int layerIndex, AnimatorStateInfo stateInfo)
     {
         m_firstUpdate = true;
-        base.OnControllerEnter(layerIndex);
+        base.OnControllerEnter(layerIndex, stateInfo);
     }
 
-    protected override void OnControllerUpdate(int layerIndex)
+    protected override void OnControllerUpdate(int layerIndex, AnimatorStateInfo stateInfo)
     {
         if (m_animator.IsInTransition(layerIndex)) return;
 

@@ -106,36 +106,6 @@ namespace Docking
 
     public class Utils
     {
-
-        public static System.Type GetDefaultControllerTypeByTargetType(DockingTargetType type)
-        {
-            switch (type)
-            {
-                case DockingTargetType.TAKE_COVER:
-                    return typeof(TakeCoverController);
-                // 进入 DockingTargetType.VAULT的target，默认进入InValutController控制器中，在其中自动转入OutValutController控制器
-                case DockingTargetType.VAULT: 
-                    return typeof(ValutController);
-                case DockingTargetType.HANGING:
-                    return typeof(HangingController);
-                case DockingTargetType.BRACED_HANG:
-                    return typeof(BracedHangController);
-                case DockingTargetType.BEAM:
-                    return typeof(JumpController);
-            }
-            return null;
-        }
-        //public static void GetBlend(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    var graph = animator.playableGraph;
-        //    for(int i = 0; i < graph.GetOutputCountByType<AnimationPlayableOutput>(); ++i)
-        //    {
-        //        var output = (AnimationPlayableOutput)(animator.playableGraph.GetOutputByType<AnimationPlayableOutput>(i));
-        //        var source = PlayableOutputExtensions.GetSourcePlayable(output);
-        //        Debug.Log(source.GetPlayableType().Name);
-        //    }
-        //}
-
         // Realigns quaternion keys to ensure shortest interpolation paths.
         public static Quaternion EnsureQuaternionContinuity(Quaternion lastQ, Quaternion q)
         {

@@ -8,7 +8,14 @@ public class IdleCon : StateBehavioConBase
 {
     public DetectorType m_detectorType;
 
-    protected override void OnControllerUpdate(int layerIndex)
+    protected override void OnControllerEnter(int layerIndex, AnimatorStateInfo stateInfo)
+    {
+        m_dockingDetector.GetNearestDockingTarget(m_detectorType, GetRawInput(), null);
+        base.OnControllerEnter(layerIndex, stateInfo);
+    }
+
+
+    protected override void OnControllerUpdate(int layerIndex, AnimatorStateInfo stateInfo)
     {
         if (m_animator.IsInTransition(layerIndex)) return;
         

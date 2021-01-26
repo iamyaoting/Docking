@@ -6,93 +6,38 @@ using UnityEngine.Rendering;
 
 namespace Docking
 {
-    [System.Flags]
-    public enum DetectorType
-    {
-        None = 0x00,
-        LowDetector = 0x1,
-        HighDetector = 0x2,
-        HangDetector = 0x4,
-        HangBackDetector = 0x8
-    }
-
     public class DockingDetector : MonoBehaviour
     {
         public Vector3 m_biasMS = new Vector3(0.0f, 1.0f, 0.2f);     // 搜索圆锥的顶点与hostplayer节点的偏移
-
-        [Range(10, 80)]
-        public float m_fov = 40;
-        [Range(3, 6)]
-        public float m_maxDist = 5.0f;
-        [Range(0.2f, 2)]
-        public float m_minDist = 1.0f;
-        
+        public float m_fov = 40;        
+        public float m_maxDist = 5.0f;        
+        public float m_minDist = 1.0f;        
         public float m_phi = 20;  // 纬度
         public float m_lamda = 0; // 经度
+
+        public DockingDetectorData dataAsset;
 
         public ControllerEnterContext GetNearestDockingTarget(DetectorType type, Vector2 dir, DockingTarget target)
         {            
             ControllerEnterContext context = null;
-            if ((type & DetectorType.LowDetector) != DetectorType.None)
+            foreach(var data in dataAsset.dataArray)
             {
-                context = GetNearestDockingTarget_Locomotion_Low(target);
-            }
-            if ((type & DetectorType.HighDetector) != DetectorType.None)
-            {
-                context = GetNearestDockingTarget_Locomotion_High(target);
-            }
-            if ((type & DetectorType.HangDetector) != DetectorType.None)
-            {
-                context = GetNearestDockingTarget_Hanging(dir, target);
-            }
-            if ((type & DetectorType.HangBackDetector) != DetectorType.None)
-            {
-                context = GetNearestDockingTarget_Hanging(new Vector2(0, 1), null);
-            }
+                if ((type & data.type) != DetectorType.None)
+                {
+                    context = GetNearestDockingTargetByType(data.type, dir, target);
+                    if(null != context)
+                    {
+                        break;
+                    }
+                }
+            }           
             return context;
         }
 
-
-        // 利用docking detector 寻找最近的target, Locomotion Detector
-        public ControllerEnterContext GetNearestDockingTarget_Locomotion_High(DockingTarget target)
-        {
-            SetLocomoitionHighDetector();
-            ControllerEnterContext context = new ControllerEnterContext();
-            if (false == DetectNearestTarget(target,
-                out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
-            {
-                Debug.Log("Can not find docking target, dock forbidden!");
-                return null;
-            }
-            else
-            {
-                Debug.Log("Find docking target: " + context.dockingtarget.name);
-                return context;
-            }
-        }
-
-        public ControllerEnterContext GetNearestDockingTarget_Locomotion_Low(DockingTarget target)
-        {
-            SetLocomoitionLowDetector();
-            ControllerEnterContext context = new ControllerEnterContext();
-            if (false == DetectNearestTarget(target,
-                out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
-            {
-                Debug.Log("Can not find docking target, dock forbidden!");
-                return null;
-            }
-            else
-            {
-                Debug.Log("Find docking target: " + context.dockingtarget.name);
-                return context;
-            }
-        }
-
-        // 利用docking detector 寻找最近的target, Hanging Detector
-        public ControllerEnterContext GetNearestDockingTarget_Hanging(Vector2 moveDir, DockingTarget currentTarget)
+        public ControllerEnterContext GetNearestDockingTargetByType(DetectorType type, Vector2 moveDir, DockingTarget currentTarget)
         {
             var moveDirMS = Quaternion.FromToRotation(Vector3.up, transform.up) * moveDir;
-            SetHangingDetector(moveDirMS);
+            SetDetectorData(type, moveDirMS);
             ControllerEnterContext context = new ControllerEnterContext();
             if (false == DetectNearestTarget(currentTarget,
                 out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
@@ -106,35 +51,14 @@ namespace Docking
                 return context;
             }
         }
-
-        // 设置Detector为Locomotion类型
-        private void SetLocomoitionHighDetector()
-        {
-            m_biasMS = new Vector3(0.0f, 1.0f, 0.2f);
-            m_fov = 40;
-            m_maxDist = 5.0f;
-            m_minDist = 1.0f;
-            m_phi = 20;
-            m_lamda = 0;
-        }
-        private void SetLocomoitionLowDetector()
-        {
-            m_biasMS = new Vector3(0.0f, 0.0f, 0.2f);
-            m_fov = 40;
-            m_maxDist = 5.0f;
-            m_minDist = 1.0f;
-            m_phi = 20;
-            m_lamda = 0;
-        }
-
-
+       
         // 设置Detector为Hang的2D模式，在立面进行搜索
         private void SetHangingDetector(Vector2 moveDir)
         {
             m_biasMS = transform.InverseTransformPoint(Utils.GetDockingBoneTransform(GetComponent<Animator>()).position);             
-            m_fov = 20;
-            m_maxDist = 7.0f;
-            m_minDist = 0.01f;
+            //m_fov = 20;
+            //m_maxDist = 7.0f;
+            //m_minDist = 0.01f;
                         
             if(moveDir.magnitude == 0)
             {
@@ -158,18 +82,7 @@ namespace Docking
                 m_phi = Vector2.SignedAngle(moveDir, -Vector2.right);
                 m_lamda = -90;
             }
-        }
-
-        // 设置Detector为背面搜索模式，主要用于往背面跳跃
-        private void SetHangingBackDetector()
-        {
-            m_biasMS = new Vector3(0.0f, 1.0f, -0.2f);
-            m_fov = 40;
-            m_maxDist = 5.0f;
-            m_minDist = 1.0f;
-            m_phi = 0;
-            m_lamda = 180;
-        }        
+        }    
 
         private bool DetectNearestTarget(DockingTarget currentTarget,
             out DockingTarget target, 
@@ -250,17 +163,33 @@ namespace Docking
             return false;
         }
 
+        private void SetDetectorData(DetectorType type, Vector2 input)
+        {
+            if(!dataAsset.dict.ContainsKey(type))
+            {
+                Debug.LogError("Can not find exactly detector type!");
+            }
+            m_biasMS = dataAsset.dict[type].m_biasMS;
+            m_fov = dataAsset.dict[type].m_fov;
+            m_maxDist = dataAsset.dict[type].m_maxDist;
+            m_minDist = dataAsset.dict[type].m_minDist;
+            m_phi = dataAsset.dict[type].m_phi;  // 纬度
+            m_lamda = dataAsset.dict[type].m_lamda; // 经度
+
+            // 如果是Hanging Detector 程序式修改探测器
+            if(DetectorType.HangDetector == type)
+            {
+                SetHangingDetector(input);
+            }
+        }
+
 
         #region gizmos
         private int gizmosAngle = 0;
         private const float gizmosTwistSpeed = 150;
         private DockingVertex m_desiredDockedVertex = null;
 
-        private void OnDrawGizmos()
-        {
-            DrawGizmos();
-        }
-        public void DrawGizmos()
+        private void OnDrawGizmos()       
         {
             gizmosAngle = (gizmosAngle + (int)(Time.deltaTime * gizmosTwistSpeed)) % 360;
             DockingGizmos.PushGizmosData();

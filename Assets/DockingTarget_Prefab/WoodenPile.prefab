@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4450438478478476685}
   - component: {fileID: 8525511183242547364}
+  - component: {fileID: 1767182087911904073}
   m_Layer: 0
   m_Name: WoodenPile
   m_TagString: Untagged
@@ -46,12 +47,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_active: 1
   m_type: 0
-  m_constrainRotation: 1
+  m_constrainRotation: 0
   m_desiredVertex:
     tr:
       translation: {x: 0, y: 1.91, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
+--- !u!65 &1767182087911904073
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3041077436332278906}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.45926926, y: 2.066051, z: 0.49531817}
+  m_Center: {x: 0.0060081333, y: 0.9295614, z: -0.012016237}
 --- !u!1001 &440087248271102544
 PrefabInstance:
   m_ObjectHideFlags: 0

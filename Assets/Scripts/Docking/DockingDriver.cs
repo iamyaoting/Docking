@@ -197,6 +197,10 @@ namespace Docking
         {
             m_dockingControlData = data;
         }
+        public DockingControlData GetDockingControllerData()
+        {
+            return m_dockingControlData;
+        }
 
         public void SetDockingTarget(DockingTarget target)
         {
@@ -290,7 +294,7 @@ namespace Docking
 
             }
             m_fullBodyIK.SetEnableIK(handIK);
-            //if (handIK)
+            if (lineStripTarget)
             {
                 var leftHand = m_animator.GetBoneTransform(HumanBodyBones.LeftHand);
                 var rightHand = m_animator.GetBoneTransform(HumanBodyBones.RightHand);

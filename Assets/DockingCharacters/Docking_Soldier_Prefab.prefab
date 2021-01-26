@@ -2999,6 +2999,7 @@ MonoBehaviour:
   m_minDist: 1
   m_phi: 20
   m_lamda: 0
+  dataAsset: {fileID: 11400000, guid: 36f0f648a277b434fa9545cbd7c23a9d, type: 2}
 --- !u!114 &9166176741108951172
 MonoBehaviour:
   m_ObjectHideFlags: 0

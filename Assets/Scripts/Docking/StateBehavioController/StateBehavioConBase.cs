@@ -24,8 +24,8 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
 
    
 
-    protected virtual void OnControllerUpdate(int layerIndex) { }
-    protected virtual void OnControllerEnter(int layerIndex) { }
+    protected virtual void OnControllerUpdate(int layerIndex, AnimatorStateInfo stateInfo) { }
+    protected virtual void OnControllerEnter(int layerIndex, AnimatorStateInfo stateInfo) { }
     protected virtual void OnControllerExit(int layerIndex) { }
     protected virtual void OnDockingTargetUpdate(DockingTarget target, TR tr, DockedVertexStatus status)
     {}
@@ -37,7 +37,7 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
         m_animator = animator;
         m_dockingDetector = animator.GetComponent<Docking.DockingDetector>();
         m_dockingDriver = animator.GetComponent<Docking.DockingDriver>();
-        OnControllerEnter(layerIndex);
+        OnControllerEnter(layerIndex, stateInfo);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -45,7 +45,7 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
     {
         //ResetAnimatorTriggers();        
         {
-            OnControllerUpdate(layerIndex);
+            OnControllerUpdate(layerIndex, stateInfo);
             if(m_dockingDriver.valid)
             {
                 OnDockingTargetUpdate(m_dockingDriver.GetDockingTarget(), m_dockingDriver.GetDockedVertexWS(), m_dockingDriver.GetDockedVertexStatus());
@@ -164,6 +164,7 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
             target.transform.InverseTransformPoint(context.desiredDockedVertex.tr.translation),
             Quaternion.Inverse(target.transform.rotation) * context.desiredDockedVertex.tr.rotation,
             context.desiredDockedVertex.reserveFloatParam);
+        target.m_constrainRotation = true;
 
         context.dockingtarget = target;
 

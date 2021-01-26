@@ -46,10 +46,10 @@ public class InputGUI : MonoBehaviour
             }
         }
 
-        if(Controller.HasEnvCommitAction())
-        {
-            m_dockBtn.onClick.Invoke();
-            m_dockBtn.OnSubmit(null);
-        }
+        //if(Controller.HasEnvCommitAction())
+        //{
+        //    m_dockBtn.onClick.Invoke();
+        //    m_dockBtn.OnSubmit(null);
+        //}
     }
 }

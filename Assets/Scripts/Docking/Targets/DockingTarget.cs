@@ -62,7 +62,8 @@ namespace Docking
         VAULT,
         BRACED_HANG,
         HANGING,
-        BEAM
+        BEAM,
+        PLATFORM_EDGE
     }
 
     // 角色Dock的点的信息
@@ -198,11 +199,12 @@ namespace Docking
         #region gizmos
         private Dictionary<DockingTargetType, Color> m_gizmosColorDict =
             new Dictionary<DockingTargetType, Color>{
-                {DockingTargetType.TAKE_COVER,  Color.green },
-                {DockingTargetType.VAULT,       Color.yellow },
-                {DockingTargetType.BRACED_HANG, Color.blue },
-                {DockingTargetType.HANGING,     Color.cyan},
-                {DockingTargetType.BEAM,        Color.white}
+                {DockingTargetType.TAKE_COVER,          Color.green },
+                {DockingTargetType.PLATFORM_EDGE,       Color.green},
+                {DockingTargetType.VAULT,               Color.yellow },
+                {DockingTargetType.BRACED_HANG,         Color.blue },
+                {DockingTargetType.HANGING,             Color.cyan},                
+                {DockingTargetType.BEAM,                Color.white}
             };
 
         protected const float m_lineWidth = 0.1f;

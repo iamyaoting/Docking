@@ -35,23 +35,23 @@ namespace Docking
         public float                m_intervalStartNormalizedTime = 0;   // docking blend 混合开始归一化时间
         public float                m_intervalEndNormalizedTime = 1;     // docking blend 混合结束归一化时间
 
+
+        // 状态信息
+        private float               m_lastNormalizedTime = 0;
+
         
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            m_lastNormalizedTime = 0;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            float normalizedTime = stateInfo.normalizedTime;
-            float localTime = normalizedTime * stateInfo.length;
-            float preLocalTime = Mathf.Clamp(localTime - Time.deltaTime, 0, localTime);
-            float preNomalizedTime = preLocalTime / stateInfo.length;
-
             DockingControlData dockingControlData = new DockingControlData();
-            dockingControlData.m_dockingBlend = GetDockingBlendWeight(normalizedTime);
-            dockingControlData.m_previousDockingBlend = GetDockingBlendWeight(preNomalizedTime);
+            dockingControlData.m_dockingBlend = GetDockingBlendWeight(stateInfo.normalizedTime);
+            dockingControlData.m_previousDockingBlend = GetDockingBlendWeight(m_lastNormalizedTime);
             //dockingControlData.m_dockingBone = m_dockingBone;
             //dockingControlData.m_timeOffset = Time.deltaTime;
             dockingControlData.m_targetOffsetMS = new DockingTransform();
@@ -63,8 +63,7 @@ namespace Docking
                 GetDockingDriver(animator).Notify(dockingControlData);
             }
 
-            //// 在docking blend 期间，禁止input输入
-            //SetInputMode(animator, normalizedTime);
+            m_lastNormalizedTime = stateInfo.normalizedTime;
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -115,52 +114,13 @@ namespace Docking
             }
             return blendWeight;
         }    
-        
-        private void SetInputMode(Animator animator, float normalizedTime)
-        {
-            // 在docking blend 期间，禁止input输入
-            switch (m_blendType)
-            {
-                case BlendType.DOCKED_FULL_ON:                    
-                    GetCurrentDockingController(animator).SetEnableInput(true);
-                    break;
-                case BlendType.DOCKING_BLEND:
-                    if (normalizedTime > m_intervalStartNormalizedTime && normalizedTime < m_intervalEndNormalizedTime)
-                    { 
-                        GetCurrentDockingController(animator).SetEnableInput(false); 
-                    }
-                    else
-                    {
-                        GetCurrentDockingController(animator).SetEnableInput(true);
-                    }
-                    break;
-                case BlendType.DOCKING_BLEND_AND_DOCKED_FULL_ON:
-                    if (normalizedTime > m_intervalStartNormalizedTime && normalizedTime < m_intervalEndNormalizedTime)
-                    {
-                        GetCurrentDockingController(animator).SetEnableInput(false);
-                    }
-                    if(normalizedTime > m_intervalEndNormalizedTime)
-                    {
-                        GetCurrentDockingController(animator).SetEnableInput(true);
-                    }
-                    break;
-            }            
-        }
-
-
+   
         private Docking.DockingDriver GetDockingDriver(Animator animator)
         {
             var driver = animator.GetComponent<DockingDriver>();
             if (!driver) Debug.LogError("avatar has no docking drvier!");
             return driver;
-        }
-
-        private Docking.DockingController GetCurrentDockingController(Animator animator)
-        {
-            var controllerMan = animator.GetComponent<ControllerManager>();
-            if (!controllerMan) Debug.LogError("avatar has no controller mangers!");
-            return controllerMan.GetCurrentDockingController();
-        }
+        }        
     }
 }
 

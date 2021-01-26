@@ -249,13 +249,13 @@ MonoBehaviour:
       bendGoal: {fileID: 0}
     leftHand:
       executedInEditor: 0
-      IKPosition: {x: -35.562607, y: -0.73783493, z: 15.498447}
+      IKPosition: {x: -35.58705, y: -0.73783493, z: 15.405514}
       IKPositionWeight: 0
       root: {fileID: 1140540293706924938}
       target: {fileID: 0}
       IKRotationWeight: 0
-      IKRotation: {x: -0.0076060174, y: 0.20344241, z: 0.0015772195, w: 0.9790563}
-      bendNormal: {x: -0.000000015015075, y: 0.037614565, z: 0.0000000010304575}
+      IKRotation: {x: -0.0077573657, y: 0.052291993, z: 0.0004030295, w: 0.99860173}
+      bendNormal: {x: -0.0000000039365204, y: 0.009861456, z: -0.0000000018835635}
       bone1:
         transform: {fileID: 5709431870671491655}
         weight: 1
@@ -273,8 +273,8 @@ MonoBehaviour:
         solverPosition: {x: 0, y: 0, z: 0}
         solverRotation: {x: 0, y: 0, z: 0, w: 1}
         defaultLocalPosition: {x: -0.2986352, y: 0.000000007316692, z: 0.00000023584451}
-        defaultLocalRotation: {x: -0.000000059309958, y: 0.20344852, z: -0.0000000059516374,
-          w: 0.97908574}
+        defaultLocalRotation: {x: -0.00000005952162, y: 0.052293543, z: 0.0000000031338174,
+          w: 0.9986318}
         length: 0
         sqrMag: 0
         axis: {x: -1, y: -0, z: -0}
@@ -518,11 +518,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_biasMS: {x: 0, y: 1, z: 0.2}
-  m_fov: 40
+  m_fov: 50
   m_maxDist: 5
   m_minDist: 1
   m_phi: 20
   m_lamda: 0
+  dataAsset: {fileID: 11400000, guid: 36f0f648a277b434fa9545cbd7c23a9d, type: 2}
 --- !u!1 &353321475466095422
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ public class InTakeCoverCon : StateBehavioConBase
 {
     public DetectorType m_detectorType;
 
-    protected override void OnControllerUpdate(int layerIndex)
+    protected override void OnControllerUpdate(int layerIndex, AnimatorStateInfo stateInfo)
     {
         if (m_animator.IsInTransition(layerIndex)) return;
 

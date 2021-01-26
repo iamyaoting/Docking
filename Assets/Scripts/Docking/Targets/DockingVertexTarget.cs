@@ -12,6 +12,14 @@ namespace Docking
         public override DockedVertexStatus GetDockedLS(TR undockedTRLS, out DockingVertex dockedVertexLS)
         {
             dockedVertexLS = new DockingVertex(m_desiredVertex);
+            if (m_constrainRotation)
+            {
+                dockedVertexLS.tr.rotation = m_desiredVertex.tr.rotation;
+            }
+            else
+            {
+                dockedVertexLS.tr.rotation = undockedTRLS.rotation;
+            }
             return new DockedVertexStatus();
         }
         
