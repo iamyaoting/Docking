@@ -14,7 +14,7 @@ public class InTakeCoverCon : StateBehavioConBase
 
         if (HasEnvCommitAction())
         {
-            ControllerEnterContext context = m_dockingDetector.GetNearestDockingTarget(m_detectorType, GetRawInput(), null);
+            ControllerEnterContext context = m_dockingDetector.GetNearestDockingTargetByMultiTypes(m_detectorType, GetRawInput(), null);
             if (null != context)
             {
                 m_dockingDriver.SetDockingTarget(context.dockingtarget);

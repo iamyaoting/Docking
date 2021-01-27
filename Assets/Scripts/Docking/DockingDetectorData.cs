@@ -9,12 +9,13 @@ namespace Docking
     public enum DetectorType
     {
         None = 0x00,
-        LowDetector = 0x1,          // ÆÕÍ¨µÍ½Ç¶ÈËÑË÷Æ÷
-        HighDetector = 0x2,         // ÆÕÍ¨¸ß½Ç¶ÈËÑË÷Æ÷
+        LowDetector = 0x1,              // ÆÕÍ¨µÍ½Ç¶ÈËÑË÷Æ÷
+        HighDetector = 0x2,             // ÆÕÍ¨¸ß½Ç¶ÈËÑË÷Æ÷
 
-        HangDetector = 0x4,         // ÅÊÅÀÁ¢ÃæËÑË÷Æ÷
-        TopDetector = 0x8,          // ¶¥²¿ËÑË÷Æ÷
-        HangBackDetector = 0x16
+        HangDetector = 0x4,             // ÅÊÅÀÁ¢ÃæËÑË÷Æ÷
+        TopDetector = 0x8,              // ¶¥²¿ËÑË÷Æ÷
+        ForwardBottomDetector = 0x10,   // Ç°ÏòÇÒ³¯ÏÂËÑË÷Æ÷
+        HangBackDetector = 0x20     
     }
 
     [System.Serializable]
@@ -50,14 +51,14 @@ namespace Docking
             
             foreach(var data in dataArray)
             {
-                if(dict.ContainsKey(data.type))
+                foreach(var type in dict.Keys)
                 {
-                    Debug.LogError("Detector type overlap!");
+                    if ((data.type & type) != DetectorType.None)
+                    { 
+                        Debug.LogError("Detector type overlap!");
+                    }
                 }
-                else
-                {
-                    dict.Add(data.type, data);
-                }
+                dict.Add(data.type, data);                
             }
         }
     }

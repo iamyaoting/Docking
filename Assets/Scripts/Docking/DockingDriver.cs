@@ -206,6 +206,7 @@ namespace Docking
         {
             Debug.Log("DockingDriver: Set the docking target " + target.gameObject.name);
             m_dockingTarget = target;
+            m_dockingNextTarget = null;
             SetWorldFromReference(target);
         }
         public void SetDockingNextTarget(DockingTarget target)

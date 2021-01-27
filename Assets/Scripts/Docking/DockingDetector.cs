@@ -17,14 +17,14 @@ namespace Docking
 
         public DockingDetectorData dataAsset;
 
-        public ControllerEnterContext GetNearestDockingTarget(DetectorType type, Vector2 dir, DockingTarget target)
+        public ControllerEnterContext GetNearestDockingTargetByMultiTypes(DetectorType types, Vector2 dir, DockingTarget target)
         {            
             ControllerEnterContext context = null;
             foreach(var data in dataAsset.dataArray)
             {
-                if ((type & data.type) != DetectorType.None)
+                if ((types & data.type) != DetectorType.None)
                 {
-                    context = GetNearestDockingTargetByType(data.type, dir, target);
+                    context = GetNearestDockingTargetBySingleType(data.type, dir, target);
                     if(null != context)
                     {
                         break;
@@ -34,7 +34,7 @@ namespace Docking
             return context;
         }
 
-        public ControllerEnterContext GetNearestDockingTargetByType(DetectorType type, Vector2 moveDir, DockingTarget currentTarget)
+        public ControllerEnterContext GetNearestDockingTargetBySingleType(DetectorType type, Vector2 moveDir, DockingTarget currentTarget)
         {
             var moveDirMS = Quaternion.FromToRotation(Vector3.up, transform.up) * moveDir;
             SetDetectorData(type, moveDirMS);

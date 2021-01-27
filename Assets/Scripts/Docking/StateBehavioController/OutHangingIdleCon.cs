@@ -8,6 +8,12 @@ public class OutHangingIdleCon : StateBehavioConBase
 {
     bool m_isDetectGround = false;
 
+    protected override void OnControllerEnter(int layerIndex, AnimatorStateInfo stateInfo)
+    {
+        m_isDetectGround = false;
+        base.OnControllerEnter(layerIndex, stateInfo);
+    }
+
     protected override void OnControllerUpdate(int layerIndex, AnimatorStateInfo stateInfo)
     {
         if (m_animator.IsInTransition(layerIndex)) return;

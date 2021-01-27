@@ -41,7 +41,14 @@ MonoBehaviour:
     m_minDist: 1
     m_phi: 90
     m_lamda: 0
-  - type: 30
+  - type: 16
+    m_biasMS: {x: 0, y: 0.2, z: 0}
+    m_fov: 55.6
+    m_maxDist: 7
+    m_minDist: 1
+    m_phi: -45
+    m_lamda: 0
+  - type: 32
     m_biasMS: {x: 0, y: 1, z: -0.2}
     m_fov: 40
     m_maxDist: 7

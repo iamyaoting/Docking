@@ -26,7 +26,7 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
 
     protected virtual void OnControllerUpdate(int layerIndex, AnimatorStateInfo stateInfo) { }
     protected virtual void OnControllerEnter(int layerIndex, AnimatorStateInfo stateInfo) { }
-    protected virtual void OnControllerExit(int layerIndex) { }
+    protected virtual void OnControllerExit(int layerIndex, AnimatorStateInfo stateInfo) { }
     protected virtual void OnDockingTargetUpdate(DockingTarget target, TR tr, DockedVertexStatus status)
     {}
 
@@ -56,7 +56,7 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {        
-        OnControllerExit(layerIndex);
+        OnControllerExit(layerIndex, stateInfo);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

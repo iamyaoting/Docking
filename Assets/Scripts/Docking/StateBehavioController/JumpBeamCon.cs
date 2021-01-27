@@ -23,7 +23,7 @@ public class JumpBeamCon : StateBehavioConBase
 
         //if(HasEnvCommitAction())
         {
-            ControllerEnterContext context = m_dockingDetector.GetNearestDockingTarget(Docking.DetectorType.LowDetector, GetRawInput(), m_dockingDriver.GetDockingTarget());
+            ControllerEnterContext context = m_dockingDetector.GetNearestDockingTargetByMultiTypes(Docking.DetectorType.LowDetector, GetRawInput(), m_dockingDriver.GetDockingTarget());
             if (null != context && context.dockingtarget.m_type == Docking.DockingTargetType.BEAM)
             {
                 m_dockingDriver.SetDockingNextTarget(context.dockingtarget);

@@ -13,7 +13,7 @@ public class BracedHangingIdleCon : BracedHangingConBase
         var input = GetRawInput();
         if (HasEnvCommitAction())
         {           
-            var context = m_dockingDetector.GetNearestDockingTargetByType(DetectorType.HangDetector, input, m_dockingDriver.GetDockingTarget());
+            var context = m_dockingDetector.GetNearestDockingTargetBySingleType(DetectorType.HangDetector, input, m_dockingDriver.GetDockingTarget());
             if (null != context)
             {           
                 CrossFadeAnimatorHopState(input);

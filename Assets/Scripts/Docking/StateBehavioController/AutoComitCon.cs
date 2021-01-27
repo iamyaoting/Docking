@@ -12,7 +12,7 @@ public class AutoComitCon : StateBehavioConBase
 
     protected override void OnControllerEnter(int layerIndex, AnimatorStateInfo stateInfo)
     {
-        m_dockingDetector.GetNearestDockingTarget(m_detectorType, GetRawInput(), null);
+        m_dockingDetector.GetNearestDockingTargetByMultiTypes(m_detectorType, GetRawInput(), null);
         base.OnControllerEnter(layerIndex, stateInfo);
     }
 
@@ -23,7 +23,7 @@ public class AutoComitCon : StateBehavioConBase
         //if (HasEnvCommitAction())
         if(!m_isCommit)
         {            
-            ControllerEnterContext context = m_dockingDetector.GetNearestDockingTarget(m_detectorType, GetRawInput(), null);            
+            ControllerEnterContext context = m_dockingDetector.GetNearestDockingTargetByMultiTypes(m_detectorType, GetRawInput(), null);            
             if(null != context)
             {
                 m_dockingDriver.SetDockingTarget(context.dockingtarget);
