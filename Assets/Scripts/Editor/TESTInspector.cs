@@ -8,68 +8,41 @@ public class TESTInspector : Editor
 {
     public override void OnInspectorGUI()
     {
-     /*   TEST t = target as TEST;
-        
+        TEST t = target as TEST;
+
+        t.curve.AddKey(0.1666667f, 2.90f);
 
         if(GUILayout.Button("test"))
         {
-            //var path = AssetDatabase.GetAssetPath(t.clip.GetInstanceID());
-            //var import = (ModelImporter)AssetImporter.GetAtPath(path);
-
-            ////Debug.Log(t.clip);
-            ////Debug.Log(t.clip.GetInstanceID());
-            ////Debug.Log(path);
-
-            //var anims = import.defaultClipAnimations;
-            ////anims[0].takeName = "xxxx";
-            //anims[0].name = "yyyy";
-
-
-            //import.clipAnimations = anims;
-
-            ////EditorUtility.SetDirty(import);
-            ////import.SaveAndReimport();
-            ////AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
-            ////AssetDatabase.Refresh();//刷新显示
-
-            ////AssetDatabase.WriteImportSettingsIfDirty(path);
-
-            //AssetDatabase.SaveAssets();
-            //AssetDatabase.Refresh();
-
-            EditorCurveBinding binding = new EditorCurveBinding();
-            binding.type = typeof(Transform);
-            binding.path = "DockingBone";
-
-            //binding.propertyName = "localRotation.x";
-            //AnimationUtility.SetEditorCurve(t.clip, binding, t.curve);
-            //binding.propertyName = "localRotation.y";
-            //AnimationUtility.SetEditorCurve(t.clip, binding, t.curve);
-            //binding.propertyName = "localRotation.z";
-            //AnimationUtility.SetEditorCurve(t.clip, binding, t.curve);
-            //binding.propertyName = "localRotation.w";
-            //AnimationUtility.SetEditorCurve(t.clip, binding, t.curve);
-
-            //binding.propertyName = "localPosition.x";
-            //AnimationUtility.SetEditorCurve(t.clip, binding, t.curve);
-            //binding.propertyName = "localPosition.y";
-            //AnimationUtility.SetEditorCurve(t.clip, binding, t.curve);
-            //binding.propertyName = "localPosition.z";
-            //AnimationUtility.SetEditorCurve(t.clip, binding, t.curve);
-
-            var relativePath = "DD";
-            var clip = t.clip;
-            clip.SetCurve(relativePath, typeof(Transform), "localPosition.x", t.curve);
-            clip.SetCurve(relativePath, typeof(Transform), "localPosition.y", t.curve);
-            clip.SetCurve(relativePath, typeof(Transform), "localPosition.z", t.curve);
-
-            t.clip.EnsureQuaternionContinuity();
-           
-            EditorUtility.SetDirty(t.clip);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        } */
+            SaveAnimationClip(t.clip, Docking.Utils.GetDockingBoneName(), t.curve);
+        } 
 
         base.OnInspectorGUI();
+    }
+
+
+    private static void SaveAnimationClip(AnimationClip clip, string dockingBonePath,
+            AnimationCurve curve)
+    {
+        // 先删除原来的curve，因为直接setcurve会实施combine curve行为
+        clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition", null);
+        clip.SetCurve(dockingBonePath, typeof(Transform), "localRotation", null);
+
+        // 记录docking bone 轨迹到 animation clip
+        clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition.x", curve);
+        clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition.y", curve);
+        clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition.z", curve);
+
+        clip.SetCurve(dockingBonePath, typeof(Transform), "localRotation.x", curve);
+        clip.SetCurve(dockingBonePath, typeof(Transform), "localRotation.y", curve);
+        clip.SetCurve(dockingBonePath, typeof(Transform), "localRotation.z", curve);
+        clip.SetCurve(dockingBonePath, typeof(Transform), "localRotation.w", curve);
+
+        clip.EnsureQuaternionContinuity();
+
+        // 保存文件
+        EditorUtility.SetDirty(clip);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 }

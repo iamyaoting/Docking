@@ -931,6 +931,28 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &337155388 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2204468675118878660, guid: cf2c92473878299438c27d9c33c41c58,
+    type: 3}
+  m_PrefabInstance: {fileID: 2204468676882064450}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &337155389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 337155388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b06a18b3f17cf4448cdb66948d27cd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 5
+  angle: 20
+  cycleTime: 5
+  normalAxis: {x: 1, y: 0, z: 0}
 --- !u!1 &362909684
 GameObject:
   m_ObjectHideFlags: 0
@@ -1616,7 +1638,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &589872602
 Transform:
   m_ObjectHideFlags: 0
@@ -4519,6 +4541,7 @@ GameObject:
   m_Component:
   - component: {fileID: 959842696}
   - component: {fileID: 959842697}
+  - component: {fileID: 959842698}
   m_Layer: 0
   m_Name: AniamtorEntry
   m_TagString: Untagged
@@ -4547,12 +4570,26 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 959842695}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91fff40e7fa27b84f8e0005ede1c6b10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   stateEntry: Swing.Sprint
+  timeScale: 1
+--- !u!114 &959842698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 959842695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91fff40e7fa27b84f8e0005ede1c6b10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateEntry: Swing.Idle
   timeScale: 1
 --- !u!1 &968864336
 GameObject:
@@ -4841,7 +4878,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1206962675
 Transform:
   m_ObjectHideFlags: 0
@@ -5044,6 +5081,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Platform_Swing (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007424699799071958, guid: 52f950e9448598a4180430f347e783eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52f950e9448598a4180430f347e783eb, type: 3}
@@ -6491,8 +6533,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1700425115}
-  m_LocalRotation: {x: -0.07324519, y: 0.21200071, z: -0.015791247, w: -0.9743929}
-  m_LocalPosition: {x: 3.1716118, y: 2.4246507, z: -3.628138}
+  m_LocalRotation: {x: -0.07294255, y: 0.35064083, z: -0.027405621, w: -0.93326277}
+  m_LocalPosition: {x: 5.2515335, y: 2.8534408, z: -3.0465865}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1805796076}
@@ -7069,6 +7111,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Docking_Survivor_Prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 333217951649601840, guid: 309369888274c624f8c88cc593e9cb99,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 965701008279181818, guid: 309369888274c624f8c88cc593e9cb99,
         type: 3}
       propertyPath: m_Enabled
@@ -7479,6 +7526,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 24632f199db2e124fa8de70094b989d5, type: 2}
+    - target: {fileID: 6427814856020597232, guid: 309369888274c624f8c88cc593e9cb99,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 309369888274c624f8c88cc593e9cb99, type: 3}
 --- !u!1 &1763208090
@@ -9243,7 +9295,7 @@ PrefabInstance:
     - target: {fileID: 2204468675118878667, guid: cf2c92473878299438c27d9c33c41c58,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.18
+      value: -1.44
       objectReference: {fileID: 0}
     - target: {fileID: 2204468675118878667, guid: cf2c92473878299438c27d9c33c41c58,
         type: 3}

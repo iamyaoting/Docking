@@ -13,6 +13,7 @@ public class AutoComitCon : StateBehavioConBase
     protected override void OnControllerEnter(int layerIndex, AnimatorStateInfo stateInfo)
     {
         m_dockingDetector.GetNearestDockingTargetByMultiTypes(m_detectorType, GetRawInput(), null);
+        m_isCommit = false;
         base.OnControllerEnter(layerIndex, stateInfo);
     }
 

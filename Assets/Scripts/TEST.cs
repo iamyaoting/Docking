@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class TEST : MonoBehaviour
 {
-    public Docking.DockingDetector d;
-    public Vector2 m;
+    public AnimationClip clip;
+
+    public AnimationCurve curve;
 
     private void Update()
     {

@@ -519,7 +519,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_biasMS: {x: 0, y: 1, z: 0.2}
   m_fov: 50
-  m_maxDist: 5
+  m_maxDist: 8
   m_minDist: 1
   m_phi: 20
   m_lamda: 0

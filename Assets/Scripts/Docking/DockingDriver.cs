@@ -34,7 +34,7 @@ namespace Docking
         // DockingDriver 修正所需要的参数数据，由Docking Generator 上传提供
         private DockingControlData m_dockingControlData;
 
-        // DockingDriver 所需要的target标记线，由Docking Controller 设置提供
+        // DockingDriver 所需要的target标记线，由Docking Controller 设置提供        
         private DockingTarget m_dockingTarget;
 
         // DockingDriver 所需要的target标记线

@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace Docking
 {
-    class BoneTransfromCurve
+    public class BoneTransfromCurve
     {
         public AnimationCurve posX = new AnimationCurve();
         public AnimationCurve posY = new AnimationCurve();
@@ -217,7 +217,7 @@ namespace Docking
             return;
         }
 
-        private static void SaveAnimationClip(AnimationClip clip, string dockingBonePath, 
+        public static void SaveAnimationClip(AnimationClip clip, string dockingBonePath, 
             BoneTransfromCurve boneTransfromCurve)
         {
             // 先删除原来的curve，因为直接setcurve会实施combine curve行为
