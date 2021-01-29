@@ -245,10 +245,30 @@ namespace Docking
         private static void SetTransformCurve(float time, BoneTransfromCurve transCurve, 
             Vector3 posWS, Quaternion quatWS, Transform root)
         {
+            if(transCurve.posX.keys.Length > 0)  // 如果两帧靠的太近，选择覆盖
+            {
+                var len = transCurve.posX.keys.Length;
+                float lastTime = transCurve.posX.keys[len - 1].time;
+                if(time - lastTime < Utils.GetFloatZeroThreshold())
+                {
+                    Debug.LogWarning("Two Frame's time closely: " + time + "\\" + lastTime);
+
+                    transCurve.posX.RemoveKey(len - 2);
+                    transCurve.posY.RemoveKey(len - 2);
+                    transCurve.posZ.RemoveKey(len - 2);
+                    transCurve.quatX.RemoveKey(len - 2);
+                    transCurve.quatY.RemoveKey(len - 2);
+                    transCurve.quatZ.RemoveKey(len - 2);
+                    transCurve.quatW.RemoveKey(len - 2);
+                }
+            }
+
             Vector3 lcoalPos = root.InverseTransformPoint(posWS);
             Quaternion localQuat = Quaternion.Inverse(root.rotation) * quatWS;
             localQuat = Utils.EnsureQuaternionContinuity(transCurve.LastQuaternion(), localQuat);
             
+
+
             transCurve.posX.AddKey(time, lcoalPos.x);
             transCurve.posY.AddKey(time, lcoalPos.y);
             transCurve.posZ.AddKey(time, lcoalPos.z);          

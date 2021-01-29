@@ -33,9 +33,12 @@ namespace Docking
             {
                 if (null != clip)
                 {
-                    var dockingBonePath = Utils.GetDockingBoneName(); 
+                    var dockingBonePath = Utils.GetDockingBoneName();
                     var boneTransCurves = GetCurvesFromCurve(clip, dockingBonePath);
-                    DockingAnimationSetInspector.SaveAnimationClip(clip, dockingBonePath, boneTransCurves);
+                    if (null != boneTransCurves)
+                    {
+                        DockingAnimationSetInspector.SaveAnimationClip(clip, dockingBonePath, boneTransCurves);
+                    }
                 }
             }
             EditorGUILayout.EndHorizontal();
@@ -47,37 +50,48 @@ namespace Docking
             {
                 EditorCurveBinding binding = new EditorCurveBinding();
                 binding.path = dockingBonePath;
-                binding.propertyName = propertyName;                
+                binding.propertyName = propertyName;
+                binding.type = typeof(Transform);
                 var curve = AnimationUtility.GetEditorCurve(clip, binding);
                 return curve;
             };
 
-            string[] propertyNames = 
+            string[] propertyNames =
             {
-                "localPosition.x",
-                "localPosition.y",
-                "localPosition.z",
-                "localRotation.x",
-                "localRotation.y",
-                "localRotation.z",
-                "localRotation.w"
+                "m_LocalPosition.x",
+                "m_LocalPosition.y",
+                "m_LocalPosition.z",
+                "m_LocalRotation.x",
+                "m_LocalRotation.y",
+                "m_LocalRotation.z",
+                "m_LocalRotation.w"
             };
             BoneTransfromCurve boneCurves = new BoneTransfromCurve();
-            AnimationCurve[] curves =
-            {
-                boneCurves.posX,
-                boneCurves.posY,
-                boneCurves.posZ,
-                boneCurves.quatX,
-                boneCurves.quatY,
-                boneCurves.quatZ,
-                boneCurves.quatW
-            };
+            AnimationCurve[] curves = new AnimationCurve[7];
 
-            for(int i = 0; i < 7; ++i)
+            for (int i = 0; i < 7; ++i)
             {
-                curves[i] = GetCurve(propertyNames[i], clip);                
+                curves[i] = GetCurve(propertyNames[i], clip);
+                if (null == curves[i])
+                {
+                    Debug.LogError("Can not find curve: " + propertyNames[i]);
+                    return null;
+                }
+                var len = curves[i].length;
+                if (curves[i].keys[len - 1].time - curves[i].keys[len - 2].time < Utils.GetFloatZeroThreshold())
+                {
+                    curves[i].RemoveKey(len - 2);
+                }
             }
+
+            boneCurves.posX = curves[0];
+            boneCurves.posY = curves[1];
+            boneCurves.posZ = curves[2];
+
+            boneCurves.quatX = curves[3];
+            boneCurves.quatY = curves[4];
+            boneCurves.quatZ = curves[5];
+            boneCurves.quatW = curves[6];
 
             return boneCurves;
         }

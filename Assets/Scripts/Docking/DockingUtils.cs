@@ -191,6 +191,7 @@ namespace Docking
             return animator.transform.Find(Utils.GetDockingBoneName());
         }
 
+        public static float GetFloatZeroThreshold() { return 0.00001f; }
         public static string GetDockingBoneName()
         {
             return "DockingBone";
