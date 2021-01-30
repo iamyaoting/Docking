@@ -18,6 +18,8 @@ namespace Docking
     }
     public class DockingDriver : MonoBehaviour
     {
+        public bool m_adjustPlayBackSpeed = false;
+
         private Animator m_animator;
         private FullBodyIKModifier m_fullBodyIK;
 
@@ -45,6 +47,9 @@ namespace Docking
 
         // docking Bone 的transform
         private Transform m_dockingBone;
+
+        // animation playback speed
+        private float m_desiredPlaybackSpeed = 1.0f;
 
         // 数据是否有效
         public bool valid { get; private set; } = false;
@@ -86,7 +91,10 @@ namespace Docking
         }
 
         public bool DockDriver()
-        {            
+        {          
+            m_animator.speed = Mathf.Lerp(m_animator.speed, m_desiredPlaybackSpeed, 1);            
+            m_desiredPlaybackSpeed = 1.0f;   // 首先设置默认值
+
             //Debug.Log("Dock");
             UpdateWorldFromReference(m_dockingTarget);
             // 更新ik控制器
@@ -174,7 +182,7 @@ namespace Docking
                 worldFromModel.ApplyDockingTransformWS(m_animator.transform);
 
                 //m_worldFromOldReference = m_worldFromNewReference;
-
+                DynamicAdjustPlaybackSpeed();
                 // 处理手部IK
                 SolveHandIK(m_dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
 
@@ -308,11 +316,24 @@ namespace Docking
             }
         }
 
-        private void OnDrawGizmos()
-        {
-            DrawGizmos();
+        // 动态调整动画播放时间速度扭曲
+        private void DynamicAdjustPlaybackSpeed()
+        {            
+            if (null == m_dockingControlData) return;
+            if (m_dockingControlData.m_dockingBlend == 1.0f) return;
+            if (m_adjustPlayBackSpeed)
+            {
+                var dist1 = (m_worldFromLastTarget.translation - m_animator.transform.position).magnitude;
+                var dist2 = (m_worldFromLastDesiredTarget.translation - m_animator.transform.position).magnitude;
+                if (dist2 > dist1)
+                {
+                    m_desiredPlaybackSpeed = dist1 / dist2;
+                    Debug.Log(m_desiredPlaybackSpeed);
+                }
+            }            
         }
-        public void DrawGizmos()       
+
+        private void OnDrawGizmos()      
         {
             DockingGizmos.PushGizmosData();
             
@@ -323,6 +344,11 @@ namespace Docking
             DockingGizmos.DrawCoordinateFrameWS(m_worldFromLastDesiredTarget);
 
             DockingGizmos.PopGizmosData();
+        }
+        private void OnGUI()
+        {
+            if(m_adjustPlayBackSpeed)
+                GUI.Label(new Rect(50, 50, 100, 100), m_animator.speed.ToString());
         }
     }
 }

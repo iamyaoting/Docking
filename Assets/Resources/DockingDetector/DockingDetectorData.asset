@@ -16,42 +16,42 @@ MonoBehaviour:
   - type: 1
     m_biasMS: {x: 0, y: 0, z: 0.2}
     m_fov: 40
-    m_maxDist: 8
+    m_maxDist: 6
     m_minDist: 1
     m_phi: 20
     m_lamda: 0
   - type: 2
     m_biasMS: {x: 0, y: 1, z: 0.2}
     m_fov: 50
-    m_maxDist: 8
+    m_maxDist: 6
     m_minDist: 1
     m_phi: 20
     m_lamda: 0
   - type: 4
     m_biasMS: {x: 0, y: 0, z: 0}
     m_fov: 20
-    m_maxDist: 8
+    m_maxDist: 6
     m_minDist: 0.5
     m_phi: 0
     m_lamda: 0
   - type: 8
     m_biasMS: {x: 0, y: 0.2, z: 0}
     m_fov: 40
-    m_maxDist: 8
+    m_maxDist: 6
     m_minDist: 1
     m_phi: 90
     m_lamda: 0
   - type: 16
     m_biasMS: {x: 0, y: 0.2, z: 0}
     m_fov: 55.6
-    m_maxDist: 7
+    m_maxDist: 6
     m_minDist: 1
     m_phi: -45
     m_lamda: 0
   - type: 32
     m_biasMS: {x: 0, y: 1, z: -0.2}
     m_fov: 40
-    m_maxDist: 8
+    m_maxDist: 6
     m_minDist: 1
     m_phi: 0
     m_lamda: 180

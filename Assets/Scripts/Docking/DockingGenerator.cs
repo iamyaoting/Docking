@@ -14,7 +14,7 @@ namespace Docking
     public enum DockingFlagBits
     {
         FLAG_NONE                       = 0x0,
-        FLAG_DOCK_TO_FUTURE_POSITION    = 0x1,
+        FLAG_TRANSITION_FULLYDOCKED     = 0x1,   // 当transition到fully docked时候，会出现抖动，启动改选项
         FLAG_OVERRIDE_MOTION            = 0x2
     }
 
@@ -28,8 +28,6 @@ namespace Docking
         public Quaternion           m_rotationOffset = Quaternion.identity;
 
         public BlendType            m_blendType;
-
-        [HideInInspector]
         public DockingFlagBits      m_flags;
         
         public float                m_intervalStartNormalizedTime = 0;   // docking blend 混合开始归一化时间
@@ -38,20 +36,26 @@ namespace Docking
 
         // 状态信息
         private float               m_lastNormalizedTime = 0;
+        private float               m_lastDockingBlend = 0;
+
+        //
+        private float               m_fullyNoTransitionTime = 0;        // 该状态下没有transition的持续时间
 
         
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             m_lastNormalizedTime = 0;
+            m_lastDockingBlend = 0;
+            m_fullyNoTransitionTime = 0;
         }
 
         // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
+        {            
             DockingControlData dockingControlData = new DockingControlData();
             dockingControlData.m_dockingBlend = GetDockingBlendWeight(stateInfo.normalizedTime);
-            dockingControlData.m_previousDockingBlend = GetDockingBlendWeight(m_lastNormalizedTime);
+            dockingControlData.m_previousDockingBlend = m_lastDockingBlend;
             //dockingControlData.m_dockingBone = m_dockingBone;
             //dockingControlData.m_timeOffset = Time.deltaTime;
             dockingControlData.m_targetOffsetMS = new DockingTransform();
@@ -60,10 +64,14 @@ namespace Docking
             
             if(!animator.IsInTransition(layerIndex)) //不允许在Transition期间进行docked操作
             {
+                m_fullyNoTransitionTime += Time.deltaTime;
+                ProcessDockingControlDataFlags(dockingControlData);
                 GetDockingDriver(animator).Notify(dockingControlData);
+                m_lastDockingBlend = dockingControlData.m_dockingBlend;
             }
 
             m_lastNormalizedTime = stateInfo.normalizedTime;
+            
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -121,6 +129,19 @@ namespace Docking
             if (!driver) Debug.LogError("avatar has no docking drvier!");
             return driver;
         }        
+
+        private void ProcessDockingControlDataFlags(DockingControlData dockingControlData)
+        {
+            if(m_flags == DockingFlagBits.FLAG_TRANSITION_FULLYDOCKED && m_blendType == BlendType.DOCKED_FULL_ON)
+            {
+                var alpha = m_fullyNoTransitionTime / 0.2f;
+                if (alpha < dockingControlData.m_dockingBlend)
+                {
+                    //Debug.Log(alpha + " \\\\ " + dockingControlData.m_dockingBlend);
+                    dockingControlData.m_dockingBlend = Mathf.Clamp01(alpha);
+                }
+            }
+        }
     }
 }
 

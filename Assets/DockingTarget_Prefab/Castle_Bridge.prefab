@@ -103,12 +103,12 @@ MonoBehaviour:
   m_constrainRotation: 1
   m_start:
     tr:
-      translation: {x: 12.054809, y: 1.5735693, z: 0.94}
+      translation: {x: 12.054808, y: 1.5724562, z: 0.9248143}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
   m_end:
     tr:
-      translation: {x: 0, y: 1.5758181, z: 0.94}
+      translation: {x: -0.000000034645833, y: 1.5758181, z: 0.92125845}
       rotation: {x: 0, y: 1, z: 0, w: 0}
     reserveFloatParam: 0
 --- !u!114 &3492636131157325546
@@ -128,12 +128,12 @@ MonoBehaviour:
   m_constrainRotation: 1
   m_start:
     tr:
-      translation: {x: 0, y: 1.5735693, z: -0.94}
+      translation: {x: 0.000000033344513, y: 1.5735692, z: -0.92307794}
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
   m_end:
     tr:
-      translation: {x: 12.05481, y: 1.5758181, z: -0.94}
+      translation: {x: 12.054808, y: 1.5735418, z: -0.9213984}
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
 --- !u!114 &622977145420125575
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_type: 2
   m_vertices:
   - tr:
-      translation: {x: 0.038522013, y: -1.1094742, z: -0.9920001}
+      translation: {x: 0.03852201, y: -1.1053832, z: -0.992}
       rotation: {x: 0, y: 0, z: 0, w: 1}
     reserveFloatParam: 0
   - tr:
