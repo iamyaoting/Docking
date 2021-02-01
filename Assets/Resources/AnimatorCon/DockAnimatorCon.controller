@@ -740,7 +740,7 @@ MonoBehaviour:
   m_blendType: 0
   m_flags: 0
   m_intervalStartNormalizedTime: 0.1
-  m_intervalEndNormalizedTime: 0.7
+  m_intervalEndNormalizedTime: 0.68
 --- !u!206 &-6062627231514489541
 BlendTree:
   m_ObjectHideFlags: 1
@@ -1884,7 +1884,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Jump_Platform_Low
-  m_Speed: 1
+  m_Speed: 0.9
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
@@ -2143,9 +2143,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25000006
+  m_TransitionDuration: 0.3108614
   m_TransitionOffset: 0
-  m_ExitTime: 0.9523936
+  m_ExitTime: 0.99572915
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -3224,7 +3224,7 @@ AnimatorState:
   m_StateMachineBehaviours:
   - {fileID: 4333814010350097487}
   m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
+  m_IKOnFeet: 1
   m_WriteDefaultValues: 1
   m_Mirror: 0
   m_SpeedParameterActive: 0
@@ -3249,12 +3249,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd818d0406d3346479e251278f1d1e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_translationOffset: {x: 0, y: 0, z: -0.25}
+  m_translationOffset: {x: 0, y: 0.14, z: -0.2}
   m_rotationOffset: {x: 0, y: 0, z: 0, w: 1}
   m_blendType: 1
   m_flags: 0
-  m_intervalStartNormalizedTime: 0.16
-  m_intervalEndNormalizedTime: 0.35
+  m_intervalStartNormalizedTime: 0.1
+  m_intervalEndNormalizedTime: 0.5
 --- !u!114 &4384219919211594910
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3434,7 +3434,7 @@ AnimatorState:
   m_StateMachineBehaviours:
   - {fileID: 2619994923738249074}
   m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
+  m_IKOnFeet: 1
   m_WriteDefaultValues: 1
   m_Mirror: 0
   m_SpeedParameterActive: 0
@@ -3946,7 +3946,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Braced Hang Shimmy
-  m_Speed: 1
+  m_Speed: 1.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2192817413525966278}

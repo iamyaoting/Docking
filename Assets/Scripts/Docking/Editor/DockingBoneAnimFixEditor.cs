@@ -37,7 +37,7 @@ namespace Docking
                     var boneTransCurves = GetCurvesFromCurve(clip, dockingBonePath);
                     if (null != boneTransCurves)
                     {
-                        DockingAnimationSetInspector.SaveAnimationClip(clip, dockingBonePath, boneTransCurves);
+                        EditorUtil.SaveBoneTransToAnimationClip(clip, dockingBonePath, boneTransCurves);
                     }
                 }
             }

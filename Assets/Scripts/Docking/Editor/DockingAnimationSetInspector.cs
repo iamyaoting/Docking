@@ -109,7 +109,7 @@ namespace Docking
                         posWS = ProjectLineSegment(posWS, ledgeStart, ledgeEnd);
                     }
                 }
-                SetTransformCurve(time, dockingBoneTransCurve, posWS, quatWS, comp.transform);
+                EditorUtil.SetTransformCurve(time, dockingBoneTransCurve, posWS, quatWS, comp.transform);
                 if (time == endTime) break;
                 time += intervalFrameTime;
             }
@@ -150,34 +150,11 @@ namespace Docking
             GameObject.DestroyImmediate(player);
 
             //处理曲线斜率轨迹
-            SetCurveTangentMode(dockingBoneTransCurve);
+            EditorUtil.SetCurveTangentMode(dockingBoneTransCurve);
 
             // 保存docking bone 轨迹到文件
-            SaveAnimationClip(da.clip, Utils.GetDockingBoneName(), dockingBoneTransCurve);           
-        }
-
-        private static void SetCurveTangentMode(BoneTransfromCurve boneTransfromCurve)
-        {
-            AnimationCurve[] curves = new AnimationCurve[7] { 
-            boneTransfromCurve.posX, 
-            boneTransfromCurve.posY,
-            boneTransfromCurve.posZ,
-            boneTransfromCurve.quatX,
-            boneTransfromCurve.quatY,
-            boneTransfromCurve.quatZ,
-            boneTransfromCurve.quatW
-            };
-
-            foreach(var curve in curves)
-            {
-                int count = curve.length;
-                for(int i = 0; i < count; ++i)
-                {
-                    AnimationUtility.SetKeyLeftTangentMode(curve, i, AnimationUtility.TangentMode.ClampedAuto);
-                    AnimationUtility.SetKeyRightTangentMode(curve, i, AnimationUtility.TangentMode.ClampedAuto);
-                }
-            }
-        }
+            EditorUtil.SaveBoneTransToAnimationClip(da.clip, Utils.GetDockingBoneName(), dockingBoneTransCurve);           
+        }       
 
         private static void GetDockingBoneWS(Transform root, DockingAnimSegment da, 
             out Vector3 posWS, out Quaternion quatWS)
@@ -215,69 +192,9 @@ namespace Docking
             //quatWS = animator.GetBoneTransform(da.dockingBone).rotation;
             quatWS = root.rotation;
             return;
-        }
+        }        
 
-        public static void SaveAnimationClip(AnimationClip clip, string dockingBonePath, 
-            BoneTransfromCurve boneTransfromCurve)
-        {
-            // 先删除原来的curve，因为直接setcurve会实施combine curve行为
-            clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition", null);                                                                               
-            clip.SetCurve(dockingBonePath, typeof(Transform), "localRotation", null);
-
-            // 记录docking bone 轨迹到 animation clip
-            clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition.x", boneTransfromCurve.posX);
-            clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition.y", boneTransfromCurve.posY);
-            clip.SetCurve(dockingBonePath, typeof(Transform), "localPosition.z", boneTransfromCurve.posZ);
-
-            clip.SetCurve(dockingBonePath, typeof(Transform), "localRotation.x", boneTransfromCurve.quatX);
-            clip.SetCurve(dockingBonePath, typeof(Transform), "localRotation.y", boneTransfromCurve.quatY);
-            clip.SetCurve(dockingBonePath, typeof(Transform), "localRotation.z", boneTransfromCurve.quatZ);
-            clip.SetCurve(dockingBonePath, typeof(Transform), "localRotation.w", boneTransfromCurve.quatW);
-
-            clip.EnsureQuaternionContinuity();
-
-            // 保存文件
-            EditorUtility.SetDirty(clip);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-
-        private static void SetTransformCurve(float time, BoneTransfromCurve transCurve, 
-            Vector3 posWS, Quaternion quatWS, Transform root)
-        {
-            if(transCurve.posX.keys.Length > 0)  // 如果两帧靠的太近，选择覆盖
-            {
-                var len = transCurve.posX.keys.Length;
-                float lastTime = transCurve.posX.keys[len - 1].time;
-                if(time - lastTime < Utils.GetFloatZeroThreshold())
-                {
-                    Debug.LogWarning("Two Frame's time closely: " + time + "\\" + lastTime);
-
-                    transCurve.posX.RemoveKey(len - 2);
-                    transCurve.posY.RemoveKey(len - 2);
-                    transCurve.posZ.RemoveKey(len - 2);
-                    transCurve.quatX.RemoveKey(len - 2);
-                    transCurve.quatY.RemoveKey(len - 2);
-                    transCurve.quatZ.RemoveKey(len - 2);
-                    transCurve.quatW.RemoveKey(len - 2);
-                }
-            }
-
-            Vector3 lcoalPos = root.InverseTransformPoint(posWS);
-            Quaternion localQuat = Quaternion.Inverse(root.rotation) * quatWS;
-            localQuat = Utils.EnsureQuaternionContinuity(transCurve.LastQuaternion(), localQuat);
-            
-
-
-            transCurve.posX.AddKey(time, lcoalPos.x);
-            transCurve.posY.AddKey(time, lcoalPos.y);
-            transCurve.posZ.AddKey(time, lcoalPos.z);          
-
-            transCurve.quatX.AddKey(time, localQuat.x);
-            transCurve.quatY.AddKey(time, localQuat.y);
-            transCurve.quatZ.AddKey(time, localQuat.z);
-            transCurve.quatW.AddKey(time, localQuat.w);
-        }
+       
     }
 
 }

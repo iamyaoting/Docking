@@ -92,7 +92,7 @@ namespace Docking
 
         public bool DockDriver()
         {          
-            m_animator.speed = Mathf.Lerp(m_animator.speed, m_desiredPlaybackSpeed, 1);            
+            m_animator.speed = Mathf.Lerp(m_animator.speed, m_desiredPlaybackSpeed, 0.5f);            
             m_desiredPlaybackSpeed = 1.0f;   // 首先设置默认值
 
             //Debug.Log("Dock");
@@ -328,7 +328,8 @@ namespace Docking
                 if (dist2 > dist1)
                 {
                     m_desiredPlaybackSpeed = dist1 / dist2;
-                    Debug.Log(m_desiredPlaybackSpeed);
+                    //m_desiredPlaybackSpeed = .5f;
+                    //Debug.Log(m_desiredPlaybackSpeed);
                 }
             }            
         }
@@ -347,8 +348,9 @@ namespace Docking
         }
         private void OnGUI()
         {
-            if(m_adjustPlayBackSpeed)
-                GUI.Label(new Rect(50, 50, 100, 100), m_animator.speed.ToString());
+            //if (m_adjustPlayBackSpeed)
+            //    GUI.Label(new Rect(50, 50, 100, 100), m_animator.speed.ToString());
+            GUI.Label(new Rect(50, 50, 100, 100), m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime.ToString());
         }
     }
 }

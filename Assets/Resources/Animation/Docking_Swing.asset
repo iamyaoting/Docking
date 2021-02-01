@@ -30,6 +30,6 @@ MonoBehaviour:
       linearVelocity: 0
       dockingBone: 55
       dockingTimeType: 1
-      dockedFixedNormalizedTime: 0.75
+      dockedFixedNormalizedTime: 0.68
       startNormalizedTime: 0
       endNormalizedTime: 1
