@@ -11,19 +11,23 @@ public class BracedHangingIdleCon : BracedHangingConBase
         if (m_animator.IsInTransition(layerIndex)) return;        
         
         var input = GetRawInput();
+        if (input.magnitude == 0) return;
+
+        var limit = m_dockingDriver.GetDockedVertexStatus().limit;
+        var input2 = HandleInputLimit(input, limit);
         if (HasEnvCommitAction())
         {           
             var context = m_dockingDetector.GetNearestDockingTargetBySingleType(DetectorType.HangDetector, input, m_dockingDriver.GetDockingTarget());
             if (null != context)
-            {           
-                CrossFadeAnimatorHopState(input);
+            {
+                CrossFadeAnimatorHopState(context.desiredDockedVertex.tr.translation);
                 m_dockingDriver.SetDockingNextTarget(context.dockingtarget);
             }
         }
-        else if (input.x != 0)
-        {
+        else if (input2.x != 0)
+        {            
             m_animator.SetTrigger("T_HangingMove");
-            m_animator.SetFloat("Velocity", input.x > 0 ? 1 : -1);
+            m_animator.SetFloat("Velocity", input2.x > 0 ? 1 : -1);
         }
         else if(HasEnvUnCommitAction())
         {

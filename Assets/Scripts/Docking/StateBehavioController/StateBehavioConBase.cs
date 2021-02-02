@@ -20,15 +20,14 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
 {
     protected Animator m_animator;
     protected Docking.DockingDetector m_dockingDetector;
-    protected Docking.DockingDriver m_dockingDriver;
-
-   
+    protected Docking.DockingDriver m_dockingDriver;   
 
     protected virtual void OnControllerUpdate(int layerIndex, AnimatorStateInfo stateInfo) { }
     protected virtual void OnControllerEnter(int layerIndex, AnimatorStateInfo stateInfo) { }
     protected virtual void OnControllerExit(int layerIndex, AnimatorStateInfo stateInfo) { }
-    protected virtual void OnDockingTargetUpdate(DockingTarget target, TR tr, DockedVertexStatus status)
-    {}
+    protected virtual void OnDockingTargetUpdate(DockingTarget target, TR tr, DockedVertexStatus status) {}
+
+    protected virtual void OnDockingTargetMargin(DockingTarget target, TR tr, DockedVertexStatus status) { }
 
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
@@ -44,12 +43,22 @@ public abstract class StateBehavioConBase : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //ResetAnimatorTriggers();        
-        {
-            OnControllerUpdate(layerIndex, stateInfo);
+        {            
             if(m_dockingDriver.valid)
             {
-                OnDockingTargetUpdate(m_dockingDriver.GetDockingTarget(), m_dockingDriver.GetDockedVertexWS(), m_dockingDriver.GetDockedVertexStatus());
+                var target = m_dockingDriver.GetDockingTarget();
+                var vertex = m_dockingDriver.GetDockedVertexWS();
+                var status = m_dockingDriver.GetDockedVertexStatus();
+
+                var limit = (status.limit & DOCKED_POINT_MOVE_LIMIT.HORIZEN_LEFT_FORBIDEN) | (status.limit & DOCKED_POINT_MOVE_LIMIT.HORIZEN_RIGHT_FORBIDEN);
+                if (limit != DOCKED_POINT_MOVE_LIMIT.NONE) // 边缘处进行调用
+                {
+                    OnDockingTargetMargin(target, vertex, status); 
+                }
+
+                OnDockingTargetUpdate(target, vertex, status);
             }
+            OnControllerUpdate(layerIndex, stateInfo);
         }
     }
 

@@ -16,7 +16,10 @@ namespace Docking
             float alpha = GetDockedLS(undockedTRLS);
             float validAlpha = Mathf.Clamp(alpha, validAlphaRange.Item1, validAlphaRange.Item2);
             var dockedVertexSatus = GetDockedLS(validAlpha, out dockedVertexLS);
-            dockedVertexSatus.limit = GetLimitByAlpha(alpha, validAlphaRange);
+
+            // 有两个alpha range，其一是docked的有效区间，其二是输入限制的区间
+            var limitAlpha = GetMinMaxLimitAlhpa();
+            dockedVertexSatus.limit = GetLimitByAlpha(alpha, limitAlpha);
 
             if(m_type == DockingTargetType.BEAM) // 如果是beam，则需要进行rotation修正
             {
@@ -94,16 +97,6 @@ namespace Docking
             dockedVertexSatus.alpha = k;
             dockedVertexSatus.reserveFloatParam = dockedVertexLS.reserveFloatParam;
             
-            //// 判断原始的undocked点是否在直线的背面
-            //var dir = undockedTRLS.translation - dockedVertexLS.tr.translation;
-            //if(dir.magnitude > 0.1 && Vector3.Angle(dockedVertexLS.tr.rotation * Vector3.forward, dir) > 100)
-            //{
-            //    //Debug.Log(Vector3.Angle(dockedVertexLS.tr.rotation * Vector3.forward, dir) + "..." + k);
-            //    // 在背面，返回null
-            //    //Debug.LogWarning("At the back of the line!");
-            //    dockedVertexLS = null;
-            //}
-
             return dockedVertexSatus;
         }
 
@@ -117,6 +110,12 @@ namespace Docking
         {
             var len = GetLengthWS();
             return new System.Tuple<float, float>(marginDist / len, 1.0f - marginDist / len);
+        }
+        private System.Tuple<float, float> GetMinMaxLimitAlhpa()
+        {
+            var len = GetLengthWS();
+            var marginDist2 = marginDist + 0.1f;
+            return new System.Tuple<float, float>(marginDist2 / len, 1.0f - marginDist2 / len);
         }
 
         private DOCKED_POINT_MOVE_LIMIT GetLimitByAlpha(float alpha, System.Tuple<float, float> validAlpha)

@@ -6,8 +6,10 @@ using UnityEngine;
 
 public class BracedHangingConBase : StateBehavioConBase
 {   
-    protected bool CrossFadeAnimatorHopState(Vector2 direction)
+    protected bool CrossFadeAnimatorHopState(Vector3 targetPoint)
     {
+        targetPoint = Utils.GetDockingBoneTransform(m_animator).InverseTransformPoint(targetPoint);
+        Vector2 direction = targetPoint;
         if (direction.magnitude == 0.0) return false;
         float angle = Vector2.SignedAngle(Vector2.up, direction);
 
@@ -29,7 +31,7 @@ public class BracedHangingConBase : StateBehavioConBase
         else
         {
             //m_animator.SetTrigger("T_HangHopRight");
-            m_animator.CrossFadeInFixedTime("Braced Hang Hop Up", 0.2f);
+            m_animator.CrossFadeInFixedTime("Braced Hang Hop Right", 0.2f);
         }
         return true;
     }
