@@ -14,7 +14,7 @@ Shader "Custom/Shader_Survivor"
     {
         Tags {"Queue" = "AlphaTest" "IgnoreProjector"="True" "RenderType" = "TransparentCutout" }
         LOD 200
-        Cull Back
+        Cull Off
 
         ZTest LEqual
         //Offset -200, 0
