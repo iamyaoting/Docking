@@ -90,7 +90,7 @@ AnimatorStateTransition:
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1847381364358999960}
   m_Solo: 0
-  m_Mute: 1
+  m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
   m_TransitionDuration: 0.24999976
@@ -537,8 +537,8 @@ MonoBehaviour:
   m_rotationOffset: {x: 0, y: 0, z: 0, w: 1}
   m_blendType: 1
   m_flags: 0
-  m_intervalStartNormalizedTime: 0.2
-  m_intervalEndNormalizedTime: 0.5
+  m_intervalStartNormalizedTime: 0.15
+  m_intervalEndNormalizedTime: 0.45
 --- !u!114 &-6796506771490642335
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1163,8 +1163,8 @@ MonoBehaviour:
   m_rotationOffset: {x: 0, y: 0, z: 0, w: 1}
   m_blendType: 1
   m_flags: 0
-  m_intervalStartNormalizedTime: 0.2
-  m_intervalEndNormalizedTime: 0.5
+  m_intervalStartNormalizedTime: 0.15
+  m_intervalEndNormalizedTime: 0.45
 --- !u!114 &-5015508839726534166
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1943,7 +1943,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: JumpOnBeamRight
-  m_Speed: 1
+  m_Speed: 0.8
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -5942430147933927660}
@@ -3572,7 +3572,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: JumpOnBeamLeft
-  m_Speed: 1
+  m_Speed: 0.8
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -8855680729420118965}
@@ -4407,7 +4407,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Braced Hang Shimmy
-  m_Speed: 1.5
+  m_Speed: 1.2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2192817413525966278}

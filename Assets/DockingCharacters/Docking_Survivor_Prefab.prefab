@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &965701008279181815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157836359682935756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f0bdfdd1fa904a46b8beb2abd24f55a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_biasMS: {x: 0, y: 1, z: 0.2}
+  m_fov: 40
+  m_maxDist: 5
+  m_minDist: 1
+  m_phi: 20
+  m_lamda: 0
+  dataAsset: {fileID: 11400000, guid: 36f0f648a277b434fa9545cbd7c23a9d, type: 2}
+--- !u!114 &965701008279181818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157836359682935756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a7b6174fee5f6f47b3f4bf0a8c3e2f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_adjustPlayBackSpeed: 0
 --- !u!114 &3956241794116866234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,38 +406,6 @@ MonoBehaviour:
       rotationOffset: {x: 0, y: 0, z: 0}
       rotation: {x: -1.1638038e-15, y: -0.00000015379348, z: 0.0000045284482}
       rotationWeight: 0
---- !u!114 &965701008279181818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 157836359682935756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a7b6174fee5f6f47b3f4bf0a8c3e2f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_adjustPlayBackSpeed: 0
---- !u!114 &965701008279181815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 157836359682935756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f0bdfdd1fa904a46b8beb2abd24f55a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_biasMS: {x: 0, y: 1, z: 0.2}
-  m_fov: 40
-  m_maxDist: 5
-  m_minDist: 1
-  m_phi: 20
-  m_lamda: 0
-  dataAsset: {fileID: 11400000, guid: 36f0f648a277b434fa9545cbd7c23a9d, type: 2}
 --- !u!1001 &4215790272592267876
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -478,6 +478,11 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: e5d8906501cbf024582a43b5ceca8779, type: 2}
+    - target: {fileID: 8385792719848329106, guid: 019445333a3f9bd44ba695a1ba896bf4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 019445333a3f9bd44ba695a1ba896bf4, type: 3}
 --- !u!1 &157836359682935756 stripped

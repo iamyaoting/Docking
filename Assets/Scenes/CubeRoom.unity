@@ -1949,6 +1949,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 683262886620598646, guid: 309369888274c624f8c88cc593e9cb99,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1140540293706924938, guid: 309369888274c624f8c88cc593e9cb99,
         type: 3}
       propertyPath: m_RootOrder
@@ -3508,6 +3513,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Docking_Survivor_Prefab
       objectReference: {fileID: 0}
+    - target: {fileID: 683262886620598646, guid: 309369888274c624f8c88cc593e9cb99,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 965701008279181818, guid: 309369888274c624f8c88cc593e9cb99,
         type: 3}
       propertyPath: m_Enabled
@@ -4512,7 +4522,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 935423442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 0, z: 0}
+  m_LocalPosition: {x: -1.97, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2044734579}
@@ -5696,6 +5706,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 683262886620598646, guid: 309369888274c624f8c88cc593e9cb99,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1140540293706924938, guid: 309369888274c624f8c88cc593e9cb99,
         type: 3}
       propertyPath: m_RootOrder
@@ -5774,7 +5789,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1411370085
 Transform:
   m_ObjectHideFlags: 0

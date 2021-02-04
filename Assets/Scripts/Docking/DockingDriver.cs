@@ -299,7 +299,7 @@ namespace Docking
             if (lineStripTarget)
             {
                 handIK = lineStripTarget.m_handIK;
-                handIK = handIK & (m_lastBlend == 1.0f);
+                //handIK = handIK & (m_lastBlend == 1.0f);
 
             }
             m_fullBodyIK.SetEnableIK(handIK);
