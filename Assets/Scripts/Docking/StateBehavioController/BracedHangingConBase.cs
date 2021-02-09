@@ -35,4 +35,16 @@ public class BracedHangingConBase : StateBehavioConBase
         }
         return true;
     }
+
+    protected bool FindNextDockedHangTarget(Vector2 input)
+    {
+        var context = m_dockingDetector.GetNearestDockingTargetBySingleType(DetectorType.HangDetector, input, m_dockingDriver.GetDockingTarget());
+        if (null != context && context.dockingtarget.m_type == DockingTargetType.BRACED_HANG)
+        {
+            CrossFadeAnimatorHopState(context.desiredDockedVertex.tr.translation);
+            m_dockingDriver.SetDockingNextTarget(context.dockingtarget);
+            return true;
+        }
+        return false;
+    }
 }

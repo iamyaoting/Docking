@@ -50,6 +50,14 @@ namespace Docking
             reserveFloatParam = other.reserveFloatParam;
         }
 
+        public static DockingVertex Lerp(DockingVertex v1, DockingVertex v2, float alpha)
+        {
+            DockingVertex vertex = new DockingVertex();
+            vertex.tr = TR.Lerp(v1.tr, v2.tr, alpha);
+            vertex.reserveFloatParam = Mathf.Lerp(v1.reserveFloatParam, v2.reserveFloatParam, alpha);
+            return vertex;
+        }
+
         public TR       tr;
 
         // 对于take over代表墙高度，0：矮，1：高
@@ -79,28 +87,24 @@ namespace Docking
     {
         public bool m_active = true;
         public DockingTargetType m_type = DockingTargetType.TAKE_COVER;
+
+        public bool m_handIK = false;               // 是否需要开启Hand IK
+        //public bool m_footIK = false;
+        public float m_leftMargin = 0.7f;           // 该docking Target左边缘距离WS
+        public float m_rightMargin = 0.7f;          // 该docking Target右边边缘距离WS
+        public DockingTarget m_leftTarget = null;   // 左边接续的Target
+        public DockingTarget m_rightTarget = null;  // 右边接续的Target
+
         public bool selected { get; set; } // 是否被选中
 
         public bool temporary { get; set; } // 是否是临时的, 程序生成的target，而非静态的
 
-        protected float marginDist { 
-            get
-            {
-                switch(m_type)
-                {
-                    case DockingTargetType.TAKE_COVER:
-                        return .7f;
-                    case DockingTargetType.HANGING:
-                        return 0.7f;
-                    case DockingTargetType.BRACED_HANG:
-                        return 0.8f;                        
-                }
-                return .0f;
-            }
-        }
-
         public abstract DockedVertexStatus GetDockedLS(TR undockedTRLS, out DockingVertex dockedVertexLS);
-
+        protected virtual DockingVertex GetDockedWSImpl(float alpha) { return null; }
+        public DockingVertex GetDockedWS(float alpha)
+        {
+            return GetDockedWSImpl(alpha);
+        }
         public void Awake()
         {
             temporary = false;

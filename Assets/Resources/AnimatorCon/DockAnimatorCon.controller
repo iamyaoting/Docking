@@ -3890,7 +3890,7 @@ MonoBehaviour:
   m_translationOffset: {x: 0, y: 0.12, z: 0.06}
   m_rotationOffset: {x: 0, y: 0, z: 0, w: 1}
   m_blendType: 2
-  m_flags: 0
+  m_flags: 1
   m_intervalStartNormalizedTime: 0
   m_intervalEndNormalizedTime: 1
 --- !u!1102 &5398738008836988236
@@ -4398,7 +4398,7 @@ MonoBehaviour:
   m_blendType: 1
   m_flags: 0
   m_intervalStartNormalizedTime: 0.32
-  m_intervalEndNormalizedTime: 0.55
+  m_intervalEndNormalizedTime: 0.5
 --- !u!1102 &7288879864745612495
 AnimatorState:
   serializedVersion: 6

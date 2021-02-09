@@ -6,8 +6,14 @@ using UnityEngine;
 
 public class BracedHangingIdleCon : BracedHangingConBase
 {
-    protected override void OnControllerUpdate(int layerIndex, AnimatorStateInfo stateInfo)
+    protected override void OnControllerEnter(int layerIndex, AnimatorStateInfo stateInfo)
     {
+        Debug.Log("Idle");
+        base.OnControllerEnter(layerIndex, stateInfo);
+    }
+
+    protected override void OnControllerUpdate(int layerIndex, AnimatorStateInfo stateInfo)
+    {        
         if (m_animator.IsInTransition(layerIndex)) return;        
         
         var input = GetRawInput();
@@ -16,13 +22,8 @@ public class BracedHangingIdleCon : BracedHangingConBase
         var limit = m_dockingDriver.GetDockedVertexStatus().limit;
         var input2 = HandleInputLimit(input, limit);
         if (HasEnvCommitAction())
-        {           
-            var context = m_dockingDetector.GetNearestDockingTargetBySingleType(DetectorType.HangDetector, input, m_dockingDriver.GetDockingTarget());
-            if (null != context)
-            {
-                CrossFadeAnimatorHopState(context.desiredDockedVertex.tr.translation);
-                m_dockingDriver.SetDockingNextTarget(context.dockingtarget);
-            }
+        {
+            FindNextDockedHangTarget(input);
         }
         else if (input2.x != 0)
         {            

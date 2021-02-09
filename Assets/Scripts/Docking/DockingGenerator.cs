@@ -21,9 +21,6 @@ namespace Docking
     public class DockingGenerator : StateMachineBehaviour
     {
         // 固有信息
-        // lastBone表示root
-        //public HumanBodyBones       m_dockingBone = HumanBodyBones.LastBone;
-
         public Vector3              m_translationOffset;
         public Quaternion           m_rotationOffset = Quaternion.identity;
 
@@ -35,17 +32,13 @@ namespace Docking
 
 
         // 状态信息
-        private float               m_lastNormalizedTime = 0;
         private float               m_lastDockingBlend = 0;
-
-        //
         private float               m_fullyNoTransitionTime = 0;        // 该状态下没有transition的持续时间
 
         
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            m_lastNormalizedTime = 0;
             m_lastDockingBlend = 0;
             m_fullyNoTransitionTime = 0;
         }
@@ -65,13 +58,10 @@ namespace Docking
             if(!animator.IsInTransition(layerIndex)) //不允许在Transition期间进行docked操作
             {
                 m_fullyNoTransitionTime += Time.deltaTime;
-                ProcessDockingControlDataFlags(dockingControlData);
+                ProcessDockingControlDataFlags(dockingControlData, stateInfo);
                 GetDockingDriver(animator).Notify(dockingControlData);
                 m_lastDockingBlend = dockingControlData.m_dockingBlend;
-            }
-
-            m_lastNormalizedTime = stateInfo.normalizedTime;
-            
+            }           
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -79,19 +69,7 @@ namespace Docking
         {
             //GetCurrentDockingController(animator).OnFSMStateExit();
         }
-
-        //// OnStateMove is called right after Animator.OnAnimatorMove()
-        //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    //Implement code that processes and affects root motion
-
-        //}
-
-        // OnStateIK is called right after Animator.OnAnimatorIK()
-        //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    // Implement code that sets up animation IK (inverse kinematics)
-        //}       
+        
         private float GetDockingBlendWeight(float normalizedTime)
         {
             normalizedTime = normalizedTime - Mathf.Floor(normalizedTime);
@@ -130,16 +108,14 @@ namespace Docking
             return driver;
         }        
 
-        private void ProcessDockingControlDataFlags(DockingControlData dockingControlData)
+        // 处理Transistion 到 fullyOn的过渡状态，防止动作不连续
+        private void ProcessDockingControlDataFlags(DockingControlData dockingControlData, AnimatorStateInfo stateInfo)
         {
-            if(m_flags == DockingFlagBits.FLAG_TRANSITION_FULLYDOCKED && m_blendType == BlendType.DOCKED_FULL_ON)
+            if(m_flags == DockingFlagBits.FLAG_TRANSITION_FULLYDOCKED)
             {
-                var alpha = m_fullyNoTransitionTime / 0.2f;
-                if (alpha < dockingControlData.m_dockingBlend)
-                {
-                    //Debug.Log(alpha + " \\\\ " + dockingControlData.m_dockingBlend);
-                    dockingControlData.m_dockingBlend = Mathf.Clamp01(alpha);
-                }
+                var alpha = m_fullyNoTransitionTime / 1.0f;
+                dockingControlData.m_dockingBlend = Mathf.Min(alpha, dockingControlData.m_dockingBlend);
+                Debug.Log(dockingControlData.m_dockingBlend);
             }
         }
     }

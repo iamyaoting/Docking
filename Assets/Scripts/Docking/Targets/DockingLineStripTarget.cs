@@ -7,8 +7,7 @@ namespace Docking
     public class DockingLineStripTarget : DockingTarget
     {
         public DockingVertex[] m_vertices;          // 顶点集合
-        public bool m_loop;                         // 是否循环
-        public bool m_handIK = false;               // 是否需要开启Hand IK
+        public bool m_loop;                         // 是否循环        
 
         //public float y = 2;
         //public float radius = 5.2f;
@@ -95,7 +94,7 @@ namespace Docking
             if (alpha < 0.5f && 0 == idx)
             {
                 var dist = transform.TransformVector(tr.translation - m_vertices[0].tr.translation).magnitude;
-                if (dist < marginDist)
+                if (dist < m_leftMargin)
                 {                    
                     return DOCKED_POINT_MOVE_LIMIT.HORIZEN_LEFT_FORBIDEN;
                 }
@@ -103,7 +102,7 @@ namespace Docking
             if (alpha >= 0.5f && idx == count - 2)
             {
                 var dist = transform.TransformVector(tr.translation - m_vertices[count - 1].tr.translation).magnitude;
-                if (dist < marginDist)
+                if (dist < m_rightMargin)
                 {                 
                     return DOCKED_POINT_MOVE_LIMIT.HORIZEN_RIGHT_FORBIDEN;
                 }

@@ -224,6 +224,7 @@ namespace Docking
         }
         public void SwitchToNextDockingTarget()
         {
+            if (m_dockingNextTarget == null) return;
             m_dockingTarget = m_dockingNextTarget;
             m_dockingNextTarget = null;
             SetWorldFromReference(m_dockingTarget);

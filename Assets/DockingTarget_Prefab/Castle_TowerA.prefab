@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6409740388597594825}
   - component: {fileID: 3031485363812201134}
   - component: {fileID: 8157044728173135976}
+  - component: {fileID: 3370389046313343294}
   m_Layer: 0
   m_Name: Castle_TowerA
   m_TagString: Untagged
@@ -31,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 12970491537951477}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.8, z: 1}
   m_Children:
   - {fileID: 769708285675317670}
   - {fileID: 12970491537594079}
@@ -191,6 +192,19 @@ MonoBehaviour:
       translation: {x: -1.9792384, y: 14.894459, z: -2.3166714}
       rotation: {x: -8.158939e-16, y: 0.7093291, z: 1.9109423e-16, w: 0.7048775}
     reserveFloatParam: 0
+--- !u!65 &3370389046313343294
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12970491537951477}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.4166574, y: 14.929441, z: 4.416663}
+  m_Center: {x: 0.22178334, y: 7.4295416, z: -0.12029183}
 --- !u!1 &12970491537951487
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +222,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &12970491537594079
 Transform:
   m_ObjectHideFlags: 0
@@ -354,6 +368,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Castle_MicroWindow
       objectReference: {fileID: 0}
+    - target: {fileID: 4921944522611606344, guid: 0ef1fb70f2979244cace7c14de4fd1a8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ef1fb70f2979244cace7c14de4fd1a8, type: 3}
 --- !u!4 &769708285675317670 stripped
@@ -443,6 +462,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Castle_Window_NoCC (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9149861563419873854, guid: a260210df9f054f4b86a0cf91178940d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9149861563419873854, guid: a260210df9f054f4b86a0cf91178940d,
         type: 3}
@@ -541,6 +565,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9149861563419873854, guid: a260210df9f054f4b86a0cf91178940d,
         type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9149861563419873854, guid: a260210df9f054f4b86a0cf91178940d,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
@@ -636,6 +665,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9149861563419873854, guid: a260210df9f054f4b86a0cf91178940d,
         type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9149861563419873854, guid: a260210df9f054f4b86a0cf91178940d,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
@@ -728,6 +762,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Castle_Window_NoCC (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9149861563419873854, guid: a260210df9f054f4b86a0cf91178940d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9149861563419873854, guid: a260210df9f054f4b86a0cf91178940d,
         type: 3}
