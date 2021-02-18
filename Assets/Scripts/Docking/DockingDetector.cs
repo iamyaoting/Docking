@@ -40,7 +40,8 @@ namespace Docking
             SetDetectorData(type, moveDirMS);
             ControllerEnterContext context = new ControllerEnterContext();
             if (false == DetectNearestTarget(currentTarget,
-                out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus))
+                out context.dockingtarget, out context.desiredDockedVertex, out context.desiredDockedVertexStatus,
+                type == DetectorType.HangBackDetector))
             {
                 Debug.Log("Can not find docking target, dock forbidden!");
                 return null;
@@ -50,15 +51,11 @@ namespace Docking
                 Debug.Log("Find docking target: " + context.dockingtarget.name);
                 return context;
             }
-        }
-       
+        }       
         // 设置Detector为Hang的2D模式，在立面进行搜索
         private void SetHangingDetector(Vector2 moveDir)
         {
             m_biasMS = transform.InverseTransformPoint(Utils.GetDockingBoneTransform(GetComponent<Animator>()).position);             
-            //m_fov = 20;
-            //m_maxDist = 7.0f;
-            //m_minDist = 0.01f;
                         
             if(moveDir.magnitude == 0)
             {
@@ -82,12 +79,13 @@ namespace Docking
                 m_phi = Vector2.SignedAngle(moveDir, -Vector2.right);
                 m_lamda = -90;
             }
-        }    
+        }
 
         private bool DetectNearestTarget(DockingTarget currentTarget,
-            out DockingTarget target, 
+            out DockingTarget target,
             out DockingVertex desiredVertex,
-            out DockedVertexStatus desiredVertexStatus)
+            out DockedVertexStatus desiredVertexStatus,
+            bool isBack = false)
         {
             bool isFound = false;
             desiredVertex = new DockingVertex();
@@ -111,7 +109,7 @@ namespace Docking
                     // 在世界空间获得detector的docked点
                     float dist = float.MaxValue;
                     t.GetDockedPointWS(transform.position, transform.rotation, out dockedTR, out statusTmp);
-                    if (IsPointInDetectorWS(t, dockedTR, out dist))
+                    if (IsPointInDetectorWS(t, dockedTR, isBack, out dist))
                     {
                         if (dist < nearestDist)
                         {
@@ -139,7 +137,7 @@ namespace Docking
             return pos;
         }       
 
-        public bool IsPointInDetectorWS(DockingTarget target, TR dockedPointTRWS, out float dist)
+        private bool IsPointInDetectorWS(DockingTarget target, TR dockedPointTRWS, bool isBack, out float dist)
         {
             var pointMS = transform.InverseTransformPoint(dockedPointTRWS.translation);            
             var point_center_dir = pointMS - m_biasMS;
@@ -152,14 +150,23 @@ namespace Docking
             float fovDiff = Vector3.Angle(point_center_dir, dir);
 
             if (dist > m_minDist && dist < m_maxDist)
-            {                  
-                if (fovDiff < m_fov && quatDiff < 90)
+            {
+                if (!isBack)
                 {
-                    return true;
-                }             
+                    if (fovDiff < m_fov && quatDiff < 90)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if(fovDiff < m_fov && quatDiff > 120)
+                    {
+                        return true;
+                    }
+                }
             }
-            Debug.Log("Detect Docking Target:" + target.name + "type: " + target.m_type + ";  dist=" + dist +
-                ",  angle=" + fovDiff + "  orientation Diff =" + quatDiff);
+            Debug.Log("Detector Back" + isBack + "  Target:" + target.name + "type: " + target.m_type + ";  dist=" + dist +",  fovDiff=" + fovDiff + "  orientDiff=" + quatDiff);
             return false;
         }
 

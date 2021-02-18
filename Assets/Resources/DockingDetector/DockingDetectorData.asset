@@ -29,7 +29,7 @@ MonoBehaviour:
     m_lamda: 0
   - type: 4
     m_biasMS: {x: 0, y: 0, z: 0}
-    m_fov: 20
+    m_fov: 40
     m_maxDist: 6
     m_minDist: 0.5
     m_phi: 0

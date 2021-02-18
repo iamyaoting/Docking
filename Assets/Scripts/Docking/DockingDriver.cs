@@ -51,6 +51,8 @@ namespace Docking
         // animation playback speed
         private float m_desiredPlaybackSpeed = 1.0f;
 
+        private DockingGenerator m_dockingGenerator = null;
+
         // 数据是否有效
         public bool valid { get; private set; } = false;
 
@@ -201,9 +203,10 @@ namespace Docking
             return true;
         }
 
-        public void Notify(DockingControlData data)
+        public void Notify(DockingControlData data, DockingGenerator dockingGenrator)
         {
             m_dockingControlData = data;
+            m_dockingGenerator = dockingGenrator;
         }
         public DockingControlData GetDockingControllerData()
         {
@@ -216,6 +219,14 @@ namespace Docking
             m_dockingTarget = target;
             m_dockingNextTarget = null;
             SetWorldFromReference(target);
+        }
+
+        // 不切换state，但是切换target
+        public void SwitchNextTargetinplace(DockingTarget target)
+        {
+            m_dockingTarget = target;
+            m_dockingGenerator.SwitchNextTargetInplace();
+            m_dockingControlData = null;
         }
         public void SetDockingNextTarget(DockingTarget target)
         {

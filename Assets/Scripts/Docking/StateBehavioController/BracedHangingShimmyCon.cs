@@ -6,52 +6,59 @@ using UnityEngine;
 
 public class BracedHangingShimmyCon : BracedHangingConBase
 {
-    private bool m_alreadyProcessed = false;
+    private bool m_canIdle = true;
     protected override void OnControllerEnter(int layerIndex, AnimatorStateInfo stateInfo)
-    {        
+    {
+        m_canIdle = true;
         m_dockingDriver.SwitchToNextDockingTarget();        
         base.OnControllerEnter(layerIndex, stateInfo);
-        Debug.Log("Shimmy Enter");
+        //Debug.Log("Shimmy Enter");
     }
 
     protected override void OnControllerUpdate(int layerIndex, AnimatorStateInfo stateInfo)
-    {
-        m_alreadyProcessed = false;
+    {        
         var input = GetRawInput();
         if (HasEnvCommitAction())
         {
-            FindNextDockedHangTarget(input);
+            var dir = input.normalized;
+            FindNextDockedHangTarget(input, false);
         }
+        else if (Input.GetKeyDown(KeyCode.B))
+        {
+            FindNextDockedHangTarget(new Vector2(0, -1), true);
+        }
+
         if (m_animator.IsInTransition(layerIndex)) return;
 
-        if(false == m_alreadyProcessed)
+        if(true == m_canIdle)
         {
             var limit = m_dockingDriver.GetDockedVertexStatus().limit;
-            input = HandleInputLimit(input, limit);
+            //var input2 = HandleInputLimit(input, limit);
 
             if (input.x == 0)
             {
                 m_animator.SetTrigger("T_HangingIdle");
+                //Debug.Log("Transistion To idle!" + input.x);
             }
-        }       
+        }   
+        else
+        {
+            m_canIdle = true;
+        }
     }
     protected override void OnDockingTargetMargin(DockingTarget target, TR tr, DockedVertexStatus status)
     {
-        if (status.alpha > 0.8f)
-        {
-            var time = m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-            m_animator.CrossFade("BracedHang.Braced Hang Shimmy", 0.0f, 0, time);
-            m_dockingDriver.SetDockingNextTarget(target.m_rightTarget);
-            m_alreadyProcessed = true;
+        var input = GetRawInput();
+        if (status.alpha > 0.8f && input.x > 0.5f && target.m_rightTarget != null)
+        {      
+            m_dockingDriver.SwitchNextTargetinplace(target.m_rightTarget);
+            m_canIdle = false;
         }
-        if (status.alpha < 0.2f)
-        {
-            var time = m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-            m_animator.CrossFade("BracedHang.Braced Hang Shimmy", 0.0f, 0, time);
-            m_dockingDriver.SetDockingNextTarget(target.m_leftTarget);
-            m_alreadyProcessed = true;
+        if (status.alpha < 0.2f && input.x < -0.5f && target.m_leftTarget != null)
+        { 
+            m_dockingDriver.SwitchNextTargetinplace(target.m_leftTarget);
+            m_canIdle = false;
         }
-        base.OnDockingTargetMargin(target, tr, status);
-        
+        base.OnDockingTargetMargin(target, tr, status);        
     }
 }

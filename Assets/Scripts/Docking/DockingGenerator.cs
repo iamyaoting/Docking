@@ -35,7 +35,7 @@ namespace Docking
         private float               m_lastDockingBlend = 0;
         private float               m_fullyNoTransitionTime = 0;        // 该状态下没有transition的持续时间
 
-        
+
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
@@ -59,9 +59,14 @@ namespace Docking
             {
                 m_fullyNoTransitionTime += Time.deltaTime;
                 ProcessDockingControlDataFlags(dockingControlData, stateInfo);
-                GetDockingDriver(animator).Notify(dockingControlData);
+                GetDockingDriver(animator).Notify(dockingControlData, this);
                 m_lastDockingBlend = dockingControlData.m_dockingBlend;
             }           
+        }
+        public void SwitchNextTargetInplace()
+        {
+            m_lastDockingBlend = 0;
+            m_fullyNoTransitionTime = 0;
         }
 
         // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
@@ -113,9 +118,9 @@ namespace Docking
         {
             if(m_flags == DockingFlagBits.FLAG_TRANSITION_FULLYDOCKED)
             {
-                var alpha = m_fullyNoTransitionTime / 1.0f;
+                var alpha = m_fullyNoTransitionTime / .3f;
                 dockingControlData.m_dockingBlend = Mathf.Min(alpha, dockingControlData.m_dockingBlend);
-                Debug.Log(dockingControlData.m_dockingBlend);
+                //Debug.Log(dockingControlData.m_dockingBlend);
             }
         }
     }

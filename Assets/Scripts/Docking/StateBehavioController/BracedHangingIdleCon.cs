@@ -8,7 +8,7 @@ public class BracedHangingIdleCon : BracedHangingConBase
 {
     protected override void OnControllerEnter(int layerIndex, AnimatorStateInfo stateInfo)
     {
-        Debug.Log("Idle");
+        //Debug.Log("Idle");
         base.OnControllerEnter(layerIndex, stateInfo);
     }
 
@@ -17,22 +17,20 @@ public class BracedHangingIdleCon : BracedHangingConBase
         if (m_animator.IsInTransition(layerIndex)) return;        
         
         var input = GetRawInput();
-        if (input.magnitude == 0) return;
-
-        var limit = m_dockingDriver.GetDockedVertexStatus().limit;
-        var input2 = HandleInputLimit(input, limit);
         if (HasEnvCommitAction())
-        {
-            FindNextDockedHangTarget(input);
-        }
-        else if (input2.x != 0)
         {            
-            m_animator.SetTrigger("T_HangingMove");
-            m_animator.SetFloat("Velocity", input2.x > 0 ? 1 : -1);
+            var dir = input.normalized;        
+            FindNextDockedHangTarget(input, false);
         }
-        else if(HasEnvUnCommitAction())
+        else if(Input.GetKeyDown(KeyCode.B))
         {
-            SetUnDocking();
+            FindNextDockedHangTarget(new Vector2(0, -1), true);
+        }
+        else if (Mathf.Abs(input.x) > 0.9f)
+        {
+            Debug.Log(input * 100);
+            m_animator.SetTrigger("T_HangingMove");
+            m_animator.SetFloat("Velocity", input.x > 0 ? 1 : -1);
         }
     }
 }

@@ -97,6 +97,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_active: 1
   m_type: 2
+  m_handIK: 0
+  m_leftMargin: 0.7
+  m_rightMargin: 0.7
+  m_leftTarget: {fileID: 0}
+  m_rightTarget: {fileID: 0}
   m_vertices:
   - tr:
       translation: {x: 2.81, y: 11.71, z: 0}
@@ -179,7 +184,6 @@ MonoBehaviour:
       rotation: {x: 0, y: -0.5877853, z: -0, w: 0.809017}
     reserveFloatParam: 1
   m_loop: 1
-  m_handIK: 0
 --- !u!1001 &4631932557684786486
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -246,6 +250,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Castle_Flag
+      objectReference: {fileID: 0}
+    - target: {fileID: 2121969935481425269, guid: b5ea8f462d5d84c4eb75bf24e5d04275,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b5ea8f462d5d84c4eb75bf24e5d04275, type: 3}

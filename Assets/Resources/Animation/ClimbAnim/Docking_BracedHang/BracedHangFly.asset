@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41074f76d66d4e84a864c0639a698c5a, type: 3}
+  m_Name: BracedHangFly
+  m_EditorClassIdentifier: 
+  character: {fileID: 4085259365683167656, guid: 019445333a3f9bd44ba695a1ba896bf4,
+    type: 3}
+  anmis:
+  - clip: {fileID: 7400000, guid: bbe0f0b3033195f419a09b2ddb2c2041, type: 2}
+    segments:
+    - isCenterofHands: 1
+      linearVelocity: 0
+      dockingBone: 0
+      dockingTimeType: 1
+      dockedFixedNormalizedTime: 1
+      startNormalizedTime: 0
+      endNormalizedTime: 1
+  - clip: {fileID: 7400000, guid: c7700721d9c75f645b16344ac0d8d734, type: 2}
+    segments:
+    - isCenterofHands: 1
+      linearVelocity: 0
+      dockingBone: 0
+      dockingTimeType: 1
+      dockedFixedNormalizedTime: 1
+      startNormalizedTime: 0
+      endNormalizedTime: 1
