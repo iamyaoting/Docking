@@ -40,6 +40,12 @@ public class FullBodyIKModifier
         m_remainingTime = blendTime;
     }
 
+    public bool NeedSolveIK()
+    {
+        if (m_weight == 0.0f && m_enable == false) return false;
+        return true;
+    }
+
     public void OnIKUpdate(float deltaTime)
     {
         UpdateBlendWeight(deltaTime);

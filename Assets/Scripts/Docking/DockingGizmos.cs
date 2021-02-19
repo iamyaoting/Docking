@@ -12,7 +12,7 @@ namespace Docking
     public class DockingGizmos
     {
         private static Stack<GizmosData> gizmosStack = new Stack<GizmosData>();
-
+        private const float m_coordinateFrameAxisLength = 0.1f;
         public static void DrawTR(TR tr, Color color,
             float pointSize,
             float coordinateFrameAxisLength)
@@ -25,16 +25,16 @@ namespace Docking
         }
 
         public static void DrawCoordinateFrameWS(Vector3 pos,
-            Quaternion rot, float coordinateFrameAxisLength = 0.6f)
+            Quaternion rot, float coordinateFrameAxisLength = m_coordinateFrameAxisLength)
         {
             DrawCoordinateFrameWS(pos, rot, Color.red, 0.0f, coordinateFrameAxisLength);
         }
 
-        public static void DrawCoordinateFrameWS(TR tr, float coordinateFrameAxisLength = 0.6f)
+        public static void DrawCoordinateFrameWS(TR tr, float coordinateFrameAxisLength = m_coordinateFrameAxisLength)
         {
             DrawCoordinateFrameWS(tr.translation, tr.rotation, Color.red, 0.0f, coordinateFrameAxisLength);
         }
-        public static void DrawCoordinateFrameWS(DockingTransform tr, float coordinateFrameAxisLength = 0.6f)
+        public static void DrawCoordinateFrameWS(DockingTransform tr, float coordinateFrameAxisLength = m_coordinateFrameAxisLength)
         {
             DrawCoordinateFrameWS(tr.translation, tr.rotation, Color.red, 0.0f, coordinateFrameAxisLength);
         }
@@ -42,7 +42,7 @@ namespace Docking
         public static void DrawCoordinateFrameWS(Vector3 pos, 
             Quaternion rot, Color originColor,
             float originSize = 0.0f,
-            float coordinateFrameAxisLength = 0.6f)
+            float coordinateFrameAxisLength = m_coordinateFrameAxisLength)
         {
             //PushGizmosData();            
             DrawCoordinateFrame_Impl(pos, rot, coordinateFrameAxisLength);
@@ -68,19 +68,6 @@ namespace Docking
             
             Gizmos.matrix = oldM;
             //PopGizmosData();
-        }
-
-        // 绘制xz平面的圆盘
-        public static void DrawDisc(Vector3 center, float radius)
-        {
-            var oldMat = Gizmos.matrix;
-            var m = new Matrix4x4();
-            m.SetTRS(Vector3.zero, Quaternion.identity, new Vector3(1, 0, 1));
-            Gizmos.matrix = m;
-
-            Gizmos.DrawWireSphere(center, radius);
-
-            Gizmos.matrix = oldMat;
         }
 
         public static void DrawLines(List<System.Tuple<Vector3, Vector3>> segments, float width, Color color)

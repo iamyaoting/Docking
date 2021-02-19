@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1353780076255696418}
   - component: {fileID: 1353780076254644060}
   - component: {fileID: 1398007536775601268}
+  - component: {fileID: 3036319563263811257}
   m_Layer: 0
   m_Name: Castle_TowerB
   m_TagString: Untagged
@@ -96,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_active: 1
-  m_type: 2
+  m_type: 3
   m_handIK: 0
   m_leftMargin: 0.7
   m_rightMargin: 0.7
@@ -184,6 +185,19 @@ MonoBehaviour:
       rotation: {x: 0, y: -0.5877853, z: -0, w: 0.809017}
     reserveFloatParam: 1
   m_loop: 1
+--- !u!65 &3036319563263811257
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353780076252625018}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.5562587, y: 11.680388, z: 5.556259}
+  m_Center: {x: 0, y: 5.866321, z: -0.0000014305115}
 --- !u!1001 &4631932557684786486
 PrefabInstance:
   m_ObjectHideFlags: 0

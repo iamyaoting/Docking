@@ -81,6 +81,11 @@ namespace Docking
                 }
             }
             dockedVertexSatus.limit = GetLimitByAlpha(dockedVertexSatus.alpha, dockedVertexLS.tr, idx);
+
+            // 存储debug 信息，绘制gizmos
+            m_curIdxDebugGizmos = idx;
+            //Debug.Log(idx);
+
             return dockedVertexSatus;
         }
 
@@ -131,12 +136,14 @@ namespace Docking
             return false;
         }
 
+
+        private int m_curIdxDebugGizmos = 0;
         protected override void DrawGizmos()
         {
             DockingGizmos.PushGizmosData();
 
             var color = GetGizmosColor();
-            Gizmos.color = color;
+            
 
             DockingVertex startV, endV;
 
@@ -149,6 +156,12 @@ namespace Docking
                     if (!GetLineSegment(i, out startV, out endV)) break;
                     startTR = GetTRInWS(startV.tr);
                     var endTR = GetTRInWS(endV.tr);
+                    
+                    // 只需要绘制选中的线段
+                    if(m_curIdxDebugGizmos == i)
+                        color = GetGizmosColor();
+                    else
+                        color = GetGizmosColor(true);
                     DockingGizmos.DrawLine(startTR.translation, endTR.translation, m_lineWidth, color);
                 }
             }

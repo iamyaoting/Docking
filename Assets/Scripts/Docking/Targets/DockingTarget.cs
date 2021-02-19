@@ -214,18 +214,29 @@ namespace Docking
                 {DockingTargetType.BEAM,                Color.white}
             };
 
-        protected const float m_lineWidth = 0.1f;
-        public Color GetGizmosColor()
+        protected const float m_lineWidth = 0.05f;
+
+        // 如果foreceDefaultColor为true，则一直返回默认颜色;
+        public Color GetGizmosColor(bool foreceDefaultColor = false) 
         {
+            var color = m_gizmosColorDict[m_type];
+            if (foreceDefaultColor) return color;
             if (selected)
                 return Color.red;
-
-            var color = m_gizmosColorDict[m_type];
+                       
             return color;
         }
 
         protected abstract void DrawGizmos();
-        protected void OnDrawGizmos()
+        //protected void OnDrawGizmos()
+        //{
+        //    if (m_active && enabled)
+        //    {
+        //        DrawGizmos();
+        //    }
+        //}
+
+        protected void OnDrawGizmosSelected()
         {
             if (m_active && enabled)
             {

@@ -315,7 +315,7 @@ namespace Docking
 
             }
             m_fullBodyIK.SetEnableIK(handIK);
-            if (lineStripTarget)
+            if (lineStripTarget && m_fullBodyIK.NeedSolveIK())
             {
                 var leftHand = m_animator.GetBoneTransform(HumanBodyBones.LeftHand);
                 var rightHand = m_animator.GetBoneTransform(HumanBodyBones.RightHand);
@@ -353,8 +353,8 @@ namespace Docking
             Gizmos.color = Color.blue;
             Gizmos.DrawSphere(m_worldFromLastDesiredTarget.translation, 0.1f);
             
-            DockingGizmos.DrawCoordinateFrameWS(m_worldFromLastTarget);
-            DockingGizmos.DrawCoordinateFrameWS(m_worldFromLastDesiredTarget);
+            DockingGizmos.DrawCoordinateFrameWS(m_worldFromLastTarget, 0.4f);
+            DockingGizmos.DrawCoordinateFrameWS(m_worldFromLastDesiredTarget, 0.4f);
 
             DockingGizmos.PopGizmosData();
         }

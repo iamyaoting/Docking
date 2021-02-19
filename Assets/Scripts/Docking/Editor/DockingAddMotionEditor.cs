@@ -9,6 +9,7 @@ namespace Docking
     {
         GameObject character;
         AnimationClip clip;
+        Vector3 initPos;
 
         // Add menu named "My Window" to the Window menu
         [MenuItem("Docking/Add Motion")]
@@ -25,7 +26,10 @@ namespace Docking
 
             character = EditorGUILayout.ObjectField("Character", character, typeof(GameObject), false) as GameObject;
             clip = EditorGUILayout.ObjectField("Animation clip", clip, typeof(AnimationClip), false) as AnimationClip;
-            
+
+            initPos = EditorGUILayout.Vector3Field("Init Pos", initPos);
+
+
             EditorGUILayout.Space();
             EditorGUILayout.Space();
 
@@ -50,10 +54,10 @@ namespace Docking
                     {
                         float time = i / 30.0f;
                         comp.PlayAtTime(time);
-                        EditorUtil.SetTransformCurve(time, motionQTCurve, comp.transform.position, comp.transform.rotation, null, animator.humanScale);
+                        EditorUtil.SetTransformCurve(time, motionQTCurve, comp.transform.position + initPos, comp.transform.rotation, null, animator.humanScale);
                     }
                     comp.PlayAtTime(clip.length);
-                    EditorUtil.SetTransformCurve(clip.length, motionQTCurve, comp.transform.position, comp.transform.rotation, null, animator.humanScale);
+                    EditorUtil.SetTransformCurve(clip.length, motionQTCurve, comp.transform.position + initPos, comp.transform.rotation, null, animator.humanScale);
 
                     // «Â¿Ìplayablegraph
                     comp.Destory();
