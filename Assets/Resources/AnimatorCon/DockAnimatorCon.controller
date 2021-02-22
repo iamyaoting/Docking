@@ -900,7 +900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd818d0406d3346479e251278f1d1e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_translationOffset: {x: 0, y: 0, z: 0}
+  m_translationOffset: {x: 0, y: 0, z: -1}
   m_rotationOffset: {x: 0, y: 0, z: 0, w: 1}
   m_blendType: 0
   m_flags: 0

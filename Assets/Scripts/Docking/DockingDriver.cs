@@ -16,6 +16,49 @@ namespace Docking
         // public HumanBodyBones m_dockingBone = HumanBodyBones.LastBone;
         public DockingTransform m_targetOffsetMS;
     }
+
+    class DockingTargetContext
+    {
+        public DockingTargetContext()
+        {
+            ResetDefault();
+        }
+
+        public DockingTargetContext(DockingTarget target)
+        {
+            ResetDefault();
+            dockingTarget = target;
+        }
+
+        public void MoveTo(DockingTargetContext rhs)
+        {
+            rhs.dockingTarget = dockingTarget;
+            rhs.referenceFromTargetPoint = referenceFromTargetPoint;
+            rhs.dockedStatus = dockedStatus;
+            rhs.lockDiseredTargetPointAtBlend = lockDiseredTargetPointAtBlend;
+        
+            ResetDefault();
+        }
+        
+        public void ResetDefault()
+        {
+            dockingTarget = null;
+            referenceFromTargetPoint = null;
+            dockedStatus = null;
+            lockDiseredTargetPointAtBlend = false;
+        }
+
+        public bool IsValid()
+        {
+            return dockingTarget != null;
+        }
+
+        public DockingTarget dockingTarget;
+        public DockingTransform referenceFromTargetPoint;        // 在refence空间下目标点
+        public DockedVertexStatus dockedStatus;
+        public bool lockDiseredTargetPointAtBlend = false;       // 是否在blend期间锁定目标点，不在进行更新  
+    }
+
     public class DockingDriver : MonoBehaviour
     {
         public bool m_adjustPlayBackSpeed = false;
@@ -37,10 +80,10 @@ namespace Docking
         private DockingControlData m_dockingControlData;
 
         // DockingDriver 所需要的target标记线，由Docking Controller 设置提供        
-        private DockingTarget m_dockingTarget;
+        private DockingTargetContext m_dockingTargetContext;
 
         // DockingDriver 所需要的target标记线
-        private DockingTarget m_dockingNextTarget;
+        private DockingTargetContext m_dockingNextTargetContext;
 
         // Docking 的顶点信息
         private DockedVertexStatus m_dockedVertexStatus;
@@ -76,6 +119,9 @@ namespace Docking
                 Debug.LogError("No Docking Bone, Please add in advance!");
             }
             m_fullBodyIK = new FullBodyIKModifier(m_animator.GetComponent<RootMotion.FinalIK.BipedIK>());
+
+            m_dockingTargetContext = new DockingTargetContext();
+            m_dockingNextTargetContext = new DockingTargetContext();
         }
 
         private void LateUpdate()
@@ -98,7 +144,7 @@ namespace Docking
             m_desiredPlaybackSpeed = 1.0f;   // 首先设置默认值
 
             //Debug.Log("Dock");
-            UpdateWorldFromReference(m_dockingTarget);
+            UpdateWorldFromReference(m_dockingTargetContext.dockingTarget);
             // 更新ik控制器
             m_fullBodyIK.OnIKUpdate(Time.deltaTime);
 
@@ -140,12 +186,21 @@ namespace Docking
                 DockingTransform referenceFromDesiredTarget = new DockingTransform();
 
                 // get desired target from dockingTarget
-                if (null != m_dockingTarget) 
+                if (null != m_dockingTargetContext.dockingTarget) 
                 {
-
-                    // calculate the target
-                    m_dockingTarget.GetDcokedTransfrom(oldReferenceFromTarget, out referenceFromDesiredTarget, 
-                        out m_dockedVertexStatus);
+                    // Docking holder才会进行计算，Docking Connector Blend 期间不进行计算
+                    if(m_dockingTargetContext.lockDiseredTargetPointAtBlend &&
+                        m_dockingControlData.m_previousDockingBlend < 1.0f)
+                    {
+                        referenceFromDesiredTarget = m_dockingTargetContext.referenceFromTargetPoint;
+                        m_dockedVertexStatus = m_dockingTargetContext.dockedStatus;
+                    }
+                    else
+                    {
+                        // calculate the target
+                        m_dockingTargetContext.dockingTarget.GetDcokedTransfrom(oldReferenceFromTarget, out referenceFromDesiredTarget,
+                            out m_dockedVertexStatus);
+                    }                   
 
                     // blend
                     if (1.0 == m_dockingControlData.m_dockingBlend)
@@ -178,7 +233,7 @@ namespace Docking
                     m_worldFromFirstTarget = m_worldFromLastTarget;                    
                 }
                 m_lastBlend = m_dockingControlData.m_dockingBlend;                
-                m_dockingTarget.selected = true;
+                m_dockingTargetContext.dockingTarget.selected = true;
 
                 worldFromModel = DockingTransform.Multiply(m_worldFromNewReference, oldReferenceFromModel);
                 worldFromModel.ApplyDockingTransformWS(m_animator.transform);
@@ -186,13 +241,13 @@ namespace Docking
                 //m_worldFromOldReference = m_worldFromNewReference;
                 DynamicAdjustPlaybackSpeed();
                 // 处理手部IK
-                SolveHandIK(m_dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
+                SolveHandIK(m_dockingTargetContext.dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
 
             }
             else
             {
                 // 处理手部IK
-                SolveHandIK(m_dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
+                SolveHandIK(m_dockingTargetContext.dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
 
                 SetDefaultValue();
                 m_dockingControlData = null;
@@ -202,6 +257,7 @@ namespace Docking
             m_dockingControlData = null;
             return true;
         }
+
 
         public void Notify(DockingControlData data, DockingGenerator dockingGenrator)
         {
@@ -216,34 +272,44 @@ namespace Docking
         public void SetDockingTarget(DockingTarget target)
         {
             Debug.Log("DockingDriver: Set the docking target " + target.gameObject.name);
-            m_dockingTarget = target;
-            m_dockingNextTarget = null;
+
+            m_dockingTargetContext = new DockingTargetContext(target);
+            m_dockingNextTargetContext.ResetDefault();
             SetWorldFromReference(target);
         }
 
         // 不切换state，但是切换target
         public void SwitchNextTargetinplace(DockingTarget target)
         {
-            m_dockingTarget = target;
+            m_dockingTargetContext.dockingTarget = target;
             m_dockingGenerator.SwitchNextTargetInplace();
             m_dockingControlData = null;
         }
         public void SetDockingNextTarget(DockingTarget target)
         {
             Debug.Log("DockingDriver: Set the docking next target " + target.gameObject.name);
-            m_dockingNextTarget = target;            
+            m_dockingNextTargetContext = new DockingTargetContext(target);
+        }
+
+        public void SetDockingNextTargetFixedFuturePoint(DockingTarget target, DockingVertex vertex, DockedVertexStatus status)
+        {
+            m_dockingNextTargetContext = new DockingTargetContext(target);
+            m_dockingNextTargetContext.lockDiseredTargetPointAtBlend = true;
+            m_dockingNextTargetContext.dockedStatus = status;
+            var dt = new DockingTransform();
+            dt.translation = Quaternion.Inverse(target.transform.rotation) * (vertex.tr.translation - target.transform.position);
+            dt.rotation = Quaternion.Inverse(target.transform.rotation) * vertex.tr.rotation;
+            m_dockingNextTargetContext.referenceFromTargetPoint = dt;
         }
         public void SwitchToNextDockingTarget()
         {
-            if (m_dockingNextTarget == null) return;
-            m_dockingTarget = m_dockingNextTarget;
-            m_dockingNextTarget = null;
-            SetWorldFromReference(m_dockingTarget);
+            if (!m_dockingNextTargetContext.IsValid()) return;
+            m_dockingNextTargetContext.MoveTo(m_dockingTargetContext);
+            SetWorldFromReference(m_dockingTargetContext.dockingTarget);
         }
-
         public DockingTarget GetDockingTarget()
         {
-            return m_dockingTarget;
+            return m_dockingTargetContext.dockingTarget;
         }
 
         // 消除 Docking Target 非等比缩放，重构WorldFromReferenceTransform

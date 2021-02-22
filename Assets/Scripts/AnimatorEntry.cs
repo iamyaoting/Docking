@@ -6,7 +6,7 @@ public class AnimatorEntry : MonoBehaviour
 {
     public string stateEntry;
 
-    [Range(0.2f, 1.0f)]
+    [Range(0.2f, 1.5f)]
     public float timeScale = 1.0f;
 
 

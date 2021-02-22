@@ -44,11 +44,11 @@ public class BracedHangingConBase : StateBehavioConBase
             {
                 if (targetPoint.x > 0)
                 {
-                    m_animator.CrossFadeInFixedTime("Braced Hang Hop Back Right", 0.2f);
+                    m_animator.CrossFadeInFixedTime("Braced Hang Hop Back Right", 0.15f);
                 }
                 else
                 {
-                    m_animator.CrossFadeInFixedTime("Braced Hang Hop Back Left", 0.2f);
+                    m_animator.CrossFadeInFixedTime("Braced Hang Hop Back Left", 0.15f);
                 }
             }
             else
@@ -79,7 +79,8 @@ public class BracedHangingConBase : StateBehavioConBase
         {
             if (CrossFadeAnimatorHopState(context.desiredDockedVertex.tr.translation, context.desiredDockedVertex.tr.rotation))
             {
-                m_dockingDriver.SetDockingNextTarget(context.dockingtarget);
+                //m_dockingDriver.SetDockingNextTarget(context.dockingtarget);
+                m_dockingDriver.SetDockingNextTargetFixedFuturePoint(context.dockingtarget, context.desiredDockedVertex, context.desiredDockedVertexStatus);
             }
             return true;
         }
