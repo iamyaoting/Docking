@@ -424,12 +424,6 @@ namespace Docking
 
             DockingGizmos.PopGizmosData();
         }
-        private void OnGUI()
-        {
-            //if (m_adjustPlayBackSpeed)
-            //    GUI.Label(new Rect(50, 50, 100, 100), m_animator.speed.ToString());
-            GUI.Label(new Rect(50, 50, 100, 100), m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime.ToString());
-        }
     }
 }
 

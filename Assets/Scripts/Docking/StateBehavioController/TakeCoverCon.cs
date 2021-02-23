@@ -19,6 +19,11 @@ public class TakeCoverCon : StateBehavioConBase
         m_animator.SetFloat("Velocity", input.x);
 
         m_limit = DOCKED_POINT_MOVE_LIMIT.NONE;
+
+        if(HasEnvUnCommitAction() || input.y < -0.5f)
+        {
+            SetUnDocking();
+        }
     }
 
     protected override void OnDockingTargetUpdate(DockingTarget target, TR tr, DockedVertexStatus status)
