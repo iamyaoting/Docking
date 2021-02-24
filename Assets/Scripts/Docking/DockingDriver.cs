@@ -62,6 +62,7 @@ namespace Docking
     public class DockingDriver : MonoBehaviour
     {
         public bool m_adjustPlayBackSpeed = false;
+ 
 
         private Animator m_animator;
         private FullBodyIKModifier m_fullBodyIK;
@@ -99,6 +100,7 @@ namespace Docking
         // 数据是否有效
         public bool valid { get; private set; } = false;
 
+
         private void Start()
         {
             Init(GetComponent<Animator>());
@@ -118,15 +120,30 @@ namespace Docking
             {
                 Debug.LogError("No Docking Bone, Please add in advance!");
             }
-            m_fullBodyIK = new FullBodyIKModifier(m_animator.GetComponent<RootMotion.FinalIK.BipedIK>());
+            m_fullBodyIK = new FullBodyIKModifier(m_animator.GetComponent<RootMotion.FinalIK.FullBodyBipedIK>());
 
             m_dockingTargetContext = new DockingTargetContext();
             m_dockingNextTargetContext = new DockingTargetContext();
         }
-
         private void LateUpdate()
         {
             valid = DockDriver();
+            if(m_fullBodyIK != null)
+            {
+                if (!valid)
+                {
+                    // 防止dockingHolder之间过渡切换时候，还需要一直开着IK
+                    m_fullBodyIK.SetEnableIK(m_dockingTargetContext.dockingTarget != null);
+                }
+                else
+                {
+                    // 处理手部IK
+                    SolveHandFootIK(m_dockingTargetContext.dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
+                }
+                // 更新ik控制器
+                m_fullBodyIK.OnIKUpdate(Time.deltaTime);
+            }
+          
         }
 
         public DockedVertexStatus GetDockedVertexStatus() { return m_dockedVertexStatus; }
@@ -145,8 +162,7 @@ namespace Docking
 
             //Debug.Log("Dock");
             UpdateWorldFromReference(m_dockingTargetContext.dockingTarget);
-            // 更新ik控制器
-            m_fullBodyIK.OnIKUpdate(Time.deltaTime);
+            
 
             // 总体思想，先将更新后的model再old reference 空间中进行docking解算
             // old reference 更新到 new reference
@@ -240,15 +256,9 @@ namespace Docking
 
                 //m_worldFromOldReference = m_worldFromNewReference;
                 DynamicAdjustPlaybackSpeed();
-                // 处理手部IK
-                SolveHandIK(m_dockingTargetContext.dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
-
             }
             else
             {
-                // 处理手部IK
-                SolveHandIK(m_dockingTargetContext.dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
-
                 SetDefaultValue();
                 m_dockingControlData = null;
                 return false;
@@ -370,15 +380,13 @@ namespace Docking
         }
 
         // 处理手部IK
-        protected void SolveHandIK(DockingTarget target, TR tr, DockedVertexStatus status)
+        protected void SolveHandFootIK(DockingTarget target, TR tr, DockedVertexStatus status)
         {
             bool handIK = false;
             DockingLineStripTarget lineStripTarget = target as DockingLineStripTarget;
             if (lineStripTarget)
             {
                 handIK = lineStripTarget.m_handIK;
-                //handIK = handIK & (m_lastBlend == 1.0f);
-
             }
             m_fullBodyIK.SetEnableIK(handIK);
             if (lineStripTarget && m_fullBodyIK.NeedSolveIK())
@@ -389,8 +397,22 @@ namespace Docking
                 var leftHandDocked = lineStripTarget.GetDockedPointWS(leftHand.position, m_animator.rootRotation);
                 var rightHandDocked = lineStripTarget.GetDockedPointWS(rightHand.position, m_animator.rootRotation);
 
-                m_fullBodyIK.leftHandTargetOffset = Vector3.up * (leftHandDocked.translation.y - tr.translation.y);
-                m_fullBodyIK.rightHandTargetOffset = Vector3.up * (rightHandDocked.translation.y - tr.translation.y);
+                var dockedVertex = lineStripTarget.GetDockedPointWS(Utils.GetDockingBoneTransform(m_animator).position, m_animator.rootRotation);
+                var dockedPos = dockedVertex.translation;
+
+                // 计算斜率
+                var c = (leftHandDocked.translation - tr.translation).magnitude;
+                var h = Mathf.Abs(leftHandDocked.translation.y - tr.translation.y);
+                var sinAlpha = h / c;
+                var cosAlpha = Mathf.Sqrt(1 - sinAlpha * sinAlpha);
+
+                var lHandTrans = m_animator.GetBoneTransform(HumanBodyBones.LeftHand);
+                var rHandTrans = m_animator.GetBoneTransform(HumanBodyBones.RightHand);
+
+                m_fullBodyIK.lHandOffset = Vector3.up * (leftHandDocked.translation.y - tr.translation.y) / cosAlpha;                
+                m_fullBodyIK.rHandOffset = Vector3.up * (rightHandDocked.translation.y - tr.translation.y) / cosAlpha;
+                
+                m_fullBodyIK.CalcFootIK(tr);                
             }
         }
 

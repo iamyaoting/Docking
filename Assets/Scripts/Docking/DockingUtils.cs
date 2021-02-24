@@ -236,7 +236,34 @@ namespace Docking
             var normalizedTime = animator.GetCurrentAnimatorStateInfo(layer).normalizedTime;
             normalizedTime = normalizedTime - Mathf.Floor(normalizedTime);
             return normalizedTime;
+        }        
+
+        public static Vector3 ProjectPointToLine(Vector3 point, Vector3 lineDir, Vector3 linePoint)
+        {
+            var d1 = point - linePoint;
+            var d2 = Vector3.Project(d1, lineDir);
+            return linePoint + d2;
         }
+        public static Vector3 ProjectPointToPlane(Vector3 point, Vector3 normal, Vector3 planePoint)
+        {
+            var d1 = point - planePoint;
+            var d2 = Vector3.ProjectOnPlane(d1, normal);
+            return planePoint + d2;
+        }
+
+        public static bool DetectHangingFootContactPoint(Transform root, Transform foot, out Vector3 point)
+        {
+            point = Vector3.zero;
+            RaycastHit hit;
+            bool suc = Physics.Raycast(foot.position - root.forward, root.forward, out hit, 3.0f);
+            if(suc)
+            {
+                point = hit.point;
+            }
+            return suc;
+        }
+
+
     }
 
 }
