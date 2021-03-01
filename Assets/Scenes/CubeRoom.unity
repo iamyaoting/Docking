@@ -905,8 +905,6 @@ GameObject:
   - component: {fileID: 316757957}
   - component: {fileID: 316757959}
   - component: {fileID: 316757958}
-  - component: {fileID: 316757960}
-  - component: {fileID: 316757961}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -979,67 +977,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &316757960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 316757956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 912e29a19d4e14223afcfb72012f0993, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startOnAwake: 0
-  quitAfterCapture: 0
-  captureTime: 30
-  captureSource: 0
-  inputTexture: {fileID: 0}
-  captureType: 0
-  saveFolder: 
-  liveStreamUrl: 
-  captureMode: 0
-  projectionType: 0
-  stereoMode: 0
-  interpupillaryDistance: 0.0635
-  captureCursor: 0
-  cursorImage: {fileID: 0}
-  captureAudio: 0
-  captureMicrophone: 0
-  deviceIndex: 0
-  transparent: 0
-  offlineRender: 0
-  resolutionPreset: 2
-  cubemapFaceSize: 1
-  frameWidth: 1280
-  frameHeight: 720
-  bitrate: 2000
-  frameRate: 30
-  antiAliasing: 0
-  regularCamera: {fileID: 316757959}
-  stereoCamera: {fileID: 0}
-  encoderPreset: 0
-  enableInternalSettings: 0
-  gpuEncoding: 0
-  ffmpegEncoder: {fileID: 0}
-  gpuEncoder: {fileID: 0}
---- !u!114 &316757961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 316757956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e2640241c274459c921399b35836544, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startCapture: 293
-  stopCapture: 293
-  cancelCapture: 284
-  showHintUI: 1
 --- !u!1 &337155388 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2204468675118878660, guid: cf2c92473878299438c27d9c33c41c58,
@@ -1264,7 +1201,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &466685670
 Transform:
   m_ObjectHideFlags: 0
@@ -1592,7 +1529,7 @@ PrefabInstance:
     - target: {fileID: 157836359682935756, guid: 309369888274c624f8c88cc593e9cb99,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 333217951649601840, guid: 309369888274c624f8c88cc593e9cb99,
         type: 3}
@@ -4776,7 +4713,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &988850596
 AudioListener:
   m_ObjectHideFlags: 0
@@ -4926,7 +4863,12 @@ PrefabInstance:
     - target: {fileID: 415090005236911596, guid: da73f36407b57ec41b586680dd313bef,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9166176741108951178, guid: da73f36407b57ec41b586680dd313bef,
+        type: 3}
+      propertyPath: m_active
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da73f36407b57ec41b586680dd313bef, type: 3}
@@ -6499,7 +6441,7 @@ PrefabInstance:
     - target: {fileID: 8412702078260416270, guid: 0a40c0607880e3943a58102e4285803c,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8412702078260416270, guid: 0a40c0607880e3943a58102e4285803c,
         type: 3}
@@ -7914,7 +7856,7 @@ PrefabInstance:
     - target: {fileID: 8643106586379979427, guid: 3a541cf8da458574680c1cfce5cbd27f,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8643106586379979427, guid: 3a541cf8da458574680c1cfce5cbd27f,
         type: 3}
@@ -8519,7 +8461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateEntry: Vault.Sprint_SingleHand
-  timeScale: 0.95
+  timeScale: 0.43
 --- !u!1 &1932823609
 GameObject:
   m_ObjectHideFlags: 0
@@ -8535,7 +8477,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1932823610
 Transform:
   m_ObjectHideFlags: 0
@@ -9364,7 +9306,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2055519045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9510,6 +9452,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 11.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 965701008279181818, guid: 309369888274c624f8c88cc593e9cb99,
+        type: 3}
+      propertyPath: m_active
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 965701008279181818, guid: 309369888274c624f8c88cc593e9cb99,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 965701008279181818, guid: 309369888274c624f8c88cc593e9cb99,
         type: 3}

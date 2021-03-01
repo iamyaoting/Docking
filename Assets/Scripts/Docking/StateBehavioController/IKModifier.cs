@@ -28,6 +28,7 @@ public class FullBodyIKModifier
         if(null == ik)
         {
             Debug.LogError("Can not find the Full Body IK!!");
+            return;
         }
         m_ik = ik as RootMotion.FinalIK.FullBodyBipedIK;
 
@@ -143,7 +144,7 @@ public class FullBodyIKModifier
     }
 
     private void UpdateBlendWeight(float deltaTime)
-    {
+    {        
         m_remainingTime -= deltaTime;
         m_remainingTime = Mathf.Clamp(m_remainingTime, 0, m_remainingTime);
         if(m_enable)

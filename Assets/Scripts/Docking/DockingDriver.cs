@@ -61,6 +61,7 @@ namespace Docking
 
     public class DockingDriver : MonoBehaviour
     {
+        public bool m_active = true;
         public bool m_adjustPlayBackSpeed = false;
  
 
@@ -120,29 +121,39 @@ namespace Docking
             {
                 Debug.LogError("No Docking Bone, Please add in advance!");
             }
-            m_fullBodyIK = new FullBodyIKModifier(m_animator.GetComponent<RootMotion.FinalIK.FullBodyBipedIK>());
+
+            var ik = m_animator.GetComponent<RootMotion.FinalIK.FullBodyBipedIK>();
+            if (ik != null)
+            {
+                m_fullBodyIK = new FullBodyIKModifier(ik);
+            }
+            else
+            {
+                m_fullBodyIK = null;
+            }
 
             m_dockingTargetContext = new DockingTargetContext();
             m_dockingNextTargetContext = new DockingTargetContext();
         }
         private void LateUpdate()
         {
+            if (!m_active) return;
             valid = DockDriver();
-            if(m_fullBodyIK != null)
-            {
-                if (!valid)
-                {
-                    // 防止dockingHolder之间过渡切换时候，还需要一直开着IK
-                    m_fullBodyIK.SetEnableIK(m_dockingTargetContext.dockingTarget != null);
-                }
-                else
-                {
-                    // 处理手部IK
-                    SolveHandFootIK(m_dockingTargetContext.dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
-                }
-                // 更新ik控制器
-                m_fullBodyIK.OnIKUpdate(Time.deltaTime);
-            }
+            //if(m_fullBodyIK != null)
+            //{
+            //    if (!valid)
+            //    {
+            //        // 防止dockingHolder之间过渡切换时候，还需要一直开着IK
+            //        m_fullBodyIK.SetEnableIK(m_dockingTargetContext.dockingTarget != null);
+            //    }
+            //    else
+            //    {
+            //        // 处理手部IK
+            //        SolveHandFootIK(m_dockingTargetContext.dockingTarget, GetDockedVertexWS(), GetDockedVertexStatus());
+            //    }
+            //    // 更新ik控制器
+            //    m_fullBodyIK.OnIKUpdate(Time.deltaTime);
+            //}
           
         }
 
@@ -216,6 +227,8 @@ namespace Docking
                         // calculate the target
                         m_dockingTargetContext.dockingTarget.GetDcokedTransfrom(oldReferenceFromTarget, out referenceFromDesiredTarget,
                             out m_dockedVertexStatus);
+                        m_dockingTargetContext.lockDiseredTargetPointAtBlend = false;
+
                     }                   
 
                     // blend
